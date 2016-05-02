@@ -81,7 +81,7 @@ public class Configuracion extends JFrame
 		JPanel panelPrincipal = new JPanel();
 		panelPrincipal.setLayout(new BorderLayout(0, 0));
 		
-		JLabel bienvenido = new JLabel("Bienvenido a la configuraci�n de MFRockola");
+		JLabel bienvenido = new JLabel("Bienvenido a la configuración de MFRockola");
 		panelPrincipal.add(bienvenido,BorderLayout.NORTH);
 		
 		JTabbedPane fichas = new JTabbedPane();
@@ -94,10 +94,10 @@ public class Configuracion extends JFrame
 		panelBienvenido.setLayout(null);
 		
 		JTextPane txtpnBienvenidoAlPanel = new JTextPane();
-		txtpnBienvenidoAlPanel.setText("Bienvenido al panel de configuraci\u00F3n de MFRockola.\n\nAqu� podr�s modificar los aspectos"+" " +
-				"b�sicos del funcionamiento de MFRockola como el precio de los cr�ditos, la cantidad de tiempo necesaria para la reproducci�n"+
-				" aleatoria de una m�sica y tambi�n las teclas de acci�n en el teclado.\n\nPuedes oprimir la tecla ESC en cualquier momento para "+
-				"salir de la configuraci�n sin modificarla.");
+		txtpnBienvenidoAlPanel.setText("Bienvenido al panel de configuración de MFRockola.\n\nAquí podrás modificar los aspectos"+" " +
+				"básicos del funcionamiento de MFRockola como el precio de los créditos, la cantidad de tiempo necesaria para la reproducción"+
+				" aleatoria de una música y también las teclas de acción en el teclado.\n\nPuedes oprimir la tecla ESC en cualquier momento para "+
+				"salir de la configuración sin modificarla.");
 		txtpnBienvenidoAlPanel.setEditable(false);
 		txtpnBienvenidoAlPanel.setFocusable(false);
 		txtpnBienvenidoAlPanel.setBounds(220, 50, 367, 132);
@@ -135,20 +135,20 @@ public class Configuracion extends JFrame
 		Icon tiempo = new ImageIcon(this.getClass().getResource("/com/mfrockola/imagenes/tiempos.png"));
 		JPanel panel2 = new JPanel();
 		panel2.setBackground(Color.WHITE);
-		fichas.addTab("Tiempo",null,panel2, "Configuraci�n de los tiempos de reproducci�n y pantalla completa");
+		fichas.addTab("Tiempo",null,panel2, "Configuración de los tiempos de reproducción y pantalla completa");
 		panel2.setLayout(null);
 		JLabel labelTiempos = new JLabel();
 		labelTiempos.setIcon(tiempo);
 		labelTiempos.setBounds(10, 11, 200, 200);
 		panel2.add(labelTiempos);
 		
-		JLabel lblConfiguracinDeLos = new JLabel("Configuraci\u00F3n del Tiempo Interno");
+		JLabel lblConfiguracinDeLos = new JLabel("Configuración del Tiempo Interno");
 		lblConfiguracinDeLos.setFont(new Font("Calibri", Font.BOLD, 21));
 		lblConfiguracinDeLos.setBounds(220, 11, 295, 27);
 		panel2.add(lblConfiguracinDeLos);
 		
 		JTextPane textPane = new JTextPane();
-		textPane.setText("Este es el panel de configuracion de los tiempos internos de la Rockola, como el tiempo que debe pasar para" +
+		textPane.setText("Este es el panel de configuración de los tiempos internos de la Rockola, como el tiempo que debe pasar para" +
 				"reproducir una cancion aleatoria y el tiempo necesario para poner la pantalla completa");
 		textPane.setEditable(false);
 		textPane.setFocusable(false);
@@ -189,10 +189,10 @@ public class Configuracion extends JFrame
 		panel2.add(textFieldVideoPromocional);
 		JPanel panel3 = new JPanel();
 		panel3.setBackground(Color.WHITE);
-		fichas.addTab("Cr�ditos",null,panel3,"Configuraci�n de los cr�ditos y sus precios");
+		fichas.addTab("Cr�ditos",null,panel3,"Configuración de los créditos y sus precios");
 		panel3.setLayout(null);
 		
-		JLabel lblConfiguracionDeCreditos = new JLabel("Configuraci\u00F3n de Cr\u00E9ditos");
+		JLabel lblConfiguracionDeCreditos = new JLabel("Configuración de Créditos");
 		lblConfiguracionDeCreditos.setFont(new Font("Calibri", Font.BOLD, 21));
 		lblConfiguracionDeCreditos.setBounds(220, 11, 297, 27);
 		panel3.add(lblConfiguracionDeCreditos);
@@ -249,7 +249,7 @@ public class Configuracion extends JFrame
 		panel3.add(txtpnEnEstePanel);
 		JPanel panel4 = new JPanel();
 		panel4.setBackground(Color.WHITE);
-		fichas.addTab("Carpetas",null,panel4, "Configuraci�n de las carpetas y directorios de m�sicas y videos");
+		fichas.addTab("Carpetas",null,panel4, "Configuración de las carpetas y directorios de músicas y videos");
 		panel4.setLayout(null);
 		
 		JButton button = new JButton("...");
@@ -339,7 +339,7 @@ public class Configuracion extends JFrame
 		label_1.setBounds(10, 11, 200, 203);
 		panel4.add(label_1);
 		
-		JLabel lblConfiguracinDeLos_1 = new JLabel("Configuraci\u00F3n de los Directorios");
+		JLabel lblConfiguracinDeLos_1 = new JLabel("Configuración de los Directorios");
 		lblConfiguracinDeLos_1.setFont(new Font("Calibri", Font.BOLD, 21));
 		lblConfiguracinDeLos_1.setBounds(220, 11, 274, 27);
 		panel4.add(lblConfiguracinDeLos_1);
@@ -353,21 +353,21 @@ public class Configuracion extends JFrame
 		
 		JTextPane txtpnAdvertenciaTengaCuidado = new JTextPane();
 		txtpnAdvertenciaTengaCuidado.setForeground(Color.RED);
-		txtpnAdvertenciaTengaCuidado.setText("Advertencia: Tenga cuidado al modificar el directorio del VLC. Consulte la documentaci\u00F3n antes de realizar modificaciones");
+		txtpnAdvertenciaTengaCuidado.setText("Advertencia: Tenga cuidado al modificar el directorio del VLC. Consulte la documentación antes de realizar modificaciones");
 		txtpnAdvertenciaTengaCuidado.setBounds(10, 265, 585, 23);
 		panel4.add(txtpnAdvertenciaTengaCuidado);
 		
 		Icon teclas = new ImageIcon(this.getClass().getResource("/com/mfrockola/imagenes/teclas.png"));
 		JPanel panel5 = new JPanel();
 		panel5.setBackground(Color.WHITE);
-		fichas.addTab("Teclado y Mouse",null,panel5, "Configuraci�n de las teclas de acci�n y mouse");
+		fichas.addTab("Teclado y Mouse",null,panel5, "Configuración de las teclas de acción y mouse");
 		panel5.setLayout(null);
 		JLabel labelTeclas = new JLabel();
 		labelTeclas.setIcon(teclas);
 		labelTeclas.setBounds(10, 11, 200, 200);
 		panel5.add(labelTeclas);
 		
-		JLabel lblConfiguracinDelTeclado = new JLabel("Configuraci\u00F3n del Teclado y Mouse");
+		JLabel lblConfiguracinDelTeclado = new JLabel("Configuración del Teclado y Mouse");
 		lblConfiguracinDelTeclado.setFont(new Font("Calibri", Font.BOLD, 21));
 		lblConfiguracinDelTeclado.setBounds(220, 11, 302, 27);
 		panel5.add(lblConfiguracinDelTeclado);
@@ -490,13 +490,13 @@ public class Configuracion extends JFrame
 		labelApariencia.setBounds(10, 11, 200, 152);
 		panel6.add(labelApariencia);
 		
-		JLabel lblConfiguracinDeLa = new JLabel("Configuraci\u00F3n de la Apariencia");
+		JLabel lblConfiguracinDeLa = new JLabel("Configuración de la Apariencia");
 		lblConfiguracinDeLa.setFont(new Font("Calibri", Font.BOLD, 21));
 		lblConfiguracinDeLa.setBounds(220, 11, 302, 27);
 		panel6.add(lblConfiguracinDeLa);
 		
 		JTextPane txtpnEsteEsEl_2 = new JTextPane();
-		txtpnEsteEsEl_2.setText("Este es el panel para configurar la apariencia de MFRockola como mas le guste entre lo que cabe la modificacion. Para el tama\u00F1o de la imagen de fondo se recomienda el mismo de la resoluci\u00F3n de la pantalla que se usar\u00E1.");
+		txtpnEsteEsEl_2.setText("Este es el panel para configurar la apariencia de MFRockola como mas le guste entre lo que cabe la modificacion. Para el tamaño de la imagen de fondo se recomienda el mismo de la resolución de la pantalla que se usar.");
 		txtpnEsteEsEl_2.setEditable(false);
 		txtpnEsteEsEl_2.setFocusable(false);
 		txtpnEsteEsEl_2.setBounds(220, 50, 367, 48);
@@ -546,7 +546,7 @@ public class Configuracion extends JFrame
 		labelEstadisticas.setBounds(10, 11, 200, 152);
 		panel7.add(labelEstadisticas);
 		
-		JLabel lblConfiguracinEstadisticas = new JLabel("Configuraci\u00F3n de Estadisticas");
+		JLabel lblConfiguracinEstadisticas = new JLabel("Configuración de Estadisticas");
 		lblConfiguracinEstadisticas.setFont(new Font("Calibri", Font.BOLD, 21));
 		lblConfiguracinEstadisticas.setBounds(220, 11, 302, 27);
 		panel7.add(lblConfiguracinEstadisticas);

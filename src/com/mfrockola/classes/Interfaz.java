@@ -21,30 +21,39 @@ public class Interfaz extends JFrame
     OperacionesRegConfig registroDatos = new OperacionesRegConfig();
     RegConfig configuraciones;
 
-    JLabel lblcreditos = new JLabel("Creditos: 0");
+    private int creditos;
+    private int ancho;
+    private int alto;
 
-    int creditos = 0;
-    int ancho;
-    int alto;
+    private boolean creditosLibres = false;
 
-    boolean creditosLibres = false;
+    ListaDeMusica musicaDisponible; // Objeto de musicas disponibles en el directorio.
+    MusicasProhibidas prohibir = new MusicasProhibidas(); // Objeto de musicas que no se pueden repetir.
+    ListaDeReproduccion listaReproduccion = new ListaDeReproduccion(); // Objeto de las musicas en reproduccion.
 
-    ListaDeMusica listado;
-    MusicasProhibidas prohibir = new MusicasProhibidas();
-    ListaDeReproduccion listaReproduccion = new ListaDeReproduccion();
+    boolean isFullScreen = false; // Objeto que determina si se entra o no en pantalla completa.
 
-    boolean isFullScreen = false;
-
+    JEImagePanel panelFondo;
+    JPanel contenedorPrincipal;
     JPanel contenedorVideo;
     JPanel panel;
+    JPanel panelInferior;
 
-    Dimension resolucion;
+    Dimension resolucion; // Objeto para determinar la resolucion de la pantalla
 
     @SuppressWarnings("rawtypes")
-    JList lista = new JList();
-    JLabel lblMusica = new JLabel();
+    private JList listaDeMusicas; // JList para colocar el listado de los videos disponibles en el directorio.
+    private JList listaDeReproduccion; // JList para colocar el listado de los videos en reproduccion.
+
+    // JLabels
+
+    JLabel labelMusica = new JLabel();
     JLabel labelCancionEnRepro;
-    JLabel labelPublicidad;
+    JLabel labelcreditos;
+    JLabel labelLogo;
+
+    // Arrays
+
     String [] directorioPublicidad;
 
     Reproductor repro;
@@ -73,6 +82,8 @@ public class Interfaz extends JFrame
             Configuracion configurar = new Configuracion();
         }
 
+        initComponents();
+
         File archivo = new File(configuraciones.getDireccionImagenes());
 
         if (archivo.isDirectory())
@@ -84,120 +95,33 @@ public class Interfaz extends JFrame
             JOptionPane.showMessageDialog(null, "error");
         }
 
-        ActionListener cambiarPublicidad = new ActionListener() {
-
-            public void actionPerformed(ActionEvent e)
-            {
-                labelPublicidad.setIcon(new ImageIcon(String.format("%s\\%s",
-                        configuraciones.getDireccionImagenes(),cambiarImagen())));
-            }
-        };
-
         ActionListener cambiarLblPublicidad = new ActionListener() {
 
             public void actionPerformed(ActionEvent e)
             {
-                lblcreditos.setText(String.format("Creditos: %d", creditos));
-                lblcreditos.setForeground(Color.WHITE);
+                labelcreditos.setText(String.format("Creditos: %d", creditos));
+                labelcreditos.setForeground(Color.WHITE);
             }
         };
 
-        int demoraCambioPublicidad = 20000;
-
         int demoraLblPublicidad = 5000;
-
-        Timer temporizadorPublicidad = new Timer(demoraCambioPublicidad, cambiarPublicidad);
 
         temporizadorLblPublicidad = new Timer(demoraLblPublicidad, cambiarLblPublicidad);
         temporizadorLblPublicidad.setRepeats(false);
-
-        temporizadorPublicidad.start();
-
-
-        listado = new ListaDeMusica(configuraciones.getDireccionVideos());
-
-        JPanel panelInferior = new JPanel();
-        panelInferior.setLayout(new BorderLayout());
-        panelInferior.setOpaque(false);
-
-        resolucion = Toolkit.getDefaultToolkit().getScreenSize();
-        setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/com/mfrockola/imagenes/icono.png")));
-
-        Icon log = new ImageIcon(this.getClass().getResource("/com/mfrockola/imagenes/nombre.png"));
-        JLabel logo = new JLabel(log);
-        logo.setHorizontalAlignment(SwingConstants.RIGHT);
-        lblcreditos.setForeground(Color.WHITE);
-        lblcreditos.setFont(new Font("Calibri", Font.BOLD, 23));
-
-        panelInferior.add(lblcreditos,BorderLayout.WEST);
-        panelInferior.add(logo,BorderLayout.EAST);
-        JEImagePanel panelFondo = new JEImagePanel(configuraciones.getDireccionFondo());
-        panelFondo.setLayout(new BorderLayout());
-        panelFondo.add(panelInferior,BorderLayout.SOUTH);
-
-        labelCancionEnRepro = new JLabel("MFRockola");
-        labelCancionEnRepro.setForeground(Color.WHITE);
-        labelCancionEnRepro.setFont(new Font("Calibri", Font.BOLD, 23));
-        labelCancionEnRepro.setHorizontalAlignment(SwingConstants.CENTER);
-        panelInferior.add(labelCancionEnRepro, BorderLayout.CENTER);
-
-        JPanel contenedorPrincipal = new JPanel();
-        panelFondo.add(contenedorPrincipal,BorderLayout.CENTER);
-
-        ancho = (int) resolucion.getWidth();
-        alto = (int) (resolucion.getHeight() - 54);
-
-
-        lista.setCellRenderer(new ModificadorDeCeldas(new Font("Consolas", Font.BOLD,20),
-                configuraciones.getColor1(), configuraciones.getColor2()));
-        lista.setSelectedIndex(1);
-        lista.setListData(listado.getListaMusicas());
-        lista.addKeyListener(new manejadorDeTeclas());
-        lista.setVisibleRowCount(20);
-        lista.setFocusable(false);
-        lista.setMaximumSize(getMaximumSize());
-
-        barras = new JScrollPane(lista);
-        barras.setBounds(30, 30, ancho-590, alto-35);
-        barras.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        barras.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
-
-        contenedorPrincipal.setOpaque(false);
-        contenedorPrincipal.setLayout(null);
-        contenedorPrincipal.add(barras);
-
-        repro = new Reproductor();
-        contenedorVideo = new JPanel();
-        contenedorVideo.setOpaque(false);
-        contenedorVideo.setBackground(Color.BLACK);
-        contenedorVideo.setLayout(new BorderLayout());
-        contenedorVideo.setBounds(ancho-530, alto-(alto*94/100),500, 283);
-        contenedorVideo.add(repro.obtenerReproductor(),BorderLayout.CENTER);
-        contenedorPrincipal.add(contenedorVideo);
-
-        panel = new JPanel();
-        panel.setOpaque(false);
-        panel.setBounds(ancho-530, alto-(alto*55/100), 500, 380); // contenedorVideo.setBounds(ancho-530, alto-(alto*94/100),500, 283);
-        contenedorPrincipal.add(panel);
-        panel.setLayout(new GridLayout(2, 1, 20, 0));
 
         JPanel panel_1 = new JPanel();
         panel_1.setOpaque(false);
         panel.add(panel_1);
         panel_1.setLayout(new GridLayout(2, 0, 0, 0));
 
-        lblMusica.setText("MFRockola");
-        lblMusica.setHorizontalAlignment(SwingConstants.CENTER);
-        lblMusica.setForeground(Color.WHITE);
-        lblMusica.setFont(new Font("Calibri", Font.BOLD, 23));
-        panel_1.add(lblMusica);
+        labelMusica.setText("MFRockola");
+        labelMusica.setHorizontalAlignment(SwingConstants.CENTER);
+        labelMusica.setForeground(Color.WHITE);
+        labelMusica.setFont(new Font("Calibri", Font.BOLD, 23));
+        panel_1.add(labelMusica);
 
 
         panel_1.add(objeto.selectorMusica);
-
-        labelPublicidad = new JLabel(new ImageIcon(String.format("%s\\%s", configuraciones.getDireccionImagenes(),directorioPublicidad[0])));
-        labelPublicidad.setHorizontalAlignment(SwingConstants.CENTER);
-        panel.add(labelPublicidad);
 
         getContentPane().add(panelFondo);
 
@@ -219,16 +143,16 @@ public class Interfaz extends JFrame
                 if(configuraciones.getClickCreditos()==0 && e.isMetaDown() == false )
                 {
                     creditos = creditos + configuraciones.getCantidadCreditos();
-                    lblcreditos.setText(String.format("Creditos: %d", creditos));
+                    labelcreditos.setText(String.format("Creditos: %d", creditos));
                     agregarMonedasYCreditos();
-                    lblcreditos.setForeground(Color.WHITE);
+                    labelcreditos.setForeground(Color.WHITE);
                 }
                 if (e.isMetaDown() && configuraciones.getClickCreditos() == 1)
                 {
                     creditos = creditos + configuraciones.getCantidadCreditos();
-                    lblcreditos.setText(String.format("Creditos: %d", creditos));
+                    labelcreditos.setText(String.format("Creditos: %d", creditos));
                     agregarMonedasYCreditos();
-                    lblcreditos.setForeground(Color.WHITE);
+                    labelcreditos.setForeground(Color.WHITE);
                 }
 
 
@@ -236,6 +160,93 @@ public class Interfaz extends JFrame
         });
         this.addKeyListener(new manejadorDeTeclas());
         panelInferior.addKeyListener(new manejadorDeTeclas());
+    }
+
+    public void initComponents() {
+        creditos = 0;
+
+        resolucion = Toolkit.getDefaultToolkit().getScreenSize();
+
+        ancho = (int) resolucion.getWidth();
+        alto = (int) (resolucion.getHeight() - 54);
+
+        setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/com/mfrockola/imagenes/icono.png")));
+
+        // Iniciar los labels
+
+        labelcreditos = new JLabel("Creditos: 0");
+        labelcreditos.setForeground(Color.WHITE);
+        labelcreditos.setFont(new Font("Calibri", Font.BOLD, 23));
+        labelcreditos.setBorder(BorderFactory.createEmptyBorder(0,10,0,0));
+
+        Icon log = new ImageIcon(this.getClass().getResource("/com/mfrockola/imagenes/nombre.png"));
+        labelLogo = new JLabel(log);
+        labelLogo.setHorizontalAlignment(SwingConstants.RIGHT);
+        labelLogo.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
+
+        labelCancionEnRepro = new JLabel("MFRockola");
+        labelCancionEnRepro.setForeground(Color.WHITE);
+        labelCancionEnRepro.setFont(new Font("Calibri", Font.BOLD, 23));
+        labelCancionEnRepro.setHorizontalAlignment(SwingConstants.CENTER);
+
+        // Iniciar las listas
+
+        // Lee las musicas en el directorio seleccionado y las guarda en este objeto
+        musicaDisponible = new ListaDeMusica(configuraciones.getDireccionVideos());
+
+        listaDeMusicas = new JList();
+        listaDeMusicas.setCellRenderer(new ModificadorDeCeldas(new Font("Consolas", Font.BOLD,20),
+                configuraciones.getColor1(), configuraciones.getColor2()));
+        listaDeMusicas.setSelectedIndex(1);
+        listaDeMusicas.setListData(musicaDisponible.getListaMusicas());
+        listaDeMusicas.addKeyListener(new manejadorDeTeclas());
+        listaDeMusicas.setVisibleRowCount(20);
+        listaDeMusicas.setFocusable(false);
+        listaDeMusicas.setMaximumSize(getMaximumSize());
+
+        barras = new JScrollPane(listaDeMusicas);
+        barras.setBounds(30, 30, ancho-590, alto-35);
+        barras.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        barras.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+
+        // Iniciar los panel
+
+        contenedorPrincipal = new JPanel();
+        contenedorPrincipal.setOpaque(false);
+        contenedorPrincipal.setLayout(null);
+        contenedorPrincipal.add(barras);
+
+        panelInferior = new JPanel();
+        panelInferior.setLayout(new BorderLayout());
+        panelInferior.setOpaque(false);
+        panelInferior.add(labelLogo,BorderLayout.EAST);
+
+        panelFondo = new JEImagePanel(configuraciones.getDireccionFondo());
+        panelFondo.setLayout(new BorderLayout());
+        panelFondo.add(panelInferior,BorderLayout.SOUTH);
+
+        panelInferior.add(labelCancionEnRepro, BorderLayout.CENTER);
+
+        panelFondo.add(contenedorPrincipal,BorderLayout.CENTER);
+
+        repro = new Reproductor();
+        contenedorVideo = new JPanel();
+        contenedorVideo.setOpaque(false);
+        contenedorVideo.setBackground(Color.BLACK);
+        contenedorVideo.setLayout(new BorderLayout());
+        contenedorVideo.setBounds(ancho-530, alto-(alto*94/100),500, 283);
+        contenedorVideo.add(repro.obtenerReproductor(),BorderLayout.CENTER);
+        contenedorPrincipal.add(contenedorVideo);
+
+        panel = new JPanel();
+        panel.setOpaque(false);
+        panel.setBounds(ancho-530, alto-(alto*55/100), 500, 380); // contenedorVideo.setBounds(ancho-530, alto-(alto*94/100),500, 283);
+        contenedorPrincipal.add(panel);
+        panel.setLayout(new GridLayout(2, 1, 20, 0));
+
+        panelInferior.add(labelcreditos,BorderLayout.WEST);
+
+        activarListaReproduccion();
     }
 
     public String cambiarImagen()
@@ -250,7 +261,7 @@ public class Interfaz extends JFrame
         if (isFullScreen == false)
         {
             barras.setVisible(false);
-            lista.setVisible(false);
+            listaDeMusicas.setVisible(false);
             panel.setVisible(false);
             contenedorVideo.setBounds(0, 0, ancho, alto);
             isFullScreen = true;
@@ -259,7 +270,7 @@ public class Interfaz extends JFrame
         {
             contenedorVideo.setBounds(ancho-530, alto-(alto*94/100),500, 283);
             barras.setVisible(true);
-            lista.setVisible(true);
+            listaDeMusicas.setVisible(true);
             panel.setVisible(true);
             isFullScreen = false;
         }
@@ -339,9 +350,9 @@ public class Interfaz extends JFrame
                 else
                     condicion = false;
 
-                if (numero >= listado.getListaMusicas().length)
+                if (numero >= musicaDisponible.getListaMusicas().length)
                 {
-                    lblcreditos.setText("Musica no encontrada");
+                    labelcreditos.setText("Musica no encontrada");
                     objeto.reproducir = false;
                     objeto.reiniciarValores();
                     objeto.selectorMusica.setText("- - - -");
@@ -354,36 +365,36 @@ public class Interfaz extends JFrame
                     {
                         if (listaReproduccion.obtenerCancionAReproducir()==null)
                         {
-                            lista.setSelectedIndex(numero);
-                            Cancion cancionAReproducir =  (Cancion) lista.getSelectedValue();
+                            listaDeMusicas.setSelectedIndex(numero);
+                            Cancion cancionAReproducir =  (Cancion) listaDeMusicas.getSelectedValue();
 
                             listaReproduccion.agregarCanciones(cancionAReproducir);
                             repro.reproducirMusica(listaReproduccion.obtenerGenero(),listaReproduccion.obtenerCancionAReproducir());
                             if (creditosLibres== false)
                             {
                                 --creditos;
-                                lblcreditos.setText(String.format("%s: %d","Creditos",creditos));
+                                labelcreditos.setText(String.format("%s: %d","Creditos",creditos));
                             }
                             objeto.reproducir = false;
                             objeto.reiniciarValores();
                             objeto.selectorMusica.setText("- - - -");
                             prohibir.agregarProhibido(numero);
-                            lblMusica.setText(String.format("%04d - %s",listaReproduccion.obtenerNumero()
+                            labelMusica.setText(String.format("%04d - %s",listaReproduccion.obtenerNumero()
                                     ,listaReproduccion.obtenerCancionAReproducir()));
                             labelCancionEnRepro.setText(String.format("%04d - %s",
                                     listaReproduccion.obtenerNumero(), listaReproduccion.obtenerCancionAReproducir()));
                         }
                         else
                         {
-                            lista.setSelectedIndex(numero);
-                            Cancion cancionAReproducir = (Cancion) lista.getSelectedValue();
+                            listaDeMusicas.setSelectedIndex(numero);
+                            Cancion cancionAReproducir = (Cancion) listaDeMusicas.getSelectedValue();
                             //Cancion cancion = new Cancion(numero, cancionAReproducir);
                             listaReproduccion.agregarCanciones(cancionAReproducir);
                             if (creditosLibres == false)
                             {
                                 --creditos;
-                                lblcreditos.setForeground(Color.WHITE);
-                                lblcreditos.setText(String.format("%s: %d","Creditos",creditos));
+                                labelcreditos.setForeground(Color.WHITE);
+                                labelcreditos.setText(String.format("%s: %d","Creditos",creditos));
                             }
                             objeto.reproducir = false;
                             objeto.reiniciarValores();
@@ -394,8 +405,8 @@ public class Interfaz extends JFrame
                     }
                     else
                     {
-                        lblcreditos.setForeground(Color.RED);
-                        lblcreditos.setText("Sin creditos o no se puede reproducir en 30 mins");
+                        labelcreditos.setForeground(Color.RED);
+                        labelcreditos.setText("Sin creditos o no se puede reproducir en 30 mins");
                         temporizadorLblPublicidad.start();
                         objeto.reproducir = false;
                         objeto.reiniciarValores();
@@ -413,12 +424,12 @@ public class Interfaz extends JFrame
                     if (creditosLibres == false)
                     {
                         creditosLibres = true;
-                        lblcreditos.setText("Creditos: Libres");
+                        labelcreditos.setText("Creditos: Libres");
                     }
                     else
                     {
                         creditosLibres = false;
-                        lblcreditos.setText(String.format("Creditos: %d", creditos));
+                        labelcreditos.setText(String.format("Creditos: %d", creditos));
                     }
                 }
                 else
@@ -432,40 +443,40 @@ public class Interfaz extends JFrame
 
             else if (evento.getKeyCode()==45 || evento.getKeyCode()==109)
             {
-                if (lista.getSelectedIndex() - 10 < 0)
+                if (listaDeMusicas.getSelectedIndex() - 10 < 0)
                 {
-                    lista.setSelectedIndex(0);
-                    lista.ensureIndexIsVisible(lista.getSelectedIndex());
+                    listaDeMusicas.setSelectedIndex(0);
+                    listaDeMusicas.ensureIndexIsVisible(listaDeMusicas.getSelectedIndex());
                 }
                 else
                 {
-                    lista.setSelectedIndex(lista.getSelectedIndex()-10);
-                    lista.ensureIndexIsVisible(lista.getSelectedIndex());
+                    listaDeMusicas.setSelectedIndex(listaDeMusicas.getSelectedIndex()-10);
+                    listaDeMusicas.ensureIndexIsVisible(listaDeMusicas.getSelectedIndex());
                 }
 
             }
             else if (evento.getKeyCode()==521 || evento.getKeyCode()==107)
             {
-                if(lista.getSelectedIndex()+10 > listado.getListaMusicas().length)
+                if(listaDeMusicas.getSelectedIndex()+10 > musicaDisponible.getListaMusicas().length)
                 {
-                    lista.setSelectedIndex(listado.getListaMusicas().length-1);
-                    lista.ensureIndexIsVisible(lista.getSelectedIndex());
+                    listaDeMusicas.setSelectedIndex(musicaDisponible.getListaMusicas().length-1);
+                    listaDeMusicas.ensureIndexIsVisible(listaDeMusicas.getSelectedIndex());
                 }
                 else
                 {
-                    lista.setSelectedIndex(lista.getSelectedIndex()+10);
-                    lista.ensureIndexIsVisible(lista.getSelectedIndex());
+                    listaDeMusicas.setSelectedIndex(listaDeMusicas.getSelectedIndex()+10);
+                    listaDeMusicas.ensureIndexIsVisible(listaDeMusicas.getSelectedIndex());
                 }
             }
             else if (evento.getKeyCode() == 71)
             {
-                lista.setSelectedIndex(listado.subirGenero());
-                lista.ensureIndexIsVisible(lista.getSelectedIndex());
+                listaDeMusicas.setSelectedIndex(musicaDisponible.subirGenero());
+                listaDeMusicas.ensureIndexIsVisible(listaDeMusicas.getSelectedIndex());
             }
             else if (evento.getKeyCode() == 72)
             {
-                lista.setSelectedIndex(listado.bajarGenero());
-                lista.ensureIndexIsVisible(lista.getSelectedIndex());
+                listaDeMusicas.setSelectedIndex(musicaDisponible.bajarGenero());
+                listaDeMusicas.ensureIndexIsVisible(listaDeMusicas.getSelectedIndex());
             }
         }
     }
@@ -479,13 +490,13 @@ public class Interfaz extends JFrame
             if (listaReproduccion.obtenerCancionAReproducir() == null)
             {
                 repro.embeddedMediaPlayer.playMedia("C:\\creditos.jpg");
-                lblMusica.setText("MFRockola");
+                labelMusica.setText("MFRockola");
                 labelCancionEnRepro.setText("MFRockola");
             }
             else
             {
                 repro.reproducirMusica(listaReproduccion.obtenerGenero(), listaReproduccion.obtenerCancionAReproducir());
-                lblMusica.setText(listaReproduccion.obtenerCancionAReproducir());
+                labelMusica.setText(listaReproduccion.obtenerCancionAReproducir());
                 labelCancionEnRepro.setText(listaReproduccion.obtenerCancionAReproducir());
             }
 
@@ -578,7 +589,7 @@ public class Interfaz extends JFrame
             @Override
             public void actionPerformed(ActionEvent e)
             {
-                lista.setListData(listado.getListaMusicas());
+                listaDeMusicas.setListData(musicaDisponible.getListaMusicas());
             }
         });
 

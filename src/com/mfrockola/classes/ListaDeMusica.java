@@ -6,7 +6,7 @@ import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 
-public class ListaDeMusica extends JFrame
+public class ListaDeMusica
 {
 	private Cancion [] ListaMusicas;
 	private Genero [] generos;
