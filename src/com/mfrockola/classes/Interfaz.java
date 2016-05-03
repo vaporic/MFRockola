@@ -497,9 +497,14 @@ public class Interfaz extends JFrame
 
             if (listaReproduccion.obtenerCancionAReproducir() == null)
             {
-                repro.embeddedMediaPlayer.playMedia("C:\\creditos.jpg");
-                labelMusica.setText("MFRockola");
-                labelCancionEnRepro.setText("MFRockola");
+                if (configuraciones.isVideoPromocional()) {
+                    repro.embeddedMediaPlayer.playMedia(configuraciones.getDireccionVideoPromocional());
+                    labelMusica.setText("MFRockola");
+                    labelCancionEnRepro.setText("MFRockola");
+                } else {
+                    labelMusica.setText("MFRockola");
+                    labelCancionEnRepro.setText("MFRockola");
+                }
             }
             else
             {

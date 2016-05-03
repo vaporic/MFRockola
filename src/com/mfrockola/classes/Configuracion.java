@@ -605,7 +605,7 @@ public class Configuracion extends JFrame
 		button_5.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) 
 			{
-				textFieldVideoPromocional.setText(seleccionarDirectorio());
+				textFieldVideoPromocional.setText(seleccionarArchivo());
 			}
 		});
 		button_5.setBounds(551, 230, 45, 23);
