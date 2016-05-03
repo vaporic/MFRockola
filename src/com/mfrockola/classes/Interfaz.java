@@ -43,6 +43,7 @@ public class Interfaz extends JFrame
 
     @SuppressWarnings("rawtypes")
     private JList listaDeMusicas; // JList para colocar el listado de los videos disponibles en el directorio.
+    private ListMusic listMusic;
     private JList listaDeReproduccion; // JList para colocar el listado de los videos en reproduccion.
 
     // JLabels
@@ -180,10 +181,13 @@ public class Interfaz extends JFrame
         // Lee las musicas en el directorio seleccionado y las guarda en este objeto
         musicaDisponible = new ListaDeMusica(configuraciones.getDireccionVideos());
 
+        listMusic = new ListMusic(configuraciones.getDireccionVideos());
+
         listaDeMusicas = new JList();
         listaDeMusicas.setCellRenderer(new ModificadorDeCeldas(new Font("Consolas", Font.BOLD,20),
                 configuraciones.getColor1(), configuraciones.getColor2()));
-        listaDeMusicas.setListData(musicaDisponible.getListaMusicas());
+        listaDeMusicas.setListData(listMusic.getGenderSongs(0));
+    //    listaDeMusicas.setListData(musicaDisponible.getListaMusicas());
         listaDeMusicas.addKeyListener(new manejadorDeTeclas());
         listaDeMusicas.setVisibleRowCount(20);
         listaDeMusicas.setFocusable(false);
@@ -477,12 +481,16 @@ public class Interfaz extends JFrame
             }
             else if (evento.getKeyCode() == 71)
             {
-                listaDeMusicas.setSelectedIndex(musicaDisponible.subirGenero());
+                if (listMusic.upGender()) {
+                    listaDeMusicas.setListData(listMusic.getGenderSongs(listMusic.getSelectedGender()));
+                }
                 listaDeMusicas.ensureIndexIsVisible(0);
             }
             else if (evento.getKeyCode() == 72)
             {
-                listaDeMusicas.setSelectedIndex(musicaDisponible.bajarGenero());
+                if (listMusic.downGender()) {
+                    listaDeMusicas.setListData(listMusic.getGenderSongs(listMusic.getSelectedGender()));
+                }
                 listaDeMusicas.ensureIndexIsVisible(0);
             }
         }

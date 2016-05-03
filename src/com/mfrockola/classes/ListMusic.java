@@ -10,13 +10,20 @@ public class ListMusic {
     private Cancion[] songs;
     private ArrayList<Gender> gender;
     private String path;
-    private int selectedGenre;
+    private int selectedGender;
     private int songNumber;
 
     public ListMusic (String path) {
         setPath(path);
         setGender(new ArrayList<>());
         setSongs(new Cancion[0]);
+
+        selectedGender = 0;
+        countGender();
+    }
+
+    public int getSelectedGender (){
+        return selectedGender;
     }
 
     public void countGender() {
@@ -34,6 +41,22 @@ public class ListMusic {
                 gender.add(new Gender(listaArchivos[i],countSongs(archivoActual)));
             }
         }
+    }
+
+    public boolean upGender() {
+        if (selectedGender + 1 < gender.size()) {
+            selectedGender++;
+            return true;
+        } else
+            return false;
+    }
+
+    public boolean downGender() {
+        if (selectedGender != 0) {
+            selectedGender--;
+            return true;
+        } else
+            return false;
     }
 
     public Cancion[] countSongs(File file) {
@@ -60,5 +83,9 @@ public class ListMusic {
 
     public void setGender(ArrayList<Gender> gender) {
         this.gender = gender;
+    }
+
+    public Cancion[] getGenderSongs(int i) {
+        return gender.get(i).getSongs();
     }
 }
