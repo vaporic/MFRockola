@@ -189,7 +189,7 @@ public class Configuracion extends JFrame
 		panel2.add(textFieldVideoPromocional);
 		JPanel panel3 = new JPanel();
 		panel3.setBackground(Color.WHITE);
-		fichas.addTab("Cr�ditos",null,panel3,"Configuración de los créditos y sus precios");
+		fichas.addTab("Créditos",null,panel3,"Configuración de los créditos y sus precios");
 		panel3.setLayout(null);
 		
 		JLabel lblConfiguracionDeCreditos = new JLabel("Configuración de Créditos");

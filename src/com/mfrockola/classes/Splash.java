@@ -1,9 +1,6 @@
 package com.mfrockola.classes;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Toolkit;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -22,6 +19,8 @@ import javax.swing.UIManager;
 @SuppressWarnings("serial")
 public class Splash extends JFrame implements Runnable
 {
+	private boolean moveMouse = true;
+
 	public Splash()
 	{
 		URL url = this.getClass().getResource("/com/mfrockola/imagenes/fondoSmall.jpg");
@@ -62,7 +61,7 @@ public class Splash extends JFrame implements Runnable
 	
 	public void run()
 	{
-		final Timer temporizador = new Timer(1000*10, new ActionListener() 
+		final Timer temporizador = new Timer(1000*2, new ActionListener()
 		{
 			public void actionPerformed(ActionEvent e) 
 			{
@@ -81,6 +80,7 @@ public class Splash extends JFrame implements Runnable
 				if (evento.getKeyCode()==81)
 				{
 					temporizador.stop();
+					moveMouse = false;
 					new Configuracion();
 					dispose();
 				}
@@ -90,5 +90,16 @@ public class Splash extends JFrame implements Runnable
 				}
 			}
 		});
+
+		Robot robot = null;
+
+		try {
+			robot = new Robot();
+		} catch (AWTException e) {
+			e.printStackTrace();
+		}
+		while (moveMouse) {
+			robot.mouseMove(1366,768);
+		}
 	}
 }

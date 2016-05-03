@@ -26,13 +26,18 @@ public class ModificadorDeCeldas extends JLabel implements ListCellRenderer
 	public Component getListCellRendererComponent(JList list, Object value,
 			int index, boolean isSelected, boolean cellHasFocus) 
 	{
-		setText(value.toString());
+		if (value == null) {
+			setText("Sin canciones en reproducción");
+		} else setText(value.toString());
 		
-		if(index % 2 == 0)
+		if(index % 2 == 0 && !isSelected)
 			setBackground(color1);
-		else
+		else if (isSelected) {
+			setBackground(Color.BLUE);
+		} else {
 			setBackground(color2);
-		
+		}
+
 		return this;
 	}
 

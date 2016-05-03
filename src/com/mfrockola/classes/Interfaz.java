@@ -109,20 +109,6 @@ public class Interfaz extends JFrame
         temporizadorLblPublicidad = new Timer(demoraLblPublicidad, cambiarLblPublicidad);
         temporizadorLblPublicidad.setRepeats(false);
 
-        JPanel panel_1 = new JPanel();
-        panel_1.setOpaque(false);
-        panel.add(panel_1);
-        panel_1.setLayout(new GridLayout(2, 0, 0, 0));
-
-        labelMusica.setText("MFRockola");
-        labelMusica.setHorizontalAlignment(SwingConstants.CENTER);
-        labelMusica.setForeground(Color.WHITE);
-        labelMusica.setFont(new Font("Calibri", Font.BOLD, 23));
-        panel_1.add(labelMusica);
-
-
-        panel_1.add(objeto.selectorMusica);
-
         getContentPane().add(panelFondo);
 
         setUndecorated(true);
@@ -197,7 +183,6 @@ public class Interfaz extends JFrame
         listaDeMusicas = new JList();
         listaDeMusicas.setCellRenderer(new ModificadorDeCeldas(new Font("Consolas", Font.BOLD,20),
                 configuraciones.getColor1(), configuraciones.getColor2()));
-        listaDeMusicas.setSelectedIndex(1);
         listaDeMusicas.setListData(musicaDisponible.getListaMusicas());
         listaDeMusicas.addKeyListener(new manejadorDeTeclas());
         listaDeMusicas.setVisibleRowCount(20);
@@ -208,6 +193,13 @@ public class Interfaz extends JFrame
         barras.setBounds(30, 30, ancho-590, alto-35);
         barras.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         barras.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+
+        listaDeReproduccion = new JList();
+        listaDeReproduccion.setListData(listaReproduccion.obtenerCancionesEnLista());
+        listaDeReproduccion.setCellRenderer(new ModificadorDeCeldas(new Font("Consolas", Font.BOLD,20),
+                configuraciones.getColor1(), configuraciones.getColor2()));
+        listaDeReproduccion.setBounds(ancho-530, alto-200,500,190);
+        listaDeReproduccion.setFocusable(false);
 
         // Iniciar los panel
 
@@ -231,8 +223,6 @@ public class Interfaz extends JFrame
 
         repro = new Reproductor();
         contenedorVideo = new JPanel();
-        contenedorVideo.setOpaque(false);
-        contenedorVideo.setBackground(Color.BLACK);
         contenedorVideo.setLayout(new BorderLayout());
         contenedorVideo.setBounds(ancho-530, alto-(alto*94/100),500, 283);
         contenedorVideo.add(repro.obtenerReproductor(),BorderLayout.CENTER);
@@ -246,7 +236,20 @@ public class Interfaz extends JFrame
 
         panelInferior.add(labelcreditos,BorderLayout.WEST);
 
-        activarListaReproduccion();
+        JPanel panel_1 = new JPanel();
+        panel_1.setOpaque(false);
+        panel.add(panel_1);
+        panel_1.setLayout(new GridLayout(2, 0, 0, 0));
+
+        labelMusica.setText("MFRockola");
+        labelMusica.setHorizontalAlignment(SwingConstants.CENTER);
+        labelMusica.setForeground(Color.WHITE);
+        labelMusica.setFont(new Font("Calibri", Font.BOLD, 23));
+        panel_1.add(labelMusica);
+
+        panel_1.add(objeto.selectorMusica);
+
+        contenedorPrincipal.add(listaDeReproduccion);
     }
 
     public String cambiarImagen()
@@ -366,10 +369,12 @@ public class Interfaz extends JFrame
                         if (listaReproduccion.obtenerCancionAReproducir()==null)
                         {
                             listaDeMusicas.setSelectedIndex(numero);
+                            listaDeMusicas.ensureIndexIsVisible(numero);
                             Cancion cancionAReproducir =  (Cancion) listaDeMusicas.getSelectedValue();
 
                             listaReproduccion.agregarCanciones(cancionAReproducir);
                             repro.reproducirMusica(listaReproduccion.obtenerGenero(),listaReproduccion.obtenerCancionAReproducir());
+                            listaDeReproduccion.setListData(listaReproduccion.obtenerCancionesEnLista());
                             if (creditosLibres== false)
                             {
                                 --creditos;
@@ -387,9 +392,11 @@ public class Interfaz extends JFrame
                         else
                         {
                             listaDeMusicas.setSelectedIndex(numero);
+                            listaDeMusicas.ensureIndexIsVisible(numero);
                             Cancion cancionAReproducir = (Cancion) listaDeMusicas.getSelectedValue();
                             //Cancion cancion = new Cancion(numero, cancionAReproducir);
                             listaReproduccion.agregarCanciones(cancionAReproducir);
+                            listaDeReproduccion.setListData(listaReproduccion.obtenerCancionesEnLista());
                             if (creditosLibres == false)
                             {
                                 --creditos;
@@ -446,7 +453,7 @@ public class Interfaz extends JFrame
                 if (listaDeMusicas.getSelectedIndex() - 10 < 0)
                 {
                     listaDeMusicas.setSelectedIndex(0);
-                    listaDeMusicas.ensureIndexIsVisible(listaDeMusicas.getSelectedIndex());
+                    listaDeMusicas.ensureIndexIsVisible(0);
                 }
                 else
                 {
@@ -471,12 +478,12 @@ public class Interfaz extends JFrame
             else if (evento.getKeyCode() == 71)
             {
                 listaDeMusicas.setSelectedIndex(musicaDisponible.subirGenero());
-                listaDeMusicas.ensureIndexIsVisible(listaDeMusicas.getSelectedIndex());
+                listaDeMusicas.ensureIndexIsVisible(0);
             }
             else if (evento.getKeyCode() == 72)
             {
                 listaDeMusicas.setSelectedIndex(musicaDisponible.bajarGenero());
-                listaDeMusicas.ensureIndexIsVisible(listaDeMusicas.getSelectedIndex());
+                listaDeMusicas.ensureIndexIsVisible(0);
             }
         }
     }
@@ -486,6 +493,7 @@ public class Interfaz extends JFrame
         public void finished(MediaPlayer mediaPlayer)
         {
             listaReproduccion.quitarMusica();
+            listaDeReproduccion.setListData(listaReproduccion.obtenerCancionesEnLista());
 
             if (listaReproduccion.obtenerCancionAReproducir() == null)
             {
@@ -499,7 +507,6 @@ public class Interfaz extends JFrame
                 labelMusica.setText(listaReproduccion.obtenerCancionAReproducir());
                 labelCancionEnRepro.setText(listaReproduccion.obtenerCancionAReproducir());
             }
-
         }
     }
 
@@ -579,22 +586,22 @@ public class Interfaz extends JFrame
         cerrarRegConfig();
     }
 
-    public void activarListaReproduccion()
-    {
-        int delay = 6000;
-
-        Timer temporizadorListaReproduccion = new Timer(delay, new ActionListener()
-        {
-
-            @Override
-            public void actionPerformed(ActionEvent e)
-            {
-                listaDeMusicas.setListData(musicaDisponible.getListaMusicas());
-            }
-        });
-
-        temporizadorListaReproduccion.setRepeats(false);
-
-        temporizadorListaReproduccion.start();
-    }
+//    public void activarListaReproduccion()
+//    {
+//        int delay = 6000;
+//
+//        Timer temporizadorListaReproduccion = new Timer(delay, new ActionListener()
+//        {
+//
+//            @Override
+//            public void actionPerformed(ActionEvent e)
+//            {
+//                listaDeMusicas.setListData(musicaDisponible.getListaMusicas());
+//            }
+//        });
+//
+//        temporizadorListaReproduccion.setRepeats(false);
+//
+//        temporizadorListaReproduccion.start();
+//    }
 }
