@@ -7,16 +7,18 @@ import java.util.ArrayList;
  * Created by Angel C on 03/05/2016.
  */
 public class ListMusic {
-    private Cancion[] songs;
+
     private ArrayList<Gender> gender;
     private String path;
     private int selectedGenre;
     private int songNumber;
 
     public ListMusic (String path) {
+        selectedGenre = 0;
         setPath(path);
         setGender(new ArrayList<>());
-        setSongs(new Cancion[0]);
+
+        countGender();
     }
 
     public void countGender() {
@@ -34,6 +36,8 @@ public class ListMusic {
                 gender.add(new Gender(listaArchivos[i],countSongs(archivoActual)));
             }
         }
+
+        printListMusic();
     }
 
     public Cancion[] countSongs(File file) {
@@ -50,15 +54,27 @@ public class ListMusic {
         return gender;
     }
 
+    public void printListMusic() {
+        for (int i = 0; i < gender.size(); i++) {
+            printGender(gender.get(i));
+        }
+    }
+
+    public void printGender(Gender gender) {
+        for (int i = 0; i < gender.getSongs().length; i++) {
+            System.out.println(gender.getSongs()[i].toString());
+        }
+    }
+
     public void setPath(String path) {
         this.path = path;
     }
 
-    public void setSongs(Cancion[] songs) {
-        this.songs = songs;
-    }
-
     public void setGender(ArrayList<Gender> gender) {
         this.gender = gender;
+    }
+
+    public static void main(String [] args) {
+        new ListMusic("C:/videos");
     }
 }
