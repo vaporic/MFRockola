@@ -8,17 +8,35 @@ import java.util.ArrayList;
  */
 public class ListMusic {
 
+    private ArrayList <Cancion> listOfSongs;
     private ArrayList<Gender> gender;
     private String path;
-    private int selectedGenre;
+    private int selectedGender;
     private int songNumber;
 
     public ListMusic (String path) {
-        selectedGenre = 0;
         setPath(path);
         setGender(new ArrayList<>());
+        setListOfSongs(new ArrayList<>());
 
+        selectedGender = 0;
         countGender();
+    }
+
+    public int getSelectedGender (){
+        return selectedGender;
+    }
+
+    public void setListOfSongs(ArrayList<Cancion> listOfSongs) {
+        this.listOfSongs = listOfSongs;
+    }
+
+    public int getSizeListOfSongs () {
+        return listOfSongs.size();
+    }
+
+    public Cancion getSong(int number) {
+        return listOfSongs.get(number);
     }
 
     public void countGender() {
@@ -36,8 +54,22 @@ public class ListMusic {
                 gender.add(new Gender(listaArchivos[i],countSongs(archivoActual)));
             }
         }
+    }
 
-        printListMusic();
+    public boolean upGender() {
+        if (selectedGender + 1 < gender.size()) {
+            selectedGender++;
+            return true;
+        } else
+            return false;
+    }
+
+    public boolean downGender() {
+        if (selectedGender != 0) {
+            selectedGender--;
+            return true;
+        } else
+            return false;
     }
 
     public Cancion[] countSongs(File file) {
@@ -48,22 +80,11 @@ public class ListMusic {
 
         for (int i = 0; i < files.length; i++) {
             gender[i] = new Cancion(songNumber,file.getName(),files[i]);
+            listOfSongs.add(new Cancion(songNumber,file.getName(),files[i]));
             songNumber++;
         }
 
         return gender;
-    }
-
-    public void printListMusic() {
-        for (int i = 0; i < gender.size(); i++) {
-            printGender(gender.get(i));
-        }
-    }
-
-    public void printGender(Gender gender) {
-        for (int i = 0; i < gender.getSongs().length; i++) {
-            System.out.println(gender.getSongs()[i].toString());
-        }
     }
 
     public void setPath(String path) {
@@ -74,7 +95,8 @@ public class ListMusic {
         this.gender = gender;
     }
 
-    public static void main(String [] args) {
-        new ListMusic("C:/videos");
+    public Cancion[] getGenderSongs(int i) {
+        return gender.get(i).getSongs();
     }
+
 }

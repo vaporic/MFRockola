@@ -27,7 +27,6 @@ public class Interfaz extends JFrame
 
     private boolean creditosLibres = false;
 
-    ListaDeMusica musicaDisponible; // Objeto de musicas disponibles en el directorio.
     MusicasProhibidas prohibir = new MusicasProhibidas(); // Objeto de musicas que no se pueden repetir.
     ListaDeReproduccion listaReproduccion = new ListaDeReproduccion(); // Objeto de las musicas en reproduccion.
 
@@ -177,9 +176,6 @@ public class Interfaz extends JFrame
         labelCancionEnRepro.setHorizontalAlignment(SwingConstants.CENTER);
 
         // Iniciar las listas
-
-        // Lee las musicas en el directorio seleccionado y las guarda en este objeto
-        musicaDisponible = new ListaDeMusica(configuraciones.getDireccionVideos());
 
         listMusic = new ListMusic(configuraciones.getDireccionVideos());
 
@@ -357,7 +353,7 @@ public class Interfaz extends JFrame
                 else
                     condicion = false;
 
-                if (numero >= musicaDisponible.getListaMusicas().length)
+                if (numero >= listMusic.getSizeListOfSongs())
                 {
                     labelcreditos.setText("Musica no encontrada");
                     objeto.reproducir = false;
@@ -372,9 +368,7 @@ public class Interfaz extends JFrame
                     {
                         if (listaReproduccion.obtenerCancionAReproducir()==null)
                         {
-                            listaDeMusicas.setSelectedIndex(numero);
-                            listaDeMusicas.ensureIndexIsVisible(numero);
-                            Cancion cancionAReproducir =  (Cancion) listaDeMusicas.getSelectedValue();
+                            Cancion cancionAReproducir =  listMusic.getSong(numero);
 
                             listaReproduccion.agregarCanciones(cancionAReproducir);
                             repro.reproducirMusica(listaReproduccion.obtenerGenero(),listaReproduccion.obtenerCancionAReproducir());
@@ -395,9 +389,7 @@ public class Interfaz extends JFrame
                         }
                         else
                         {
-                            listaDeMusicas.setSelectedIndex(numero);
-                            listaDeMusicas.ensureIndexIsVisible(numero);
-                            Cancion cancionAReproducir = (Cancion) listaDeMusicas.getSelectedValue();
+                            Cancion cancionAReproducir = listMusic.getSong(numero);
                             //Cancion cancion = new Cancion(numero, cancionAReproducir);
                             listaReproduccion.agregarCanciones(cancionAReproducir);
                             listaDeReproduccion.setListData(listaReproduccion.obtenerCancionesEnLista());
@@ -468,9 +460,9 @@ public class Interfaz extends JFrame
             }
             else if (evento.getKeyCode()==521 || evento.getKeyCode()==107)
             {
-                if(listaDeMusicas.getSelectedIndex()+10 > musicaDisponible.getListaMusicas().length)
+                if(listaDeMusicas.getSelectedIndex()+10 > listMusic.getGenderSongs(listMusic.getSelectedGender()).length)
                 {
-                    listaDeMusicas.setSelectedIndex(musicaDisponible.getListaMusicas().length-1);
+                    listaDeMusicas.setSelectedIndex(listMusic.getGenderSongs(listMusic.getSelectedGender()).length-1);
                     listaDeMusicas.ensureIndexIsVisible(listaDeMusicas.getSelectedIndex());
                 }
                 else
@@ -483,15 +475,17 @@ public class Interfaz extends JFrame
             {
                 if (listMusic.upGender()) {
                     listaDeMusicas.setListData(listMusic.getGenderSongs(listMusic.getSelectedGender()));
+                    listaDeMusicas.setSelectedIndex(0);
+                    listaDeMusicas.ensureIndexIsVisible(0);
                 }
-                listaDeMusicas.ensureIndexIsVisible(0);
             }
             else if (evento.getKeyCode() == 72)
             {
                 if (listMusic.downGender()) {
                     listaDeMusicas.setListData(listMusic.getGenderSongs(listMusic.getSelectedGender()));
+                    listaDeMusicas.setSelectedIndex(0);
+                    listaDeMusicas.ensureIndexIsVisible(0);
                 }
-                listaDeMusicas.ensureIndexIsVisible(0);
             }
         }
     }
