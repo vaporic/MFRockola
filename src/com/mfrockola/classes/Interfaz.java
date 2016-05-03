@@ -47,6 +47,7 @@ public class Interfaz extends JFrame
 
     // JLabels
 
+    JLabel labelGenero;
     JLabel labelMusica = new JLabel();
     JLabel labelCancionEnRepro;
     JLabel labelcreditos;
@@ -160,6 +161,11 @@ public class Interfaz extends JFrame
 
         // Iniciar los labels
 
+        labelGenero = new JLabel("Genero");
+        labelGenero.setForeground(Color.WHITE);
+        labelGenero.setFont(new Font("Calibri", Font.BOLD, 23));
+        labelGenero.setBounds(30,15,100,35);
+
         labelcreditos = new JLabel("Creditos: 0");
         labelcreditos.setForeground(Color.WHITE);
         labelcreditos.setFont(new Font("Calibri", Font.BOLD, 23));
@@ -190,7 +196,7 @@ public class Interfaz extends JFrame
         listaDeMusicas.setMaximumSize(getMaximumSize());
 
         barras = new JScrollPane(listaDeMusicas);
-        barras.setBounds(30, 30, ancho-590, alto-35);
+        barras.setBounds(30, 60, ancho-590, alto-65);
         barras.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         barras.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
 
@@ -201,12 +207,16 @@ public class Interfaz extends JFrame
         listaDeReproduccion.setBounds(ancho-530, alto-200,500,190);
         listaDeReproduccion.setFocusable(false);
 
+        labelGenero.setText(listMusic.getNameOfGender());
+
         // Iniciar los panel
 
         contenedorPrincipal = new JPanel();
         contenedorPrincipal.setOpaque(false);
         contenedorPrincipal.setLayout(null);
         contenedorPrincipal.add(barras);
+
+        contenedorPrincipal.add(labelGenero);
 
         panelInferior = new JPanel();
         panelInferior.setLayout(new BorderLayout());
@@ -477,6 +487,7 @@ public class Interfaz extends JFrame
                     listaDeMusicas.setListData(listMusic.getGenderSongs(listMusic.getSelectedGender()));
                     listaDeMusicas.setSelectedIndex(0);
                     listaDeMusicas.ensureIndexIsVisible(0);
+                    labelGenero.setText(listMusic.getNameOfGender());
                 }
             }
             else if (evento.getKeyCode() == 72)
@@ -485,6 +496,7 @@ public class Interfaz extends JFrame
                     listaDeMusicas.setListData(listMusic.getGenderSongs(listMusic.getSelectedGender()));
                     listaDeMusicas.setSelectedIndex(0);
                     listaDeMusicas.ensureIndexIsVisible(0);
+                    labelGenero.setText(listMusic.getNameOfGender());
                 }
             }
         }

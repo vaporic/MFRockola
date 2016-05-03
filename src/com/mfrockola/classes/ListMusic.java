@@ -72,6 +72,10 @@ public class ListMusic {
             return false;
     }
 
+    public String getNameOfGender() {
+        return gender.get(selectedGender).getName();
+    }
+
     public Cancion[] countSongs(File file) {
 
         String [] files = file.list();
