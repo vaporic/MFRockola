@@ -122,6 +122,10 @@ public class Configuracion extends JFrame
 				abrirRegConfigEscritura();
 				agregarDatosRegConfig(false);
 				cerrarRegConfig();
+				JOptionPane.showMessageDialog(null,"Configuración guardada correctamente");
+				new Thread(new Splash()).start();
+				Splash.moveMouse = true;
+				dispose();
 			}
 		});
 		panelInferior.add(buttonGuardar);
@@ -207,12 +211,14 @@ public class Configuracion extends JFrame
 				{
 					videoPromocional = true;
 					textFieldVideoPromocional.setEditable(true);
+					textFieldVideoPromocional.setEnabled(true);
 					buttonPathPromotionalVideo.setEnabled(true);
 				}
 				else
 				{
 					videoPromocional = false;
 					textFieldVideoPromocional.setEditable(false);
+					textFieldVideoPromocional.setEnabled(false);
 					buttonPathPromotionalVideo.setEnabled(false);
 				}
 			}
@@ -666,6 +672,10 @@ public class Configuracion extends JFrame
 		textFieldReinicioMusicas.setText(String.format("%s",configuraciones.getReinicioMusicas()));
 
 		textFieldCantCreditos.setText(String.format("%s", configuraciones.getCantidadCreditos()));
+		textFieldVideoPromocional.setEnabled(configuraciones.isVideoPromocional());
+		textFieldVideoPromocional.setEditable(configuraciones.isVideoPromocional());
+		buttonPathPromotionalVideo.setEnabled(configuraciones.isVideoPromocional());
+		chckbxNewCheckBox.setSelected(configuraciones.isVideoPromocional());
 		textFieldVideos.setText(String.format("%s", configuraciones.getDireccionVideos()));
 		textFieldVlc.setText(String.format("%s", configuraciones.getDireccionVlc()));
 		textFieldVideoPromocional.setText(String.format("%s", configuraciones.getDireccionVideoPromocional()));
@@ -694,20 +704,6 @@ public class Configuracion extends JFrame
 		{
 			rdbtnClickDerecho.setSelected(true);
 			clickCreditos = 1;
-		}
-			
-		if(configuraciones.isVideoPromocional()==true)
-		{
-			textFieldVideoPromocional.setEditable(true);
-			chckbxNewCheckBox.setSelected(true);
-			buttonPathPromotionalVideo.setEnabled(true);
-			
-		}
-		else
-		{
-			textFieldVideoPromocional.setEditable(false);
-			chckbxNewCheckBox.setSelected(false);
-			buttonPathPromotionalVideo.setEnabled(false);
 		}
 
 		labelColor1.setBackground(configuraciones.getColor1());
@@ -757,7 +753,7 @@ public class Configuracion extends JFrame
 				configuraciones = new RegConfig(
 						"C:\\videos",
 						"C:\\Program Files\\VideoLAN\\VLC",
-						"Seleccione un video promocional",
+						"Seleccione un video",
 						1,
 						1,
 						1,
@@ -775,7 +771,7 @@ public class Configuracion extends JFrame
 						0,
 						true,
 						url,
-						new Color(51,51,255),
+						new Color(102,204,255),
 						new Color(255,255,255)
 				);
 
