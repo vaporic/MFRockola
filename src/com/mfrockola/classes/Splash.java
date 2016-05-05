@@ -23,9 +23,9 @@ public class Splash extends JFrame implements Runnable
 
 	public Splash()
 	{
-		URL url = this.getClass().getResource("/com/mfrockola/imagenes/fondoSmall.jpg");
-		System.out.println(url);
-		JEImagePanel panel = new JEImagePanel(url);
+
+		JEImagePanel panel = new JEImagePanel(
+				this.getClass().getResource("/com/mfrockola/imagenes/fondoSmall.jpg"));
 
 		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/com/mfrockola/imagenes/icono.png")));
 		panel.setLayout(new BorderLayout());

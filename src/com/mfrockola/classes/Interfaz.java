@@ -185,7 +185,7 @@ public class Interfaz extends JFrame
         listaDeReproduccion.setListData(listaReproduccion.obtenerCancionesEnLista());
         listaDeReproduccion.setCellRenderer(new ModificadorDeCeldas(new Font("Consolas", Font.BOLD,20),
                 configuraciones.getColor1(), configuraciones.getColor2()));
-        listaDeReproduccion.setBounds(ancho-530, alto-200,500,190);
+        listaDeReproduccion.setBounds(ancho-530, alto-260,500,250);
         listaDeReproduccion.setFocusable(false);
 
         labelGeneroMusical.setText("Genero Musical: "+ listMusic.getNameOfGender());
@@ -581,23 +581,4 @@ public class Interfaz extends JFrame
         agregarDatosRegConfig();
         cerrarRegConfig();
     }
-
-//    public void activarListaReproduccion()
-//    {
-//        int delay = 6000;
-//
-//        Timer temporizadorListaReproduccion = new Timer(delay, new ActionListener()
-//        {
-//
-//            @Override
-//            public void actionPerformed(ActionEvent e)
-//            {
-//                listaDeMusicas.setListData(musicaDisponible.getListaMusicas());
-//            }
-//        });
-//
-//        temporizadorListaReproduccion.setRepeats(false);
-//
-//        temporizadorListaReproduccion.start();
-//    }
 }
