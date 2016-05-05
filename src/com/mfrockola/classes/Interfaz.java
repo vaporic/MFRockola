@@ -6,10 +6,7 @@ import uk.co.caprica.vlcj.player.MediaPlayerEventAdapter;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.util.Random;
 
 /**
@@ -47,25 +44,20 @@ public class Interfaz extends JFrame
 
     // JLabels
 
-    JLabel labelGenero;
+    JLabel labelGeneroMusical;
     JLabel labelMusica = new JLabel();
     JLabel labelCancionEnRepro;
     JLabel labelcreditos;
     JLabel labelLogo;
 
-    // Arrays
-
-    String [] directorioPublicidad;
-
     Reproductor repro;
 
     SelectMusica objeto = new SelectMusica();
 
-    Random numeroAleatorio = new Random();
     private int monedasASubir;
     private int creditosASubir;
     private JScrollPane barras;
-    private Timer temporizadorLblPublicidad;
+    private Timer timerChangerLblCredits;
 
     @SuppressWarnings("unchecked")
     public Interfaz()
@@ -85,18 +77,7 @@ public class Interfaz extends JFrame
 
         initComponents();
 
-        File archivo = new File(configuraciones.getDireccionImagenes());
-
-        if (archivo.isDirectory())
-        {
-            directorioPublicidad = archivo.list();
-        }
-        else
-        {
-            JOptionPane.showMessageDialog(null, "error");
-        }
-
-        ActionListener cambiarLblPublicidad = new ActionListener() {
+        ActionListener changeLblCredits = new ActionListener() {
 
             public void actionPerformed(ActionEvent e)
             {
@@ -105,10 +86,8 @@ public class Interfaz extends JFrame
             }
         };
 
-        int demoraLblPublicidad = 5000;
-
-        temporizadorLblPublicidad = new Timer(demoraLblPublicidad, cambiarLblPublicidad);
-        temporizadorLblPublicidad.setRepeats(false);
+        timerChangerLblCredits = new Timer(5000, changeLblCredits);
+        timerChangerLblCredits.setRepeats(false);
 
         getContentPane().add(panelFondo);
 
@@ -117,11 +96,11 @@ public class Interfaz extends JFrame
         setSize(resolucion);
         setVisible(true);
 
-        //lista.setVisible(false);
-
         repro.embeddedMediaPlayer.addMediaPlayerEventListener(new manejadorDeReproductor());
 
-        //contenedorVideo.setBounds(0, 0, ancho, alto);
+        if(configuraciones.isVideoPromocional()) {
+            repro.embeddedMediaPlayer.playMedia(configuraciones.getDireccionVideoPromocional());
+        }
 
         addMouseListener(new MouseAdapter() {
             @Override
@@ -145,11 +124,14 @@ public class Interfaz extends JFrame
 
             }
         });
+
         this.addKeyListener(new manejadorDeTeclas());
+
         panelInferior.addKeyListener(new manejadorDeTeclas());
     }
 
     public void initComponents() {
+
         creditos = 0;
 
         resolucion = Toolkit.getDefaultToolkit().getScreenSize();
@@ -161,10 +143,10 @@ public class Interfaz extends JFrame
 
         // Iniciar los labels
 
-        labelGenero = new JLabel("Genero");
-        labelGenero.setForeground(Color.WHITE);
-        labelGenero.setFont(new Font("Calibri", Font.BOLD, 23));
-        labelGenero.setBounds(30,15,100,35);
+        labelGeneroMusical = new JLabel("Genero");
+        labelGeneroMusical.setForeground(Color.WHITE);
+        labelGeneroMusical.setFont(new Font("Calibri", Font.BOLD, 23));
+        labelGeneroMusical.setBounds(30,15,ancho-590,35);
 
         labelcreditos = new JLabel("Creditos: 0");
         labelcreditos.setForeground(Color.WHITE);
@@ -189,7 +171,6 @@ public class Interfaz extends JFrame
         listaDeMusicas.setCellRenderer(new ModificadorDeCeldas(new Font("Consolas", Font.BOLD,20),
                 configuraciones.getColor1(), configuraciones.getColor2()));
         listaDeMusicas.setListData(listMusic.getGenderSongs(0));
-    //    listaDeMusicas.setListData(musicaDisponible.getListaMusicas());
         listaDeMusicas.addKeyListener(new manejadorDeTeclas());
         listaDeMusicas.setVisibleRowCount(20);
         listaDeMusicas.setFocusable(false);
@@ -207,7 +188,7 @@ public class Interfaz extends JFrame
         listaDeReproduccion.setBounds(ancho-530, alto-200,500,190);
         listaDeReproduccion.setFocusable(false);
 
-        labelGenero.setText(listMusic.getNameOfGender());
+        labelGeneroMusical.setText("Genero Musical: "+ listMusic.getNameOfGender());
 
         // Iniciar los panel
 
@@ -216,7 +197,7 @@ public class Interfaz extends JFrame
         contenedorPrincipal.setLayout(null);
         contenedorPrincipal.add(barras);
 
-        contenedorPrincipal.add(labelGenero);
+        contenedorPrincipal.add(labelGeneroMusical);
 
         panelInferior = new JPanel();
         panelInferior.setLayout(new BorderLayout());
@@ -249,7 +230,7 @@ public class Interfaz extends JFrame
         JPanel panel_1 = new JPanel();
         panel_1.setOpaque(false);
         panel.add(panel_1);
-        panel_1.setLayout(new GridLayout(2, 0, 0, 0));
+        panel_1.setLayout(new GridLayout(3, 1, 0, 0));
 
         labelMusica.setText("MFRockola");
         labelMusica.setHorizontalAlignment(SwingConstants.CENTER);
@@ -262,13 +243,6 @@ public class Interfaz extends JFrame
         contenedorPrincipal.add(listaDeReproduccion);
     }
 
-    public String cambiarImagen()
-    {
-        String imagen = directorioPublicidad[numeroAleatorio.nextInt(directorioPublicidad.length)];
-
-        return imagen;
-    }
-
     public void pantallaCompleta()
     {
         if (isFullScreen == false)
@@ -276,6 +250,7 @@ public class Interfaz extends JFrame
             barras.setVisible(false);
             listaDeMusicas.setVisible(false);
             panel.setVisible(false);
+            labelGeneroMusical.setVisible(false);
             contenedorVideo.setBounds(0, 0, ancho, alto);
             isFullScreen = true;
         }
@@ -285,6 +260,7 @@ public class Interfaz extends JFrame
             barras.setVisible(true);
             listaDeMusicas.setVisible(true);
             panel.setVisible(true);
+            labelGeneroMusical.setVisible(true);
             isFullScreen = false;
         }
     }
@@ -296,7 +272,9 @@ public class Interfaz extends JFrame
 
     private class manejadorDeTeclas extends KeyAdapter
     {
-        public void keyReleased(KeyEvent evento)
+
+
+        public void keyPressed(KeyEvent evento)
         {
 
             if (evento.getKeyCode()==10)
@@ -369,7 +347,7 @@ public class Interfaz extends JFrame
                     objeto.reproducir = false;
                     objeto.reiniciarValores();
                     objeto.selectorMusica.setText("- - - -");
-                    temporizadorLblPublicidad.start();
+                    timerChangerLblCredits.start();
 
                 }
                 else
@@ -420,7 +398,7 @@ public class Interfaz extends JFrame
                     {
                         labelcreditos.setForeground(Color.RED);
                         labelcreditos.setText("Sin creditos o no se puede reproducir en 30 mins");
-                        temporizadorLblPublicidad.start();
+                        timerChangerLblCredits.start();
                         objeto.reproducir = false;
                         objeto.reiniciarValores();
                         objeto.selectorMusica.setText("- - - -");
@@ -446,7 +424,7 @@ public class Interfaz extends JFrame
                     }
                 }
                 else
-                    JOptionPane.showMessageDialog(null, "Contrase�a Incorrecta");
+                    JOptionPane.showMessageDialog(null, "Contraseña Incorrecta");
             }
             else if (evento.getKeyCode()==123)
             {
@@ -487,7 +465,7 @@ public class Interfaz extends JFrame
                     listaDeMusicas.setListData(listMusic.getGenderSongs(listMusic.getSelectedGender()));
                     listaDeMusicas.setSelectedIndex(0);
                     listaDeMusicas.ensureIndexIsVisible(0);
-                    labelGenero.setText(listMusic.getNameOfGender());
+                    labelGeneroMusical.setText("Genero Musical: " + listMusic.getNameOfGender());
                 }
             }
             else if (evento.getKeyCode() == 72)
@@ -496,7 +474,7 @@ public class Interfaz extends JFrame
                     listaDeMusicas.setListData(listMusic.getGenderSongs(listMusic.getSelectedGender()));
                     listaDeMusicas.setSelectedIndex(0);
                     listaDeMusicas.ensureIndexIsVisible(0);
-                    labelGenero.setText(listMusic.getNameOfGender());
+                    labelGeneroMusical.setText("Genero Musical: " + listMusic.getNameOfGender());
                 }
             }
         }
@@ -548,9 +526,7 @@ public class Interfaz extends JFrame
         try
         {
             configuraciones = new RegConfig(
-                    this.configuraciones.getDireccionMusicas(),
                     this.configuraciones.getDireccionVideos(),
-                    this.configuraciones.getDireccionImagenes(),
                     this.configuraciones.getDireccionVlc(),
                     this.configuraciones.getDireccionVideoPromocional(),
                     this.configuraciones.getMusicAleatoria(),
@@ -559,7 +535,6 @@ public class Interfaz extends JFrame
                     this.configuraciones.isLibre(),
                     this.configuraciones.isVideoPromocional(),
                     this.configuraciones.getClickCreditos(),
-                    this.configuraciones.isVideoPromocional(),
                     this.configuraciones.getTeclaSubirLista(),
                     this.configuraciones.getTeclaBajarLista(),
                     this.configuraciones.getTeclaSubirGenero(),
@@ -569,8 +544,8 @@ public class Interfaz extends JFrame
                     this.configuraciones.getTeclaCambiarLista(),
                     creditosASubir,
                     monedasASubir,
+                    this.configuraciones.isDefaultBackground(),
                     this.configuraciones.getDireccionFondo(),
-                    this.configuraciones.isMostrarPublicidad(),
                     this.configuraciones.getColor1(),
                     this.configuraciones.getColor2()
             );
@@ -588,6 +563,8 @@ public class Interfaz extends JFrame
         {
             if (salida != null)
                 salida.close();
+
+            salida = null;
         }
         catch (IOException ioExcepcion)
         {

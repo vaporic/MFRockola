@@ -9,58 +9,55 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
-	@SuppressWarnings("serial")
-	public class JEImagePanel extends JPanel{  
+public class JEImagePanel extends JPanel{
 
-		private Image image=null;  
+	private Image image=null;
 
-		    private Icon icon;  
+	private Icon icon;
 
-		/** Creates a new instance of JEImagePanel */  
+	/** Creates a new instance of JEImagePanel */
 
-		    public JEImagePanel(String nombreImagen)
-		    {  
-		    	this.setIcon(new ImageIcon(nombreImagen));
-		    }  
+	public JEImagePanel(String nombreImagen) {
+		this.setIcon(new ImageIcon(nombreImagen));
+	}
 
-		public JEImagePanel(URL resource) 
-		{
-			this.setIcon(new ImageIcon(resource));
-		}
+	public JEImagePanel(URL resource) {
+		setIcon(new ImageIcon(resource));
+	}
 
-		protected void paintComponent(Graphics g) {  
+	protected void paintComponent(Graphics g) {
 
-		        Graphics2D g2 =(Graphics2D) g;  
+		Graphics2D g2 =(Graphics2D) g;
 
-		        if(getImage()!=null)  
+		if(getImage()!=null)
 
-		            g2.drawImage(getImage(), 0, 0, getWidth(), getHeight(), null);  
+			g2.drawImage(getImage(), 0, 0, getWidth(), getHeight(), null);
 
-		    }  
+	}
 
-		public Image getImage() {  
+	public Image getImage() {
 
-		        return image;  
+		return image;
 
-		    }  
+	}
 
-		public void setImage(Image image) {  
+	public void setImage(Image image) {
 
-		        this.image = image;  
+		this.image = image;
 
-		    }  
+	}
 
-		public Icon getIcon() {  
+	public Icon getIcon() {
 
-		        return icon;  
+		return icon;
 
-		    }  
+	}
 
-		public void setIcon(Icon icon){  
+	public void setIcon(Icon icon){
 
-		        this.icon=icon;  
+		this.icon=icon;
 
-		        setImage(((ImageIcon)icon).getImage());  
+		setImage(((ImageIcon)icon).getImage());
 
-		    }  
+	}
 }

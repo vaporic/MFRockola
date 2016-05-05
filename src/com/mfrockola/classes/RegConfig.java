@@ -2,13 +2,12 @@ package com.mfrockola.classes;
 
 import java.awt.Color;
 import java.io.Serializable;
+import java.net.URL;
 
 @SuppressWarnings("serial")
 public class RegConfig implements Serializable
 {
-	private String direccionMusicas;
 	private String direccionVideos;
-	private String direccionImagenes;
 	private String direccionVlc;
 	private String direccionVideoPromocional;
 	private int musicAleatoria;
@@ -26,21 +25,19 @@ public class RegConfig implements Serializable
 	private int teclaCambiarLista;
 	private int cantidadCreditosUsados;
 	private int cantidadMonedasInsertadas;
-	private String direccionFondo;
-	private boolean mostrarPublicidad;
+	private boolean defaultBackground;
+	private URL direccionFondo;
 	private Color color1;
 	private Color color2;
 	
-	public RegConfig(String direccionMusicas, String direccionVideos, String direccionImagenes, String direccionVlc,
+	public RegConfig(String direccionVideos, String direccionVlc,
 			String direccionVideoPromocional, int musicAleatoria,int reinicioMusicas,int cantidadCreditos, boolean libre,
-			boolean videoPromocional, int clickCreditos, boolean selectVideoProm, int teclaSubirLista, int teclaBajarLista,
+			boolean videoPromocional, int clickCreditos, int teclaSubirLista, int teclaBajarLista,
 			int teclaSubirGenero, int teclaBajarGenero, int teclaPantallaCompleta, int teclaBorrar, int teclaCambiarLista,
-			int cantidadCreditosUsados, int CantidadMonedasInsertadas, String direccionFondo, boolean mostrarPublicidad,
+			int cantidadCreditosUsados, int CantidadMonedasInsertadas, boolean defaultBackground, URL direccionFondo,
 			Color color1, Color color2)
 	{
-		this.setDireccionMusicas(direccionMusicas);
 		this.setDireccionVideos(direccionVideos);
-		this.setDireccionImagenes(direccionImagenes);
 		this.setDireccionVlc(direccionVlc);
 		this.setMusicAleatoria(musicAleatoria);
 		this.setReinicioMusicas(reinicioMusicas);
@@ -57,20 +54,12 @@ public class RegConfig implements Serializable
 		this.setTeclaCambiarLista(teclaCambiarLista);
 		this.setCantidadCreditosUsados(cantidadCreditosUsados);
 		this.setCantidadMonedasInsertadas(CantidadMonedasInsertadas);
+		setDefaultBackground(defaultBackground);
 		this.setDireccionFondo(direccionFondo);
-		this.setMostrarPublicidad(mostrarPublicidad);
 		this.setColor1(color1);
 		this.setColor2(color2);
 	}
-	
-	public String getDireccionMusicas() 
-	{
-		return direccionMusicas;
-	}
-	public void setDireccionMusicas(String direccionMusicas) 
-	{
-		this.direccionMusicas = direccionMusicas;
-	}
+
 	public String getDireccionVideos() 
 	{
 		return direccionVideos;
@@ -78,14 +67,6 @@ public class RegConfig implements Serializable
 	public void setDireccionVideos(String direccionVideos) 
 	{
 		this.direccionVideos = direccionVideos;
-	}
-
-	public String getDireccionImagenes() {
-		return direccionImagenes;
-	}
-
-	public void setDireccionImagenes(String direccionImagenes) {
-		this.direccionImagenes = direccionImagenes;
 	}
 
 	public String getDireccionVlc() {
@@ -224,20 +205,12 @@ public class RegConfig implements Serializable
 		this.cantidadMonedasInsertadas = cantidadMonedasInsertadas;
 	}
 
-	public String getDireccionFondo() {
+	public URL getDireccionFondo() {
 		return direccionFondo;
 	}
 
-	public void setDireccionFondo(String direccionFondos) {
+	public void setDireccionFondo(URL direccionFondos) {
 		this.direccionFondo = direccionFondos;
-	}
-
-	public boolean isMostrarPublicidad() {
-		return mostrarPublicidad;
-	}
-
-	public void setMostrarPublicidad(boolean mostrarPublicidad) {
-		this.mostrarPublicidad = mostrarPublicidad;
 	}
 
 	public Color getColor1() {
@@ -254,5 +227,13 @@ public class RegConfig implements Serializable
 
 	public void setColor2(Color color2) {
 		this.color2 = color2;
+	}
+
+	public boolean isDefaultBackground() {
+		return defaultBackground;
+	}
+
+	public void setDefaultBackground(boolean defaultBackground) {
+		this.defaultBackground = defaultBackground;
 	}
 }

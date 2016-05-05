@@ -9,10 +9,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
+import java.io.*;
+import java.net.URL;
 
 import javax.swing.ButtonGroup;
 import javax.swing.Icon;
@@ -38,11 +36,9 @@ public class Configuracion extends JFrame
 	private ObjectOutputStream salida;
 	private OperacionesRegConfig registroDatos = new OperacionesRegConfig();
 	private RegConfig configuraciones;
-	
-	private JTextField textFieldMusicas;
+
 	private JTextField textFieldVideos;
 	private JTextField textFieldVlc;
-	private JTextField textFieldImagenes;
 	private JTextField textFieldCantCreditos;
 	private JTextField textFieldMusicaAleatoria;
 	private JTextField textFieldReinicioMusicas;
@@ -58,13 +54,13 @@ public class Configuracion extends JFrame
 	private JLabel labelCreditosUsados;
 	private JLabel labelMonedasInsertadas;
 	private JCheckBox chckbxNewCheckBox;
-	private JCheckBox chckbxMostrarPublicidad;
+	private JCheckBox checkBoxFoundDefaultBackground;
 	private JRadioButton rdbtnSi;
 	private JRadioButton rdbtnNo;
 	private boolean libre;
 	private boolean videoPromocional;
+	private boolean defaultBackground;
 	private boolean selectVideoProm;
-	private boolean mostrarPublicidad;
 	private int clickCreditos;
 	JFileChooser selectorArchivos = new JFileChooser();
 	private Color color1;
@@ -76,7 +72,7 @@ public class Configuracion extends JFrame
 	
 	public Configuracion() 
 	{	
-		setTitle("Configuraci\u00F3n");
+		setTitle("Configuración");
 		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/com/mfrockola/imagenes/icono.png")));
 		JPanel panelPrincipal = new JPanel();
 		panelPrincipal.setLayout(new BorderLayout(0, 0));
@@ -95,7 +91,7 @@ public class Configuracion extends JFrame
 		
 		JTextPane txtpnBienvenidoAlPanel = new JTextPane();
 		txtpnBienvenidoAlPanel.setText("Bienvenido al panel de configuración de MFRockola.\n\nAquí podrás modificar los aspectos"+" " +
-				"básicos del funcionamiento de MFRockola como el precio de los créditos, la cantidad de tiempo necesaria para la reproducción"+
+				"básicos del funcionamiento de MFRockola como el precio de los créditos, la cantidad de tiempo necesario para la reproducción"+
 				" aleatoria de una música y también las teclas de acción en el teclado.\n\nPuedes oprimir la tecla ESC en cualquier momento para "+
 				"salir de la configuración sin modificarla.");
 		txtpnBienvenidoAlPanel.setEditable(false);
@@ -114,23 +110,23 @@ public class Configuracion extends JFrame
 		
 		JPanel panelInferior = new JPanel();
 		panelPrincipal.add(panelInferior,BorderLayout.SOUTH);
-		JButton reestablecer = new JButton("Reestablecer");
-		reestablecer.setFocusable(false);
+		JButton buttonReestablecer = new JButton("Reestablecer");
+		buttonReestablecer.setFocusable(false);
 		panelInferior.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-		JButton guardar = new JButton("Guardar");
-		guardar.setFocusable(false);
-		guardar.addActionListener(new ActionListener()
+		JButton buttonGuardar = new JButton("Guardar");
+		buttonGuardar.setFocusable(false);
+		buttonGuardar.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent e) 
 			{
 				abrirRegConfigEscritura();
-				agregarDatosRegConfig();
+				agregarDatosRegConfig(false);
 				cerrarRegConfig();
 			}
 		});
-		panelInferior.add(guardar);
+		panelInferior.add(buttonGuardar);
 		
-		panelInferior.add(reestablecer);
+		panelInferior.add(buttonReestablecer);
 		
 		Icon tiempo = new ImageIcon(this.getClass().getResource("/com/mfrockola/imagenes/tiempos.png"));
 		JPanel panel2 = new JPanel();
@@ -159,6 +155,8 @@ public class Configuracion extends JFrame
 		txtpnTiempoNecesarioPara.setText("Tiempo necesario para reproducir una Musica Aleatoria (Minutos)");
 		txtpnTiempoNecesarioPara.setFont(new Font("Calibri", Font.PLAIN, 15));
 		txtpnTiempoNecesarioPara.setBounds(220, 98, 225, 48);
+		txtpnTiempoNecesarioPara.setFocusable(false);
+		txtpnTiempoNecesarioPara.setEditable(false);
 		panel2.add(txtpnTiempoNecesarioPara);
 		
 		textFieldMusicaAleatoria = new JTextField();
@@ -171,6 +169,8 @@ public class Configuracion extends JFrame
 		JTextPane txtpnTiempoNecesarioPara_1 = new JTextPane();
 		txtpnTiempoNecesarioPara_1.setText("Tiempo necesario para reiniciar las musicas introducidas (Minutos)");
 		txtpnTiempoNecesarioPara_1.setFont(new Font("Calibri", Font.PLAIN, 15));
+		txtpnTiempoNecesarioPara_1.setFocusable(false);
+		txtpnTiempoNecesarioPara_1.setEditable(false);
 		txtpnTiempoNecesarioPara_1.setBounds(220, 158, 225, 48);
 		panel2.add(txtpnTiempoNecesarioPara_1);
 		
@@ -182,11 +182,47 @@ public class Configuracion extends JFrame
 		panel2.add(textFieldReinicioMusicas);
 		
 		textFieldVideoPromocional = new JTextField();
+		textFieldVideoPromocional.setEnabled(false);
 		textFieldVideoPromocional.setHorizontalAlignment(SwingConstants.LEFT);
 		textFieldVideoPromocional.setFont(new Font("Calibri", Font.PLAIN, 13));
 		textFieldVideoPromocional.setColumns(10);
 		textFieldVideoPromocional.setBounds(364, 230, 177, 23);
 		panel2.add(textFieldVideoPromocional);
+
+		final JButton buttonPathPromotionalVideo = new JButton("...");
+		buttonPathPromotionalVideo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				textFieldVideoPromocional.setText(seleccionarArchivo());
+			}
+		});
+		buttonPathPromotionalVideo.setBounds(551, 230, 45, 23);
+		buttonPathPromotionalVideo.setEnabled(false);
+		panel2.add(buttonPathPromotionalVideo);
+
+		chckbxNewCheckBox = new JCheckBox("Video Promocional");
+		chckbxNewCheckBox.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e)
+			{
+				if(chckbxNewCheckBox.isSelected())
+				{
+					videoPromocional = true;
+					textFieldVideoPromocional.setEditable(true);
+					buttonPathPromotionalVideo.setEnabled(true);
+				}
+				else
+				{
+					videoPromocional = false;
+					textFieldVideoPromocional.setEditable(false);
+					buttonPathPromotionalVideo.setEnabled(false);
+				}
+			}
+		});
+		chckbxNewCheckBox.setBackground(Color.WHITE);
+		chckbxNewCheckBox.setFont(new Font("Calibri", Font.PLAIN, 15));
+		chckbxNewCheckBox.setHorizontalAlignment(SwingConstants.RIGHT);
+		chckbxNewCheckBox.setBounds(207, 230, 154, 23);
+		panel2.add(chckbxNewCheckBox);
+
 		JPanel panel3 = new JPanel();
 		panel3.setBackground(Color.WHITE);
 		fichas.addTab("Créditos",null,panel3,"Configuración de los créditos y sus precios");
@@ -232,11 +268,15 @@ public class Configuracion extends JFrame
 		JTextPane txtpnCantidadDeCreditos = new JTextPane();
 		txtpnCantidadDeCreditos.setFont(new Font("Calibri", Font.PLAIN, 15));
 		txtpnCantidadDeCreditos.setText("Cantidad de creditos que recibe el cliente al introducir una moneda");
+		txtpnCantidadDeCreditos.setEditable(false);
+		txtpnCantidadDeCreditos.setFocusable(false);
 		txtpnCantidadDeCreditos.setBounds(220, 89, 225, 44);
 		panel3.add(txtpnCantidadDeCreditos);
 		
 		JTextPane txtpnModoACreditos = new JTextPane();
 		txtpnModoACreditos.setText("Modo a creditos libre");
+		txtpnModoACreditos.setEditable(false);
+		txtpnModoACreditos.setFocusable(false);
 		txtpnModoACreditos.setFont(new Font("Calibri", Font.PLAIN, 15));
 		txtpnModoACreditos.setBounds(303, 140, 144, 25);
 		panel3.add(txtpnModoACreditos);
@@ -252,87 +292,46 @@ public class Configuracion extends JFrame
 		fichas.addTab("Carpetas",null,panel4, "Configuración de las carpetas y directorios de músicas y videos");
 		panel4.setLayout(null);
 		
-		JButton button = new JButton("...");
-		button.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) 
-			{
-				textFieldMusicas.setText(seleccionarDirectorio());
-			}
-		});
-		button.setBounds(563, 127, 32, 23);
-		panel4.add(button);
-		
-		JButton button_1 = new JButton("...");
-		button_1.addActionListener(new ActionListener() {
+		JButton buttonPathVideos = new JButton("...");
+		buttonPathVideos.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) 
 			{
 				textFieldVideos.setText(seleccionarDirectorio());
 			}
 		});
-		button_1.setBounds(563, 161, 32, 23);
-		panel4.add(button_1);
+		buttonPathVideos.setBounds(563, 127, 32, 23);
+		panel4.add(buttonPathVideos);
 		
-		JButton button_2 = new JButton("...");
-		button_2.addActionListener(new ActionListener() {
+		JButton buttonPathVLC = new JButton("...");
+		buttonPathVLC.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) 
 			{
 				textFieldVlc.setText(seleccionarDirectorio());
 			}
 		});
-		button_2.setBounds(563, 231, 32, 23);
-		panel4.add(button_2);
-		
-		JButton button_3 = new JButton("...");
-		button_3.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) 
-			{
-				textFieldImagenes.setText(seleccionarDirectorio());
-			}
-		});
-		button_3.setBounds(563, 197, 32, 23);
-		panel4.add(button_3);
-		
-		textFieldMusicas = new JTextField();
-		textFieldMusicas.setText("");
-		textFieldMusicas.setBounds(328, 128, 225, 20);
-		panel4.add(textFieldMusicas);
-		textFieldMusicas.setColumns(10);
+		buttonPathVLC.setBounds(563, 161, 32, 23);
+		panel4.add(buttonPathVLC);
 		
 		textFieldVideos = new JTextField();
 		textFieldVideos.setText("");
 		textFieldVideos.setColumns(10);
-		textFieldVideos.setBounds(328, 162, 225, 20);
+		textFieldVideos.setBounds(328, 128, 225, 20);
 		panel4.add(textFieldVideos);
 		
 		textFieldVlc = new JTextField();
 		textFieldVlc.setColumns(10);
-		textFieldVlc.setBounds(328, 234, 225, 20);
+		textFieldVlc.setBounds(328, 162, 225, 20);
 		panel4.add(textFieldVlc);
-		
-		textFieldImagenes = new JTextField();
-		textFieldImagenes.setColumns(10);
-		textFieldImagenes.setBounds(328, 198, 225, 20);
-		panel4.add(textFieldImagenes);
-		
-		JLabel lblMusicas = new JLabel("Directorio de Musicas");
-		lblMusicas.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblMusicas.setBounds(217, 131, 101, 14);
-		panel4.add(lblMusicas);
 		
 		JLabel lblVideos = new JLabel("Directorio de Videos");
 		lblVideos.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblVideos.setBounds(217, 165, 101, 14);
+		lblVideos.setBounds(217, 131, 101, 14);
 		panel4.add(lblVideos);
 		
 		JLabel lblVlc = new JLabel("Directorio del VLC");
 		lblVlc.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblVlc.setBounds(217, 237, 101, 14);
+		lblVlc.setBounds(217, 165, 101, 14);
 		panel4.add(lblVlc);
-		
-		JLabel lblImagenes = new JLabel("Directorio de Publicidad");
-		lblImagenes.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblImagenes.setBounds(207, 201, 111, 14);
-		panel4.add(lblImagenes);
 		
 		Icon carpeta = new ImageIcon(this.getClass().getResource("/com/mfrockola/imagenes/carpeta.png"));
 		JLabel label_1 = new JLabel(carpeta);
@@ -354,6 +353,8 @@ public class Configuracion extends JFrame
 		JTextPane txtpnAdvertenciaTengaCuidado = new JTextPane();
 		txtpnAdvertenciaTengaCuidado.setForeground(Color.RED);
 		txtpnAdvertenciaTengaCuidado.setText("Advertencia: Tenga cuidado al modificar el directorio del VLC. Consulte la documentación antes de realizar modificaciones");
+		txtpnAdvertenciaTengaCuidado.setEditable(false);
+		txtpnAdvertenciaTengaCuidado.setFocusable(false);
 		txtpnAdvertenciaTengaCuidado.setBounds(10, 265, 585, 23);
 		panel4.add(txtpnAdvertenciaTengaCuidado);
 		
@@ -501,40 +502,91 @@ public class Configuracion extends JFrame
 		txtpnEsteEsEl_2.setFocusable(false);
 		txtpnEsteEsEl_2.setBounds(220, 50, 367, 48);
 		panel6.add(txtpnEsteEsEl_2);
-		
-		JLabel lblDirectorioDeLos = new JLabel("Directorio de los Fondos");
-		lblDirectorioDeLos.setBounds(230, 109, 115, 14);
-		panel6.add(lblDirectorioDeLos);
-		
-		textFieldDirFondos = new JTextField();
-		textFieldDirFondos.setBounds(355, 106, 167, 20);
-		panel6.add(textFieldDirFondos);
-		textFieldDirFondos.setColumns(10);
-		
-		JButton button_4 = new JButton("...");
-		button_4.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) 
+
+
+		JButton buttonPathFunds = new JButton("...");
+		buttonPathFunds.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e)
 			{
 				textFieldDirFondos.setText(seleccionarArchivo());
 			}
 		});
-		button_4.setBounds(532, 105, 30, 23);
-		panel6.add(button_4);
-		
-		chckbxMostrarPublicidad = new JCheckBox("Mostrar Publicidad");
-		chckbxMostrarPublicidad.addItemListener(new ItemListener() {
-			public void itemStateChanged(ItemEvent e) 
+		buttonPathFunds.setBounds(532, 138, 30, 23);
+		panel6.add(buttonPathFunds);
+
+		checkBoxFoundDefaultBackground = new JCheckBox("Fondo Predeterminado");
+		checkBoxFoundDefaultBackground.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e)
 			{
-				if(chckbxMostrarPublicidad.isSelected())
-					mostrarPublicidad = true;
+				if(checkBoxFoundDefaultBackground.isSelected())
+				{
+					defaultBackground = true;
+					textFieldDirFondos.setEditable(false);
+					buttonPathFunds.setEnabled(false);
+					textFieldDirFondos.setText("");
+				}
 				else
-					mostrarPublicidad = false;
+				{
+					defaultBackground = false;
+					textFieldDirFondos.setEditable(true);
+					buttonPathFunds.setEnabled(true);
+					textFieldDirFondos.setText("");
+				}
 			}
 		});
-		chckbxMostrarPublicidad.setBackground(Color.WHITE);
-		chckbxMostrarPublicidad.setBounds(230, 149, 115, 23);
-		panel6.add(chckbxMostrarPublicidad);
+
+		checkBoxFoundDefaultBackground.setBackground(Color.WHITE);
+		checkBoxFoundDefaultBackground.setHorizontalAlignment(SwingConstants.LEFT);
+		checkBoxFoundDefaultBackground.setBounds(225, 112, 300, 14);
+		panel6.add(checkBoxFoundDefaultBackground);
+
+		JLabel lblDirectorioDeLos = new JLabel("Directorio de los Fondos");
+		lblDirectorioDeLos.setBounds(230, 142, 115, 14);
+		panel6.add(lblDirectorioDeLos);
 		
+		textFieldDirFondos = new JTextField();
+		textFieldDirFondos.setBounds(355, 139, 167, 20);
+		panel6.add(textFieldDirFondos);
+		textFieldDirFondos.setColumns(10);
+
+		JLabel labelCelda1 = new JLabel("Seleccionar Color #1");
+		labelCelda1.setBounds(423, 182, 99, 14);
+		panel6.add(labelCelda1);
+
+		JLabel labelCelda2 = new JLabel("Seleccionar Color #2");
+		labelCelda2.setBounds(423, 205, 99, 14);
+		panel6.add(labelCelda2);
+
+		labelColor1 = new JLabel("");
+		labelColor1.setOpaque(true);
+		labelColor1.setBounds(567, 181, 20, 14);
+		panel6.add(labelColor1);
+
+		labelColor2 = new JLabel("");
+		labelColor2.setOpaque(true);
+		labelColor2.setBounds(567, 215, 20, 14);
+		panel6.add(labelColor2);
+
+		botonColor1 = new JButton("...");
+		botonColor1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e)
+			{
+				seleccionarColor(e);
+			}
+		});
+		botonColor1.setBounds(532, 172, 30, 23);
+		panel6.add(botonColor1);
+
+		botonColor2 = new JButton("...");
+		botonColor2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e)
+			{
+				seleccionarColor(e);
+			}
+		});
+		botonColor2.setBounds(532, 205, 30, 23);
+		panel6.add(botonColor2);
+
 		JPanel panel7 = new JPanel();
 		panel7.setBackground(Color.WHITE);
 		fichas.addTab("Estadisticas",null,panel7, "Configuracion y Visualizacion de las estadisticas de uso");
@@ -585,7 +637,21 @@ public class Configuracion extends JFrame
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 642, 397);
 		setVisible(true);
-		
+
+		try {
+			File file = new File("config.mfr");
+
+			if (!file.exists())
+			{
+				salida = new ObjectOutputStream(new FileOutputStream("config.mfr"));
+				abrirRegConfigEscritura();
+				agregarDatosRegConfig(true);
+				cerrarRegConfig();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 		try
 		{
 			registroDatos.abrirRegConfigLectura();
@@ -594,50 +660,13 @@ public class Configuracion extends JFrame
 		catch (NullPointerException excepcion)
 		{
 			abrirRegConfigEscritura();
-			agregarDatosRegConfig();
-			cerrarRegConfig();
 		}
 		
 		textFieldMusicaAleatoria.setText(String.format("%s",configuraciones.getMusicAleatoria()));
 		textFieldReinicioMusicas.setText(String.format("%s",configuraciones.getReinicioMusicas()));
-		
-		final JButton button_5 = new JButton("...");
-		button_5.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) 
-			{
-				textFieldVideoPromocional.setText(seleccionarArchivo());
-			}
-		});
-		button_5.setBounds(551, 230, 45, 23);
-		panel2.add(button_5);
-		
-		chckbxNewCheckBox = new JCheckBox("Video Promocional");
-		chckbxNewCheckBox.addItemListener(new ItemListener() {
-			public void itemStateChanged(ItemEvent e) 
-			{
-				if(chckbxNewCheckBox.isSelected())
-				{
-					videoPromocional = true;
-					textFieldVideoPromocional.setEditable(true);
-					button_5.setEnabled(true);
-				}
-				else
-				{
-					videoPromocional = false;
-					textFieldVideoPromocional.setEditable(false);
-					button_5.setEnabled(false);
-				}
-			}
-		});
-		chckbxNewCheckBox.setBackground(Color.WHITE);
-		chckbxNewCheckBox.setFont(new Font("Calibri", Font.PLAIN, 15));
-		chckbxNewCheckBox.setHorizontalAlignment(SwingConstants.RIGHT);
-		chckbxNewCheckBox.setBounds(207, 230, 154, 23);
-		panel2.add(chckbxNewCheckBox);
+
 		textFieldCantCreditos.setText(String.format("%s", configuraciones.getCantidadCreditos()));
-		textFieldMusicas.setText(String.format("%s", configuraciones.getDireccionMusicas()));
 		textFieldVideos.setText(String.format("%s", configuraciones.getDireccionVideos()));
-		textFieldImagenes.setText(String.format("%s",configuraciones.getDireccionImagenes()));
 		textFieldVlc.setText(String.format("%s", configuraciones.getDireccionVlc()));
 		textFieldVideoPromocional.setText(String.format("%s", configuraciones.getDireccionVideoPromocional()));
 		textFieldSubirL.setText(String.format("%s", configuraciones.getTeclaSubirLista()));
@@ -649,45 +678,7 @@ public class Configuracion extends JFrame
 		textFieldCambiarLista.setText(String.format("%s", configuraciones.getTeclaCambiarLista()));
 		labelCreditosUsados.setText(String.format("%s", configuraciones.getCantidadCreditosUsados()));
 		labelMonedasInsertadas.setText(String.format("%s", configuraciones.getCantidadMonedasInsertadas()));
-		textFieldDirFondos.setText(configuraciones.getDireccionFondo());
-		
-		JLabel labelCelda1 = new JLabel("Seleccionar Color #1");
-		labelCelda1.setBounds(423, 149, 99, 14);
-		panel6.add(labelCelda1);
-		
-		JLabel labelCelda2 = new JLabel("Seleccionar Color #2");
-		labelCelda2.setBounds(423, 182, 99, 14);
-		panel6.add(labelCelda2);
-		
-		labelColor1 = new JLabel("");
-		labelColor1.setOpaque(true);
-		labelColor1.setBounds(567, 148, 20, 14);
-		panel6.add(labelColor1);
-		
-		labelColor2 = new JLabel("");
-		labelColor2.setOpaque(true);
-		labelColor2.setBounds(567, 182, 20, 14);
-		panel6.add(labelColor2);
-		
-		botonColor1 = new JButton("...");
-		botonColor1.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) 
-			{
-				seleccionarColor(e);
-			}
-		});
-		botonColor1.setBounds(532, 139, 30, 23);
-		panel6.add(botonColor1);
-		
-		botonColor2 = new JButton("...");
-		botonColor2.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) 
-			{
-				seleccionarColor(e);
-			}
-		});
-		botonColor2.setBounds(532, 173, 30, 23);
-		panel6.add(botonColor2);
+		checkBoxFoundDefaultBackground.setSelected(configuraciones.isDefaultBackground());
 
 		if(configuraciones.isLibre() == true)
 			rdbtnSi.setSelected(true);
@@ -709,26 +700,23 @@ public class Configuracion extends JFrame
 		{
 			textFieldVideoPromocional.setEditable(true);
 			chckbxNewCheckBox.setSelected(true);
-			button_5.setEnabled(true);
+			buttonPathPromotionalVideo.setEnabled(true);
 			
 		}
 		else
 		{
 			textFieldVideoPromocional.setEditable(false);
 			chckbxNewCheckBox.setSelected(false);
-			button_5.setEnabled(false);
+			buttonPathPromotionalVideo.setEnabled(false);
 		}
-		
-		if (configuraciones.isMostrarPublicidad() == true)
-			chckbxMostrarPublicidad.setSelected(true);
-		else
-			chckbxMostrarPublicidad.setSelected(false);
-		
+
 		labelColor1.setBackground(configuraciones.getColor1());
 		labelColor2.setBackground(configuraciones.getColor2());
 		
 		color1 = configuraciones.getColor1();
 		color2 = configuraciones.getColor2();
+
+		textFieldDirFondos.setText(configuraciones.getDireccionFondo().getFile());
 	}
 	
 	private class manejadorRadioButtons implements ItemListener
@@ -755,44 +743,87 @@ public class Configuracion extends JFrame
 		}
 	}
 	
-	public void agregarDatosRegConfig()
+	public void agregarDatosRegConfig(boolean firstOpen)
 	{
 		RegConfig configuraciones;
-		
-		try 
-		{
-			configuraciones = new RegConfig(
-					textFieldMusicas.getText(),
-					textFieldVideos.getText(),
-					textFieldImagenes.getText(),
-					textFieldVlc.getText(),
-					textFieldVideoPromocional.getText(),
-					Integer.parseInt(textFieldMusicaAleatoria.getText()),
-					Integer.parseInt(textFieldReinicioMusicas.getText()),
-					Integer.parseInt(textFieldCantCreditos.getText()),
-					libre,
-					videoPromocional,
-					clickCreditos,
-					selectVideoProm,
-					Integer.parseInt(textFieldSubirL.getText()),
-					Integer.parseInt(textFieldBajarL.getText()),
-					Integer.parseInt(textFieldSubirGenero.getText()),
-					Integer.parseInt(textFieldBajarGenero.getText()),
-					Integer.parseInt(textFieldPantallaCompleta.getText()),
-					Integer.parseInt(textFieldBorrar.getText()),
-					Integer.parseInt(textFieldCambiarLista.getText()),
-					Integer.parseInt(labelCreditosUsados.getText()),
-					Integer.parseInt(labelMonedasInsertadas.getText()),
-					textFieldDirFondos.getText(),
-					mostrarPublicidad,
-					color1,
-					color2
-					);
-			
-			salida.writeObject(configuraciones);
-		} catch (IOException excepcion) 
-		{
-			System.err.println("Error al escribir el archivo");
+
+		if (firstOpen) {
+			try
+			{
+				URL url = this.getClass().getResource("/com/mfrockola/imagenes/fondo.jpg");
+
+				System.out.println(url);
+
+				configuraciones = new RegConfig(
+						"C:\\videos",
+						"C:\\Program Files\\VideoLAN\\VLC",
+						"Seleccione un video promocional",
+						1,
+						1,
+						1,
+						false,
+						false,
+						1,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						0,
+						true,
+						url,
+						new Color(51,51,255),
+						new Color(255,255,255)
+				);
+
+				salida.writeObject(configuraciones);
+			} catch (Exception excepcion)
+			{
+				System.err.println("Error al escribir el archivo");
+			}
+		} else {
+			try
+			{
+				URL url;
+				if (defaultBackground) {
+					url = this.getClass().getResource("/com/mfrockola/imagenes/fondo.jpg");
+				} else {
+					url = new URL("file:"+textFieldDirFondos.getText());
+				}
+
+				configuraciones = new RegConfig(
+						textFieldVideos.getText(),
+						textFieldVlc.getText(),
+						textFieldVideoPromocional.getText(),
+						Integer.parseInt(textFieldMusicaAleatoria.getText()),
+						Integer.parseInt(textFieldReinicioMusicas.getText()),
+						Integer.parseInt(textFieldCantCreditos.getText()),
+						libre,
+						videoPromocional,
+						clickCreditos,
+						Integer.parseInt(textFieldSubirL.getText()),
+						Integer.parseInt(textFieldBajarL.getText()),
+						Integer.parseInt(textFieldSubirGenero.getText()),
+						Integer.parseInt(textFieldBajarGenero.getText()),
+						Integer.parseInt(textFieldPantallaCompleta.getText()),
+						Integer.parseInt(textFieldBorrar.getText()),
+						Integer.parseInt(textFieldCambiarLista.getText()),
+						Integer.parseInt(labelCreditosUsados.getText()),
+						Integer.parseInt(labelMonedasInsertadas.getText()),
+						defaultBackground,
+						url,
+						color1,
+						color2
+				);
+
+				salida.writeObject(configuraciones);
+			} catch (IOException excepcion)
+			{
+				excepcion.printStackTrace();
+			}
 		}
 	}
 	

@@ -19,7 +19,7 @@ import javax.swing.UIManager;
 @SuppressWarnings("serial")
 public class Splash extends JFrame implements Runnable
 {
-	private boolean moveMouse = true;
+	public static boolean moveMouse = true;
 
 	public Splash()
 	{
@@ -65,8 +65,17 @@ public class Splash extends JFrame implements Runnable
 		{
 			public void actionPerformed(ActionEvent e) 
 			{
-				new Interfaz();
-				dispose();
+				File file = new File("config.mfr");
+				if (file.exists()) {
+					file = null;
+					new Interfaz();
+					dispose();
+				} else {
+					file = null;
+					moveMouse = false;
+					new Configuracion();
+					dispose();
+				}
 			}
 		});
 		
