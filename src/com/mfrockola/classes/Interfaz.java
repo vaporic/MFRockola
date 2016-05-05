@@ -58,6 +58,7 @@ public class Interfaz extends JFrame
     private int creditosASubir;
     private JScrollPane barras;
     private Timer timerChangerLblCredits;
+    private Timer timerFullScreen;
 
     @SuppressWarnings("unchecked")
     public Interfaz()
@@ -89,6 +90,16 @@ public class Interfaz extends JFrame
         timerChangerLblCredits = new Timer(5000, changeLblCredits);
         timerChangerLblCredits.setRepeats(false);
 
+        ActionListener changeFullScreen = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                pantallaCompleta();
+            }
+        };
+
+        timerFullScreen = new Timer(10000, changeFullScreen);
+        timerFullScreen.setRepeats(false);
+
         getContentPane().add(panelFondo);
 
         setUndecorated(true);
@@ -100,6 +111,7 @@ public class Interfaz extends JFrame
 
         if(configuraciones.isVideoPromocional()) {
             repro.embeddedMediaPlayer.playMedia(configuraciones.getDireccionVideoPromocional());
+            pantallaCompleta();
         }
 
         addMouseListener(new MouseAdapter() {
@@ -112,6 +124,9 @@ public class Interfaz extends JFrame
                     labelcreditos.setText(String.format("Creditos: %d", creditos));
                     agregarMonedasYCreditos();
                     labelcreditos.setForeground(Color.WHITE);
+                    if (isFullScreen) {
+                        pantallaCompleta();
+                    }
                 }
                 if (e.isMetaDown() && configuraciones.getClickCreditos() == 1)
                 {
@@ -119,6 +134,9 @@ public class Interfaz extends JFrame
                     labelcreditos.setText(String.format("Creditos: %d", creditos));
                     agregarMonedasYCreditos();
                     labelcreditos.setForeground(Color.WHITE);
+                    if (isFullScreen) {
+                        pantallaCompleta();
+                    }
                 }
 
 
@@ -253,6 +271,10 @@ public class Interfaz extends JFrame
             labelGeneroMusical.setVisible(false);
             contenedorVideo.setBounds(0, 0, ancho, alto);
             isFullScreen = true;
+
+            if (creditos == 0 && timerFullScreen.isRunning()) {
+                timerFullScreen.stop();
+            }
         }
         else
         {
@@ -265,18 +287,10 @@ public class Interfaz extends JFrame
         }
     }
 
-    public static void main(String [] args)
-    {
-        Interfaz aplicacion = new Interfaz();
-    }
-
     private class manejadorDeTeclas extends KeyAdapter
     {
-
-
         public void keyPressed(KeyEvent evento)
         {
-
             if (evento.getKeyCode()==10)
             {
                 pantallaCompleta();
@@ -434,33 +448,44 @@ public class Interfaz extends JFrame
 
             else if (evento.getKeyCode()==45 || evento.getKeyCode()==109)
             {
-                if (listaDeMusicas.getSelectedIndex() - 10 < 0)
+                if (isFullScreen) {
+                    pantallaCompleta();
+                }
+
+                if (listaDeMusicas.getSelectedIndex() - 20 < 0)
                 {
                     listaDeMusicas.setSelectedIndex(0);
                     listaDeMusicas.ensureIndexIsVisible(0);
                 }
                 else
                 {
-                    listaDeMusicas.setSelectedIndex(listaDeMusicas.getSelectedIndex()-10);
+                    listaDeMusicas.setSelectedIndex(listaDeMusicas.getSelectedIndex()-20);
                     listaDeMusicas.ensureIndexIsVisible(listaDeMusicas.getSelectedIndex());
                 }
 
             }
             else if (evento.getKeyCode()==521 || evento.getKeyCode()==107)
             {
-                if(listaDeMusicas.getSelectedIndex()+10 > listMusic.getGenderSongs(listMusic.getSelectedGender()).length)
+                if (isFullScreen) {
+                    pantallaCompleta();
+                }
+
+                if(listaDeMusicas.getSelectedIndex()+20 > listMusic.getGenderSongs(listMusic.getSelectedGender()).length)
                 {
                     listaDeMusicas.setSelectedIndex(listMusic.getGenderSongs(listMusic.getSelectedGender()).length-1);
                     listaDeMusicas.ensureIndexIsVisible(listaDeMusicas.getSelectedIndex());
                 }
                 else
                 {
-                    listaDeMusicas.setSelectedIndex(listaDeMusicas.getSelectedIndex()+10);
+                    listaDeMusicas.setSelectedIndex(listaDeMusicas.getSelectedIndex()+20);
                     listaDeMusicas.ensureIndexIsVisible(listaDeMusicas.getSelectedIndex());
                 }
             }
-            else if (evento.getKeyCode() == 71)
+            else if (evento.getKeyCode() == 71 || evento.getKeyCode()== 106)
             {
+                if (isFullScreen) {
+                    pantallaCompleta();
+                }
                 if (listMusic.upGender()) {
                     listaDeMusicas.setListData(listMusic.getGenderSongs(listMusic.getSelectedGender()));
                     listaDeMusicas.setSelectedIndex(0);
@@ -468,14 +493,21 @@ public class Interfaz extends JFrame
                     labelGeneroMusical.setText("Genero Musical: " + listMusic.getNameOfGender());
                 }
             }
-            else if (evento.getKeyCode() == 72)
+            else if (evento.getKeyCode() == 72 || evento.getKeyCode() == 111)
             {
+                if (isFullScreen) {
+                    pantallaCompleta();
+                }
                 if (listMusic.downGender()) {
                     listaDeMusicas.setListData(listMusic.getGenderSongs(listMusic.getSelectedGender()));
                     listaDeMusicas.setSelectedIndex(0);
                     listaDeMusicas.ensureIndexIsVisible(0);
                     labelGeneroMusical.setText("Genero Musical: " + listMusic.getNameOfGender());
                 }
+            }
+
+            if (creditos == 0 && !isFullScreen) {
+                timerFullScreen.restart();
             }
         }
     }
