@@ -271,10 +271,6 @@ public class Interfaz extends JFrame
             labelGeneroMusical.setVisible(false);
             contenedorVideo.setBounds(0, 0, ancho, alto);
             isFullScreen = true;
-
-            if (creditos == 0 && timerFullScreen.isRunning()) {
-                timerFullScreen.stop();
-            }
         }
         else
         {
@@ -388,6 +384,9 @@ public class Interfaz extends JFrame
                                     ,listaReproduccion.obtenerCancionAReproducir()));
                             labelCancionEnRepro.setText(String.format("%04d - %s",
                                     listaReproduccion.obtenerNumero(), listaReproduccion.obtenerCancionAReproducir()));
+                            if (creditos == 0) {
+                                timerFullScreen.restart();
+                            }
                         }
                         else
                         {
@@ -405,7 +404,9 @@ public class Interfaz extends JFrame
                             objeto.reiniciarValores();
                             objeto.selectorMusica.setText("- - - -");
                             prohibir.agregarProhibido(numero);
-
+                            if (creditos == 0) {
+                                timerFullScreen.restart();
+                            }
                         }
                     }
                     else
@@ -504,10 +505,6 @@ public class Interfaz extends JFrame
                     listaDeMusicas.ensureIndexIsVisible(0);
                     labelGeneroMusical.setText("Genero Musical: " + listMusic.getNameOfGender());
                 }
-            }
-
-            if (creditos == 0 && !isFullScreen) {
-                timerFullScreen.restart();
             }
         }
     }
