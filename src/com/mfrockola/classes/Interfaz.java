@@ -138,8 +138,6 @@ public class Interfaz extends JFrame
                         pantallaCompleta();
                     }
                 }
-
-
             }
         });
 
@@ -530,8 +528,10 @@ public class Interfaz extends JFrame
             else
             {
                 repro.reproducirMusica(listaReproduccion.obtenerGenero(), listaReproduccion.obtenerCancionAReproducir());
-                labelMusica.setText(listaReproduccion.obtenerCancionAReproducir());
-                labelCancionEnRepro.setText(listaReproduccion.obtenerCancionAReproducir());
+                labelMusica.setText(String.format("%04d - %s",
+                        listaReproduccion.obtenerNumero(), listaReproduccion.obtenerCancionAReproducir()));
+                labelCancionEnRepro.setText(String.format("%04d - %s",
+                        listaReproduccion.obtenerNumero(), listaReproduccion.obtenerCancionAReproducir()));
             }
         }
     }

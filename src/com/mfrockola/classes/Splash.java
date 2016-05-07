@@ -23,7 +23,6 @@ public class Splash extends JFrame implements Runnable
 
 	public Splash()
 	{
-
 		JEImagePanel panel = new JEImagePanel(
 				this.getClass().getResource("/com/mfrockola/imagenes/fondoSmall.jpg"));
 
@@ -108,7 +107,8 @@ public class Splash extends JFrame implements Runnable
 			e.printStackTrace();
 		}
 		while (moveMouse) {
-			robot.mouseMove(1366,768);
+			robot.mouseMove((int) Toolkit.getDefaultToolkit().getScreenSize().getWidth(),
+					(int) Toolkit.getDefaultToolkit().getScreenSize().getHeight());
 		}
 	}
 }
