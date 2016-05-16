@@ -22,7 +22,8 @@ public class RegConfig implements Serializable
 	private int teclaBajarGenero;
 	private int teclaPantallaCompleta;
 	private int teclaBorrar;
-	private int teclaCambiarLista;
+	private boolean cancelMusic;
+	private String password;
 	private int cantidadCreditosUsados;
 	private int cantidadMonedasInsertadas;
 	private boolean defaultBackground;
@@ -33,9 +34,9 @@ public class RegConfig implements Serializable
 	public RegConfig(String direccionVideos, String direccionVlc,
 			String direccionVideoPromocional, int musicAleatoria,int reinicioMusicas,int cantidadCreditos, boolean libre,
 			boolean videoPromocional, int clickCreditos, int teclaSubirLista, int teclaBajarLista,
-			int teclaSubirGenero, int teclaBajarGenero, int teclaPantallaCompleta, int teclaBorrar, int teclaCambiarLista,
-			int cantidadCreditosUsados, int CantidadMonedasInsertadas, boolean defaultBackground, URL direccionFondo,
-			Color color1, Color color2)
+			int teclaSubirGenero, int teclaBajarGenero, int teclaPantallaCompleta, int teclaBorrar,
+			boolean cancelMusic,String password, int cantidadCreditosUsados, int CantidadMonedasInsertadas, boolean defaultBackground,
+			URL direccionFondo, Color color1, Color color2)
 	{
 		this.setDireccionVideos(direccionVideos);
 		this.setDireccionVlc(direccionVlc);
@@ -51,7 +52,8 @@ public class RegConfig implements Serializable
 		this.setTeclaSubirGenero(teclaSubirGenero);
 		this.setTeclaPantallaCompleta(teclaPantallaCompleta);
 		this.setTeclaBorrar(teclaBorrar);
-		this.setTeclaCambiarLista(teclaCambiarLista);
+		this.setCancelMusic(cancelMusic);
+		this.setPassword(password);
 		this.setCantidadCreditosUsados(cantidadCreditosUsados);
 		this.setCantidadMonedasInsertadas(CantidadMonedasInsertadas);
 		setDefaultBackground(defaultBackground);
@@ -181,14 +183,6 @@ public class RegConfig implements Serializable
 		this.teclaBorrar = teclaBorrar;
 	}
 
-	public int getTeclaCambiarLista() {
-		return teclaCambiarLista;
-	}
-
-	public void setTeclaCambiarLista(int teclaCambiarLista) {
-		this.teclaCambiarLista = teclaCambiarLista;
-	}
-
 	public int getCantidadCreditosUsados() {
 		return cantidadCreditosUsados;
 	}
@@ -235,5 +229,21 @@ public class RegConfig implements Serializable
 
 	public void setDefaultBackground(boolean defaultBackground) {
 		this.defaultBackground = defaultBackground;
+	}
+
+	public boolean isCancelMusic() {
+		return cancelMusic;
+	}
+
+	public void setCancelMusic(boolean cancelMusic) {
+		this.cancelMusic = cancelMusic;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 }

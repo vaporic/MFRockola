@@ -12,22 +12,7 @@ import java.awt.event.ItemListener;
 import java.io.*;
 import java.net.URL;
 
-import javax.swing.ButtonGroup;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JColorChooser;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.JTabbedPane;
-import javax.swing.JTextField;
-import javax.swing.JTextPane;
-import javax.swing.SwingConstants;
+import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 @SuppressWarnings("serial")
@@ -49,7 +34,7 @@ public class Configuracion extends JFrame
 	private JTextField textFieldBajarGenero;
 	private JTextField textFieldPantallaCompleta;
 	private JTextField textFieldBorrar;
-	private JTextField textFieldCambiarLista;
+	private JPasswordField passwordField;
 	private JTextField textFieldDirFondos;
 	private JLabel labelCreditosUsados;
 	private JLabel labelMonedasInsertadas;
@@ -60,6 +45,7 @@ public class Configuracion extends JFrame
 	private boolean libre;
 	private boolean videoPromocional;
 	private boolean defaultBackground;
+	private boolean cancelMusic;
 	private boolean selectVideoProm;
 	private int clickCreditos;
 	JFileChooser selectorArchivos = new JFileChooser();
@@ -446,23 +432,22 @@ public class Configuracion extends JFrame
 		
 		JLabel lblAgregarCredito = new JLabel("Agregar Credito");
 		lblAgregarCredito.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblAgregarCredito.setBounds(262, 244, 103, 14);
+		lblAgregarCredito.setBounds(262, 219, 103, 14);
 		panel5.add(lblAgregarCredito);
 		
 		final JRadioButton rdbtnClickIzquierdo = new JRadioButton("Click Izquierdo");
 		
 
 		rdbtnClickIzquierdo.setBackground(Color.WHITE);
-		rdbtnClickIzquierdo.setBounds(375, 240, 95, 23);
+		rdbtnClickIzquierdo.setBounds(375, 215, 95, 23);
 		panel5.add(rdbtnClickIzquierdo);
 		
 		JRadioButton rdbtnClickDerecho = new JRadioButton("Click Derecho");
 		rdbtnClickDerecho.setBackground(Color.WHITE);
-		rdbtnClickDerecho.setBounds(475, 240, 89, 23);
+		rdbtnClickDerecho.setBounds(475, 215, 89, 23);
 		panel5.add(rdbtnClickDerecho);
 		
 		ButtonGroup grupoMouse = new ButtonGroup();
-		
 		
 		rdbtnClickIzquierdo.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) 
@@ -475,16 +460,42 @@ public class Configuracion extends JFrame
 		
 		grupoMouse.add(rdbtnClickIzquierdo);
 		grupoMouse.add(rdbtnClickDerecho);
-		
-		JLabel lblCambiarEntreListareproduccion = new JLabel("Cambiar entre Lista/Reproduccion");
-		lblCambiarEntreListareproduccion.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblCambiarEntreListareproduccion.setBounds(203, 219, 162, 14);
-		panel5.add(lblCambiarEntreListareproduccion);
-		
-		textFieldCambiarLista = new JTextField();
-		textFieldCambiarLista.setColumns(10);
-		textFieldCambiarLista.setBounds(375, 219, 30, 20);
-		panel5.add(textFieldCambiarLista);
+
+		JCheckBox checkBoxCancelMusic = new JCheckBox("Cancelar musica con click Izquierdo");
+		checkBoxCancelMusic.setBounds(375,238,200, 23);
+		checkBoxCancelMusic.setBackground(Color.WHITE);
+		checkBoxCancelMusic.addItemListener(new ItemListener() {
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				if (checkBoxCancelMusic.isSelected()) {
+					cancelMusic = true;
+					passwordField.setEnabled(true);
+					passwordField.setText("");
+					rdbtnClickDerecho.setSelected(true);
+					lblAgregarCredito.setEnabled(false);
+					rdbtnClickDerecho.setEnabled(false);
+					rdbtnClickIzquierdo.setEnabled(false);
+				} else {
+					cancelMusic = false;
+					passwordField.setEnabled(false);
+					passwordField.setText("");
+					lblAgregarCredito.setEnabled(true);
+					rdbtnClickDerecho.setEnabled(true);
+					rdbtnClickIzquierdo.setEnabled(true);
+				}
+			}
+		});
+
+		panel5.add(checkBoxCancelMusic);
+
+		JLabel labelPassword = new JLabel("Contraseña para eliminar canciones");
+		labelPassword.setBounds(165, 261, 200, 23);
+		labelPassword.setHorizontalAlignment(SwingConstants.RIGHT);
+		panel5.add(labelPassword);
+
+		passwordField = new JPasswordField(5);
+		passwordField.setBounds(375,265,200, 23);
+		panel5.add(passwordField);
 		
 		JPanel panel6 = new JPanel();
 		panel6.setBackground(Color.WHITE);
@@ -641,8 +652,9 @@ public class Configuracion extends JFrame
 		getContentPane().add(panelPrincipal);
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 642, 397);
+		setBounds(100, 100, 642, 400); // posicion de la ventana
 		setVisible(true);
+		setResizable(false);
 
 		try {
 			File file = new File("config.mfr");
@@ -685,10 +697,16 @@ public class Configuracion extends JFrame
 		textFieldBajarGenero.setText(String.format("%s", configuraciones.getTeclaBajarGenero()));
 		textFieldPantallaCompleta.setText(String.format("%s", configuraciones.getTeclaPantallaCompleta()));
 		textFieldBorrar.setText(String.format("%s", configuraciones.getTeclaBorrar()));
-		textFieldCambiarLista.setText(String.format("%s", configuraciones.getTeclaCambiarLista()));
 		labelCreditosUsados.setText(String.format("%s", configuraciones.getCantidadCreditosUsados()));
 		labelMonedasInsertadas.setText(String.format("%s", configuraciones.getCantidadMonedasInsertadas()));
 		checkBoxFoundDefaultBackground.setSelected(configuraciones.isDefaultBackground());
+		checkBoxCancelMusic.setSelected(configuraciones.isCancelMusic());
+		passwordField.setText(configuraciones.getPassword());
+		if (configuraciones.isCancelMusic() == true) {
+			passwordField.setEnabled(true);
+		} else {
+			passwordField.setEnabled(false);
+		}
 
 		if(configuraciones.isLibre() == true)
 			rdbtnSi.setSelected(true);
@@ -751,28 +769,29 @@ public class Configuracion extends JFrame
 				System.out.println(url);
 
 				configuraciones = new RegConfig(
-						"C:\\videos",
-						"C:\\Program Files\\VideoLAN\\VLC",
-						"Seleccione un video",
-						1,
-						1,
-						1,
-						false,
-						false,
-						1,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						0,
-						true,
-						url,
-						new Color(102,204,255),
-						new Color(255,255,255)
+						"C:\\videos", // path of videos
+						"C:\\Program Files\\VideoLAN\\VLC", // path of VLC
+						"Seleccione un video", // path promotional video
+						1, // time in minutes of random music
+						1, // time in minutes of reset music
+						1, // credits per click
+						false, // is credit free?
+						false, // is promotional video?
+						1, // click credits
+						0, // key up list
+						0, // key down list
+						0, // key up gender
+						0, // key down gender
+						0, // key fullscreen
+						0, // key delete number selector
+						false, // cancel music
+						"",
+						0, // cantidad de creditos usados
+						0, // cantidad de monedas insertadas
+						true, // is default background?
+						url, // path background
+						new Color(102,204,255), // color 1 of list
+						new Color(255,255,255) // color 2 of list
 				);
 
 				salida.writeObject(configuraciones);
@@ -806,7 +825,8 @@ public class Configuracion extends JFrame
 						Integer.parseInt(textFieldBajarGenero.getText()),
 						Integer.parseInt(textFieldPantallaCompleta.getText()),
 						Integer.parseInt(textFieldBorrar.getText()),
-						Integer.parseInt(textFieldCambiarLista.getText()),
+						cancelMusic,
+						new String(passwordField.getPassword()),
 						Integer.parseInt(labelCreditosUsados.getText()),
 						Integer.parseInt(labelMonedasInsertadas.getText()),
 						defaultBackground,

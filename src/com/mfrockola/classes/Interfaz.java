@@ -22,8 +22,6 @@ public class Interfaz extends JFrame
     private int ancho;
     private int alto;
 
-    private boolean creditosLibres = false;
-
     MusicasProhibidas prohibir = new MusicasProhibidas(); // Objeto de musicas que no se pueden repetir.
     ListaDeReproduccion listaReproduccion = new ListaDeReproduccion(); // Objeto de las musicas en reproduccion.
 
@@ -56,6 +54,11 @@ public class Interfaz extends JFrame
 
     private int monedasASubir;
     private int creditosASubir;
+
+    private boolean cancelMusic;
+    private boolean creditosLibres;
+    private int countClickCancelMusic;
+
     private JScrollPane barras;
     private Timer timerChangerLblCredits;
     private Timer timerFullScreen;
@@ -69,6 +72,8 @@ public class Interfaz extends JFrame
             configuraciones = registroDatos.leerRegConfigLectura();
             monedasASubir = configuraciones.getCantidadMonedasInsertadas();
             creditosASubir = configuraciones.getCantidadCreditosUsados();
+            cancelMusic = configuraciones.isCancelMusic();
+            creditosLibres = configuraciones.isLibre();
         }
         catch (NullPointerException excepcion)
         {
@@ -82,7 +87,12 @@ public class Interfaz extends JFrame
 
             public void actionPerformed(ActionEvent e)
             {
-                labelcreditos.setText(String.format("Creditos: %d", creditos));
+                if (creditosLibres) {
+                    labelcreditos.setText("Creditos Libres");
+                } else {
+                    labelcreditos.setText(String.format("Creditos: %d", creditos));
+                }
+
                 labelcreditos.setForeground(Color.WHITE);
             }
         };
@@ -93,7 +103,9 @@ public class Interfaz extends JFrame
         ActionListener changeFullScreen = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                pantallaCompleta();
+                if (!isFullScreen) {
+                    pantallaCompleta();
+                }
             }
         };
 
@@ -118,7 +130,8 @@ public class Interfaz extends JFrame
             @Override
             public void mouseReleased(MouseEvent e)
             {
-                if(configuraciones.getClickCreditos()==0 && e.isMetaDown() == false )
+
+                if(configuraciones.getClickCreditos()==0 && e.isMetaDown() == false && !cancelMusic && !creditosLibres)
                 {
                     creditos = creditos + configuraciones.getCantidadCreditos();
                     labelcreditos.setText(String.format("Creditos: %d", creditos));
@@ -127,9 +140,42 @@ public class Interfaz extends JFrame
                     if (isFullScreen) {
                         pantallaCompleta();
                     }
-                }
-                if (e.isMetaDown() && configuraciones.getClickCreditos() == 1)
-                {
+                } else if (cancelMusic && e.isMetaDown() == false && listaReproduccion.obtenerCancionAReproducir()!=null) {
+
+                    if (isFullScreen) {
+                        pantallaCompleta();
+                    }
+                    countClickCancelMusic++;
+                    if (countClickCancelMusic == 3) {
+
+                        PasswordPanel passwordPanel = new PasswordPanel();
+                        JOptionPane optionPane = new JOptionPane(passwordPanel, JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+
+                        JDialog dlg = optionPane.createDialog("Eliminar Canción");
+
+                        dlg.addWindowFocusListener(new WindowAdapter() {
+                            @Override
+                            public void windowGainedFocus(WindowEvent e) {
+                                passwordPanel.gainedFocus();
+                            }
+                        });
+
+                        dlg.setVisible(true);
+
+                        if (optionPane.getValue()!=null && optionPane.getValue().equals(JOptionPane.OK_OPTION)) {
+                            if (new String(passwordPanel.getPassword()).equals(configuraciones.getPassword())) {
+                                repro.embeddedMediaPlayer.stop();
+                                dlg.dispatchEvent(new WindowEvent(dlg, WindowEvent.WINDOW_CLOSING));
+                                dlg.dispose(); // else java VM will wait for dialog to be disposed of (forever)
+                            }
+                        } else {
+                            dlg.dispatchEvent(new WindowEvent(dlg, WindowEvent.WINDOW_CLOSING));
+                            dlg.dispose(); // else java VM will wait for dialog to be disposed of (forever)
+                        }
+
+                        countClickCancelMusic = 0;
+                    }
+                } else if (e.isMetaDown() && configuraciones.getClickCreditos() == 1 && !creditosLibres) {
                     creditos = creditos + configuraciones.getCantidadCreditos();
                     labelcreditos.setText(String.format("Creditos: %d", creditos));
                     agregarMonedasYCreditos();
@@ -164,7 +210,12 @@ public class Interfaz extends JFrame
         labelGeneroMusical.setFont(new Font("Calibri", Font.BOLD, 23));
         labelGeneroMusical.setBounds(30,15,ancho-590,35);
 
-        labelcreditos = new JLabel("Creditos: 0");
+        if (creditosLibres) {
+            labelcreditos= new JLabel("Creditos Libres");
+        } else {
+            labelcreditos = new JLabel("Creditos: 0");
+        }
+
         labelcreditos.setForeground(Color.WHITE);
         labelcreditos.setFont(new Font("Calibri", Font.BOLD, 23));
         labelcreditos.setBorder(BorderFactory.createEmptyBorder(0,10,0,0));
@@ -382,7 +433,7 @@ public class Interfaz extends JFrame
                                     ,listaReproduccion.obtenerCancionAReproducir()));
                             labelCancionEnRepro.setText(String.format("%04d - %s",
                                     listaReproduccion.obtenerNumero(), listaReproduccion.obtenerCancionAReproducir()));
-                            if (creditos == 0) {
+                            if (creditos == 0 && !creditosLibres) {
                                 timerFullScreen.restart();
                             }
                         }
@@ -402,7 +453,7 @@ public class Interfaz extends JFrame
                             objeto.reiniciarValores();
                             objeto.selectorMusica.setText("- - - -");
                             prohibir.agregarProhibido(numero);
-                            if (creditos == 0) {
+                            if (creditos == 0 && !creditosLibres) {
                                 timerFullScreen.restart();
                             }
                         }
@@ -509,8 +560,17 @@ public class Interfaz extends JFrame
 
     private class manejadorDeReproductor extends MediaPlayerEventAdapter
     {
+        @Override
+        public void stopped(MediaPlayer mediaPlayer) {
+            nextMusic();
+        }
+
         public void finished(MediaPlayer mediaPlayer)
         {
+            nextMusic();
+        }
+
+        public void nextMusic() {
             listaReproduccion.quitarMusica();
             listaDeReproduccion.setListData(listaReproduccion.obtenerCancionesEnLista());
 
@@ -570,7 +630,8 @@ public class Interfaz extends JFrame
                     this.configuraciones.getTeclaBajarGenero(),
                     this.configuraciones.getTeclaPantallaCompleta(),
                     this.configuraciones.getTeclaBorrar(),
-                    this.configuraciones.getTeclaCambiarLista(),
+                    this.configuraciones.isCancelMusic(),
+                    this.configuraciones.getPassword(),
                     creditosASubir,
                     monedasASubir,
                     this.configuraciones.isDefaultBackground(),
