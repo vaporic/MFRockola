@@ -5,14 +5,14 @@ import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
+import java.awt.event.*;
+import java.awt.font.TextAttribute;
 import java.io.*;
 import java.net.URL;
+import java.util.Map;
 
 import javax.swing.*;
+import javax.swing.border.TitledBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 @SuppressWarnings("serial")
@@ -38,6 +38,7 @@ public class Configuracion extends JFrame
 	private JTextField textFieldDirFondos;
 	private JLabel labelCreditosUsados;
 	private JLabel labelMonedasInsertadas;
+	private JLabel labelTextoDelPremio;
 	private JCheckBox chckbxNewCheckBox;
 	private JCheckBox checkBoxFoundDefaultBackground;
 	private JRadioButton rdbtnSi;
@@ -622,7 +623,7 @@ public class Configuracion extends JFrame
 		
 		JTextPane txtPaneEstadis = new JTextPane();
 		txtPaneEstadis.setText("Este es el panel para configurar y visualizar las estadisticas de uso de MFRockola. " +
-				"Encontraras las monedas intruducidas, asi como un monto aproximado de las ganancias generadas. Asi como cuantas canciones" +
+				"Encontraras las monedas intruducidas, asi como un monto aproximado de las ganancias generadas. Asi como cuantas canciones " +
 				"aleatorias fueron reproducidas.");
 		txtPaneEstadis.setEditable(false);
 		txtPaneEstadis.setFocusable(false);
@@ -646,13 +647,130 @@ public class Configuracion extends JFrame
 		labelMonedasInsertadas.setFont(new Font("Tahoma", Font.BOLD, 11));
 		labelMonedasInsertadas.setBounds(475, 149, 47, 14);
 		panel7.add(labelMonedasInsertadas);
+
+		JPanel panel8 = new JPanel();
+		panel8.setBackground(Color.WHITE);
+		fichas.addTab("Promociones",null,panel8, "Configuración de las promociones de MFRockola");
+		panel8.setLayout(null);
+
+		Icon promociones = new ImageIcon(this.getClass().getResource("/com/mfrockola/imagenes/promociones.png"));
+		JLabel labelPromociones = new JLabel();
+		labelPromociones.setIcon(promociones);
+		labelPromociones.setBounds(10, 11, 200, 205);
+		panel8.add(labelPromociones);
+
+		JLabel lblConfiguracinPromociones = new JLabel("Configuración de Promociones");
+		lblConfiguracinPromociones.setFont(new Font("Calibri", Font.BOLD, 21));
+		lblConfiguracinPromociones.setBounds(220, 11, 302, 27);
+		panel8.add(lblConfiguracinPromociones);
+
+		JTextPane txtPanePromos = new JTextPane();
+		txtPanePromos.setText("Este es el panel para configurar las promociones de MFRockola.");
+		txtPanePromos.setEditable(false);
+		txtPanePromos.setFocusable(false);
+		txtPanePromos.setBounds(220, 50, 367, 23);
+		panel8.add(txtPanePromos);
+
+		TitledBorder titledBorderCreditos;
+		titledBorderCreditos = BorderFactory.createTitledBorder("Creditos");
+
+		JPanel panelCreditosAdicionales = new JPanel();
+		panelCreditosAdicionales.setBackground(Color.WHITE);
+		panelCreditosAdicionales.setBorder(titledBorderCreditos);
+		panelCreditosAdicionales.setBounds(220,78,300,90);
+		panelCreditosAdicionales.setLayout(null);
+		panel8.add(panelCreditosAdicionales);
+
+		JCheckBox checkBoxCreditosAdicionales = new JCheckBox("Creditos adicionales");
+		checkBoxCreditosAdicionales.setBounds(5,20, 139, 14);
+		checkBoxCreditosAdicionales.setBackground(Color.WHITE);
+		panelCreditosAdicionales.add(checkBoxCreditosAdicionales);
+
+		JLabel labelNumeroDeCreditosAdicionales = new JLabel("Nº de Creditos Adicionales");
+		labelNumeroDeCreditosAdicionales.setBounds(8,43,139,14);
+		panelCreditosAdicionales.add(labelNumeroDeCreditosAdicionales);
+
+		CustomTextField textFieldNumeroDeCreditosAdicionales = new CustomTextField(2);
+		textFieldNumeroDeCreditosAdicionales.setBounds(138,43,20,14);
+		panelCreditosAdicionales.add(textFieldNumeroDeCreditosAdicionales);
+
+		JLabel labelCadaCantidadDeCreditos = new JLabel("Cada Nº de creditos introducidos");
+		labelCadaCantidadDeCreditos.setBounds(8,66,160,14);
+		panelCreditosAdicionales.add(labelCadaCantidadDeCreditos);
+
+		CustomTextField textFieldCadaCantidadDeCreditos = new CustomTextField(2);
+		textFieldCadaCantidadDeCreditos.setBounds(168,66,20,14);
+		panelCreditosAdicionales.add(textFieldCadaCantidadDeCreditos);
+
+		JCheckBox checkBoxCreditosContinuos = new JCheckBox("Continuos");
+		checkBoxCreditosContinuos.setBounds(188, 66,100,14);
+		checkBoxCreditosContinuos.setBackground(Color.WHITE);
+		panelCreditosAdicionales.add(checkBoxCreditosContinuos);
+
+		TitledBorder titledBorderPremios;
+		titledBorderPremios = BorderFactory.createTitledBorder("Premios");
+
+		JPanel panelPremios = new JPanel();
+		panelPremios.setBackground(Color.WHITE);
+		panelPremios.setBorder(titledBorderPremios);
+		panelPremios.setBounds(220,173,300,136);
+		panelPremios.setLayout(null);
+		panel8.add(panelPremios);
+
+		JCheckBox checkBoxPremio = new JCheckBox("Ganar Premio");
+		checkBoxPremio.setBounds(5, 20, 139, 14);
+		checkBoxPremio.setBackground(Color.WHITE);
+		panelPremios.add(checkBoxPremio);
+
+		JLabel labelNumeroDePremios = new JLabel("Nº de Premios");
+		labelNumeroDePremios.setBounds(8,43,139,14);
+		panelPremios.add(labelNumeroDePremios);
+
+		CustomTextField textFieldNumeroDePremios = new CustomTextField(2);
+		textFieldNumeroDePremios.setBounds(83,43,20,14);
+		panelPremios.add(textFieldNumeroDePremios);
+
+		JLabel labelPremioCadaCreditos = new JLabel("Nº de Creditos por premio");
+		labelPremioCadaCreditos.setBounds(8,66,139,14);
+		panelPremios.add(labelPremioCadaCreditos);
+
+		CustomTextField textFieldPremioCadaCreditos = new CustomTextField(3);
+		textFieldPremioCadaCreditos.setBounds(138,66,30,14);
+		panelPremios.add(textFieldPremioCadaCreditos);
+
+		JLabel labelTipoDePremio = new JLabel("Tipo de Premio");
+		labelTipoDePremio.setBounds(8,89,139,14);
+		panelPremios.add(labelTipoDePremio);
+
+		JTextField textFieldTipoDePremio = new JTextField();
+		textFieldTipoDePremio.setBounds(83,89,150,14);
+		panelPremios.add(textFieldTipoDePremio);
+
+		textFieldTipoDePremio.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				labelTextoDelPremio.setText("Ganaste " + textFieldNumeroDePremios.getText() +" "+ textFieldTipoDePremio.getText());
+			}
+		});
+
+		textFieldNumeroDePremios.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				labelTextoDelPremio.setText("Ganaste " + textFieldNumeroDePremios.getText() +" "+ textFieldTipoDePremio.getText());
+			}
+		});
+
+		labelTextoDelPremio = new JLabel("Ganaste 1 Doritos");
+		labelTextoDelPremio.setBounds(8,112,290,14);
+		labelTextoDelPremio.setFont(new Font("Tahoma", Font.BOLD, 11));
+		panelPremios.add(labelTextoDelPremio);
 		
 		panelPrincipal.add(fichas);
 		
 		getContentPane().add(panelPrincipal);
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 642, 400); // posicion de la ventana
+		setBounds(100, 100, 642, 420); // posicion de la ventana
 		setVisible(true);
 		setResizable(false);
 
