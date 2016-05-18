@@ -637,7 +637,15 @@ public class Interfaz extends JFrame
                     this.configuraciones.isDefaultBackground(),
                     this.configuraciones.getDireccionFondo(),
                     this.configuraciones.getColor1(),
-                    this.configuraciones.getColor2()
+                    this.configuraciones.getColor2(),
+                    this.configuraciones.isAgregarAdicional(),
+                    this.configuraciones.getNumeroDeCreditosAdicionales(),
+                    this.configuraciones.getCadaCantidadDeCreditos(),
+                    this.configuraciones.isCreditosContinuos(),
+                    this.configuraciones.isEntregarPremio(),
+                    this.configuraciones.getCantidadDePremios(),
+                    this.configuraciones.getCantidadDeCreditosPorPremio(),
+                    this.configuraciones.getTipoDePremio()
             );
 
             salida.writeObject(configuraciones);

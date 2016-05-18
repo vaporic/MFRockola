@@ -39,6 +39,19 @@ public class Configuracion extends JFrame
 	private JLabel labelCreditosUsados;
 	private JLabel labelMonedasInsertadas;
 	private JLabel labelTextoDelPremio;
+	private JCheckBox checkBoxCreditosAdicionales;
+	private JLabel labelNumeroDeCreditosAdicionales;
+	private CustomTextField textFieldNumeroDeCreditosAdicionales;
+	private JLabel labelCadaCantidadDeCreditos;
+	private CustomTextField textFieldCadaCantidadDeCreditos;
+	private JCheckBox checkBoxCreditosContinuos;
+	private JCheckBox checkBoxPremio;
+	private JLabel labelNumeroDePremios;
+	private CustomTextField textFieldNumeroDePremios;
+	private JLabel labelPremioCadaCreditos;
+	private CustomTextField textFieldPremioCadaCreditos;
+	private JLabel labelTipoDePremio;
+	private JTextField textFieldTipoDePremio;
 	private JCheckBox chckbxNewCheckBox;
 	private JCheckBox checkBoxFoundDefaultBackground;
 	private JRadioButton rdbtnSi;
@@ -681,29 +694,57 @@ public class Configuracion extends JFrame
 		panelCreditosAdicionales.setLayout(null);
 		panel8.add(panelCreditosAdicionales);
 
-		JCheckBox checkBoxCreditosAdicionales = new JCheckBox("Creditos adicionales");
+		checkBoxCreditosAdicionales = new JCheckBox("Creditos adicionales");
 		checkBoxCreditosAdicionales.setBounds(5,20, 139, 14);
 		checkBoxCreditosAdicionales.setBackground(Color.WHITE);
+		checkBoxCreditosAdicionales.setFocusable(false);
 		panelCreditosAdicionales.add(checkBoxCreditosAdicionales);
 
-		JLabel labelNumeroDeCreditosAdicionales = new JLabel("Nº de Creditos Adicionales");
+		checkBoxCreditosAdicionales.addItemListener(new ItemListener() {
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				if (checkBoxCreditosAdicionales.isSelected()) {
+					labelNumeroDeCreditosAdicionales.setEnabled(true);
+					textFieldNumeroDeCreditosAdicionales.setEnabled(true);
+					labelCadaCantidadDeCreditos.setEnabled(true);
+					textFieldCadaCantidadDeCreditos.setEnabled(true);
+					checkBoxCreditosContinuos.setEnabled(true);
+				} else {
+					labelNumeroDeCreditosAdicionales.setEnabled(false);
+					textFieldNumeroDeCreditosAdicionales.setEnabled(false);
+					textFieldNumeroDeCreditosAdicionales.setText("0");
+					labelCadaCantidadDeCreditos.setEnabled(false);
+					textFieldCadaCantidadDeCreditos.setEnabled(false);
+					textFieldCadaCantidadDeCreditos.setText("0");
+					checkBoxCreditosContinuos.setEnabled(false);
+					checkBoxCreditosContinuos.setSelected(false);
+				}
+			}
+		});
+
+		labelNumeroDeCreditosAdicionales = new JLabel("Nº de Creditos Adicionales");
 		labelNumeroDeCreditosAdicionales.setBounds(8,43,139,14);
+		labelNumeroDeCreditosAdicionales.setEnabled(false);
 		panelCreditosAdicionales.add(labelNumeroDeCreditosAdicionales);
 
-		CustomTextField textFieldNumeroDeCreditosAdicionales = new CustomTextField(2);
+		textFieldNumeroDeCreditosAdicionales = new CustomTextField(2);
 		textFieldNumeroDeCreditosAdicionales.setBounds(138,43,20,14);
+		textFieldNumeroDeCreditosAdicionales.setEnabled(false);
 		panelCreditosAdicionales.add(textFieldNumeroDeCreditosAdicionales);
 
-		JLabel labelCadaCantidadDeCreditos = new JLabel("Cada Nº de creditos introducidos");
+		labelCadaCantidadDeCreditos = new JLabel("Cada Nº de creditos introducidos");
 		labelCadaCantidadDeCreditos.setBounds(8,66,160,14);
+		labelCadaCantidadDeCreditos.setEnabled(false);
 		panelCreditosAdicionales.add(labelCadaCantidadDeCreditos);
 
-		CustomTextField textFieldCadaCantidadDeCreditos = new CustomTextField(2);
+		textFieldCadaCantidadDeCreditos = new CustomTextField(2);
 		textFieldCadaCantidadDeCreditos.setBounds(168,66,20,14);
+		textFieldCadaCantidadDeCreditos.setEnabled(false);
 		panelCreditosAdicionales.add(textFieldCadaCantidadDeCreditos);
 
-		JCheckBox checkBoxCreditosContinuos = new JCheckBox("Continuos");
+		checkBoxCreditosContinuos = new JCheckBox("Continuos");
 		checkBoxCreditosContinuos.setBounds(188, 66,100,14);
+		checkBoxCreditosContinuos.setEnabled(false);
 		checkBoxCreditosContinuos.setBackground(Color.WHITE);
 		panelCreditosAdicionales.add(checkBoxCreditosContinuos);
 
@@ -717,33 +758,69 @@ public class Configuracion extends JFrame
 		panelPremios.setLayout(null);
 		panel8.add(panelPremios);
 
-		JCheckBox checkBoxPremio = new JCheckBox("Ganar Premio");
+		checkBoxPremio = new JCheckBox("Ganar Premio");
 		checkBoxPremio.setBounds(5, 20, 139, 14);
 		checkBoxPremio.setBackground(Color.WHITE);
+		checkBoxPremio.setFocusable(false);
 		panelPremios.add(checkBoxPremio);
 
-		JLabel labelNumeroDePremios = new JLabel("Nº de Premios");
+		checkBoxPremio.addItemListener(new ItemListener() {
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				if (checkBoxPremio.isSelected()) {
+					labelNumeroDePremios.setEnabled(true);
+					textFieldNumeroDePremios.setEnabled(true);
+					labelPremioCadaCreditos.setEnabled(true);
+					textFieldPremioCadaCreditos.setEnabled(true);
+					labelTipoDePremio.setEnabled(true);
+					textFieldTipoDePremio.setEnabled(true);
+					textFieldTipoDePremio.setText("");
+					labelTextoDelPremio.setEnabled(true);
+					labelTextoDelPremio.setText("Inserte el tipo y cantidad del premio");
+				} else {
+					labelNumeroDePremios.setEnabled(false);
+					textFieldNumeroDePremios.setEnabled(false);
+					textFieldNumeroDePremios.setText("0");
+					labelPremioCadaCreditos.setEnabled(false);
+					textFieldPremioCadaCreditos.setEnabled(false);
+					textFieldPremioCadaCreditos.setText("0");
+					labelTipoDePremio.setEnabled(false);
+					textFieldTipoDePremio.setEnabled(false);
+					textFieldTipoDePremio.setText("");
+					labelTextoDelPremio.setEnabled(false);
+					labelTextoDelPremio.setText("No se entregarán premios");
+				}
+			}
+		});
+
+		labelNumeroDePremios = new JLabel("Nº de Premios");
 		labelNumeroDePremios.setBounds(8,43,139,14);
+		labelNumeroDePremios.setEnabled(false);
 		panelPremios.add(labelNumeroDePremios);
 
-		CustomTextField textFieldNumeroDePremios = new CustomTextField(2);
+		textFieldNumeroDePremios = new CustomTextField(2);
 		textFieldNumeroDePremios.setBounds(83,43,20,14);
+		textFieldNumeroDePremios.setEnabled(false);
 		panelPremios.add(textFieldNumeroDePremios);
 
-		JLabel labelPremioCadaCreditos = new JLabel("Nº de Creditos por premio");
+		labelPremioCadaCreditos = new JLabel("Nº de Creditos por premio");
 		labelPremioCadaCreditos.setBounds(8,66,139,14);
+		labelPremioCadaCreditos.setEnabled(false);
 		panelPremios.add(labelPremioCadaCreditos);
 
-		CustomTextField textFieldPremioCadaCreditos = new CustomTextField(3);
+		textFieldPremioCadaCreditos = new CustomTextField(3);
 		textFieldPremioCadaCreditos.setBounds(138,66,30,14);
+		textFieldPremioCadaCreditos.setEnabled(false);
 		panelPremios.add(textFieldPremioCadaCreditos);
 
-		JLabel labelTipoDePremio = new JLabel("Tipo de Premio");
+		labelTipoDePremio = new JLabel("Tipo de Premio");
 		labelTipoDePremio.setBounds(8,89,139,14);
+		labelTipoDePremio.setEnabled(false);
 		panelPremios.add(labelTipoDePremio);
 
-		JTextField textFieldTipoDePremio = new JTextField();
+		textFieldTipoDePremio = new JTextField();
 		textFieldTipoDePremio.setBounds(83,89,150,14);
+		textFieldTipoDePremio.setEnabled(false);
 		panelPremios.add(textFieldTipoDePremio);
 
 		textFieldTipoDePremio.addKeyListener(new KeyAdapter() {
@@ -762,6 +839,7 @@ public class Configuracion extends JFrame
 
 		labelTextoDelPremio = new JLabel("Ganaste 1 Doritos");
 		labelTextoDelPremio.setBounds(8,112,290,14);
+		labelTextoDelPremio.setEnabled(false);
 		labelTextoDelPremio.setFont(new Font("Tahoma", Font.BOLD, 11));
 		panelPremios.add(labelTextoDelPremio);
 		
@@ -849,6 +927,36 @@ public class Configuracion extends JFrame
 		color2 = configuraciones.getColor2();
 
 		textFieldDirFondos.setText(configuraciones.getDireccionFondo().getFile());
+
+		if (configuraciones.isAgregarAdicional()) {
+			checkBoxCreditosAdicionales.setSelected(true);
+		} else {
+			checkBoxCreditosAdicionales.setSelected(false);
+		}
+
+		textFieldNumeroDeCreditosAdicionales.setText(String.format("%s",configuraciones.getNumeroDeCreditosAdicionales()));
+
+		textFieldCadaCantidadDeCreditos.setText(String.format("%s", configuraciones.getCadaCantidadDeCreditos()));
+
+		checkBoxCreditosContinuos.setSelected(configuraciones.isCreditosContinuos());
+
+		if (configuraciones.isEntregarPremio()) {
+			checkBoxPremio.setSelected(true);
+		} else {
+			checkBoxPremio.setSelected(false);
+		}
+
+		textFieldNumeroDePremios.setText(String.valueOf(configuraciones.getCantidadDePremios()));
+
+		textFieldPremioCadaCreditos.setText(String.valueOf(configuraciones.getCantidadDeCreditosPorPremio()));
+
+		textFieldTipoDePremio.setText(String.valueOf(configuraciones.getTipoDePremio()));
+
+		if (configuraciones.getTipoDePremio().equals("")) {
+			labelTextoDelPremio.setText("No se entregarán premios");
+		} else {
+			labelTextoDelPremio.setText("Ganaste " + configuraciones.getCantidadDePremios() +" "+ configuraciones.getTipoDePremio());
+		}
 	}
 	
 	private class manejadorRadioButtons implements ItemListener
@@ -909,7 +1017,15 @@ public class Configuracion extends JFrame
 						true, // is default background?
 						url, // path background
 						new Color(102,204,255), // color 1 of list
-						new Color(255,255,255) // color 2 of list
+						new Color(255,255,255), // color 2 of list
+						false, // is agregarAdicional?
+						0, // numero de creditos adicionales
+						0, // cada cantidad de creditos
+						false, // is creditos continuos
+						false, // is entregarPremio?
+						0,
+						0,
+						""
 				);
 
 				salida.writeObject(configuraciones);
@@ -950,7 +1066,15 @@ public class Configuracion extends JFrame
 						defaultBackground,
 						url,
 						color1,
-						color2
+						color2,
+						checkBoxCreditosAdicionales.isSelected(),
+						Integer.parseInt(textFieldNumeroDeCreditosAdicionales.getText()),
+						Integer.parseInt(textFieldCadaCantidadDeCreditos.getText()),
+						checkBoxCreditosContinuos.isSelected(),
+						checkBoxPremio.isSelected(),
+						Integer.parseInt(textFieldNumeroDePremios.getText()),
+						Integer.parseInt(textFieldPremioCadaCreditos.getText()),
+						textFieldTipoDePremio.getText()
 				);
 
 				salida.writeObject(configuraciones);

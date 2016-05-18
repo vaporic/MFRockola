@@ -30,42 +30,64 @@ public class RegConfig implements Serializable
 	private URL direccionFondo;
 	private Color color1;
 	private Color color2;
+
+	// Tab promociones
+
+	private boolean agregarAdicional;
+	private int numeroDeCreditosAdicionales;
+	private int cadaCantidadDeCreditos;
+	private boolean creditosContinuos;
+	private boolean entregarPremio;
+	private int cantidadDePremios;
+	private int cantidadDeCreditosPorPremio;
+	private String tipoDePremio;
 	
 	public RegConfig(String direccionVideos, String direccionVlc,
 			String direccionVideoPromocional, int musicAleatoria,int reinicioMusicas,int cantidadCreditos, boolean libre,
 			boolean videoPromocional, int clickCreditos, int teclaSubirLista, int teclaBajarLista,
 			int teclaSubirGenero, int teclaBajarGenero, int teclaPantallaCompleta, int teclaBorrar,
 			boolean cancelMusic,String password, int cantidadCreditosUsados, int CantidadMonedasInsertadas, boolean defaultBackground,
-			URL direccionFondo, Color color1, Color color2)
+			URL direccionFondo, Color color1, Color color2, boolean agregarAdicional, int numeroDeCreditosAdicionales,
+			int cadaCantidadDeCreditos, boolean creditosContinuos, boolean entregarPremio, int cantidadDePremios,
+			int cantidadDeCreditosPorPremio, String tipoDePremio)
 	{
-		this.setDireccionVideos(direccionVideos);
-		this.setDireccionVlc(direccionVlc);
-		this.setMusicAleatoria(musicAleatoria);
-		this.setReinicioMusicas(reinicioMusicas);
-		this.setDireccionVideoPromocional(direccionVideoPromocional);
-		this.setCantidadCreditos(cantidadCreditos);
-		this.setLibre(libre);
-		this.setVideoPromocional(videoPromocional);
-		this.setClickCreditos(clickCreditos);
-		this.setTeclaSubirLista(teclaSubirLista);
-		this.setTeclaBajarLista(teclaBajarLista);
-		this.setTeclaSubirGenero(teclaSubirGenero);
-		this.setTeclaPantallaCompleta(teclaPantallaCompleta);
-		this.setTeclaBorrar(teclaBorrar);
-		this.setCancelMusic(cancelMusic);
-		this.setPassword(password);
-		this.setCantidadCreditosUsados(cantidadCreditosUsados);
-		this.setCantidadMonedasInsertadas(CantidadMonedasInsertadas);
+		setDireccionVideos(direccionVideos);
+		setDireccionVlc(direccionVlc);
+		setMusicAleatoria(musicAleatoria);
+		setReinicioMusicas(reinicioMusicas);
+		setDireccionVideoPromocional(direccionVideoPromocional);
+		setCantidadCreditos(cantidadCreditos);
+		setLibre(libre);
+		setVideoPromocional(videoPromocional);
+		setClickCreditos(clickCreditos);
+		setTeclaSubirLista(teclaSubirLista);
+		setTeclaBajarLista(teclaBajarLista);
+		setTeclaSubirGenero(teclaSubirGenero);
+		setTeclaPantallaCompleta(teclaPantallaCompleta);
+		setTeclaBorrar(teclaBorrar);
+		setCancelMusic(cancelMusic);
+		setPassword(password);
+		setCantidadCreditosUsados(cantidadCreditosUsados);
+		setCantidadMonedasInsertadas(CantidadMonedasInsertadas);
 		setDefaultBackground(defaultBackground);
-		this.setDireccionFondo(direccionFondo);
-		this.setColor1(color1);
-		this.setColor2(color2);
+		setDireccionFondo(direccionFondo);
+		setColor1(color1);
+		setColor2(color2);
+		setAgregarAdicional(agregarAdicional);
+		setNumeroDeCreditosAdicionales(numeroDeCreditosAdicionales);
+		setCadaCantidadDeCreditos(cadaCantidadDeCreditos);
+		setCreditosContinuos(creditosContinuos);
+		setEntregarPremio(entregarPremio);
+		setCantidadDePremios(cantidadDePremios);
+		setCantidadDeCreditosPorPremio(cantidadDeCreditosPorPremio);
+		setTipoDePremio(tipoDePremio);
 	}
 
 	public String getDireccionVideos() 
 	{
 		return direccionVideos;
 	}
+
 	public void setDireccionVideos(String direccionVideos) 
 	{
 		this.direccionVideos = direccionVideos;
@@ -245,5 +267,69 @@ public class RegConfig implements Serializable
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public boolean isAgregarAdicional() {
+		return agregarAdicional;
+	}
+
+	public void setAgregarAdicional(boolean agregarAdicional) {
+		this.agregarAdicional = agregarAdicional;
+	}
+
+	public boolean isEntregarPremio() {
+		return entregarPremio;
+	}
+
+	public void setEntregarPremio(boolean entregarPremio) {
+		this.entregarPremio = entregarPremio;
+	}
+
+	public int getNumeroDeCreditosAdicionales() {
+		return numeroDeCreditosAdicionales;
+	}
+
+	public void setNumeroDeCreditosAdicionales(int numeroDeCreditosAdicionales) {
+		this.numeroDeCreditosAdicionales = numeroDeCreditosAdicionales;
+	}
+
+	public int getCadaCantidadDeCreditos() {
+		return cadaCantidadDeCreditos;
+	}
+
+	public void setCadaCantidadDeCreditos(int cadaCantidadDeCreditos) {
+		this.cadaCantidadDeCreditos = cadaCantidadDeCreditos;
+	}
+
+	public boolean isCreditosContinuos() {
+		return creditosContinuos;
+	}
+
+	public void setCreditosContinuos(boolean creditosContinuos) {
+		this.creditosContinuos = creditosContinuos;
+	}
+
+	public int getCantidadDePremios() {
+		return cantidadDePremios;
+	}
+
+	public void setCantidadDePremios(int cantidadDePremios) {
+		this.cantidadDePremios = cantidadDePremios;
+	}
+
+	public int getCantidadDeCreditosPorPremio() {
+		return cantidadDeCreditosPorPremio;
+	}
+
+	public void setCantidadDeCreditosPorPremio(int cantidadDeCreditosPorPremio) {
+		this.cantidadDeCreditosPorPremio = cantidadDeCreditosPorPremio;
+	}
+
+	public String getTipoDePremio() {
+		return tipoDePremio;
+	}
+
+	public void setTipoDePremio(String tipoDePremio) {
+		this.tipoDePremio = tipoDePremio;
 	}
 }
