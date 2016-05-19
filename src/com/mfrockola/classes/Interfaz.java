@@ -3,7 +3,11 @@ package com.mfrockola.classes;
 import uk.co.caprica.vlcj.player.MediaPlayer;
 import uk.co.caprica.vlcj.player.MediaPlayerEventAdapter;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
@@ -47,6 +51,7 @@ public class Interfaz extends JFrame
     JLabel labelCancionEnRepro;
     JLabel labelcreditos;
     JLabel labelLogo;
+    JLabel labelPromociones;
 
     Reproductor repro;
 
@@ -58,10 +63,16 @@ public class Interfaz extends JFrame
     private boolean cancelMusic;
     private boolean creditosLibres;
     private int countClickCancelMusic;
+    private boolean agregarCreditoAdicional;
+    private int creditosInsertados;
+    private boolean entregarPremio;
+    private int creditosInsertadosParaPremio;
 
     private JScrollPane barras;
     private Timer timerChangerLblCredits;
     private Timer timerFullScreen;
+
+    private Clip sound;
 
     @SuppressWarnings("unchecked")
     public Interfaz()
@@ -74,6 +85,8 @@ public class Interfaz extends JFrame
             creditosASubir = configuraciones.getCantidadCreditosUsados();
             cancelMusic = configuraciones.isCancelMusic();
             creditosLibres = configuraciones.isLibre();
+            agregarCreditoAdicional = configuraciones.isAgregarAdicional();
+            entregarPremio = configuraciones.isEntregarPremio();
         }
         catch (NullPointerException excepcion)
         {
@@ -140,6 +153,8 @@ public class Interfaz extends JFrame
                     if (isFullScreen) {
                         pantallaCompleta();
                     }
+
+                    entregarPremiosYCreditosAdicionales();
                 } else if (cancelMusic && e.isMetaDown() == false && listaReproduccion.obtenerCancionAReproducir()!=null) {
 
                     if (isFullScreen) {
@@ -183,6 +198,7 @@ public class Interfaz extends JFrame
                     if (isFullScreen) {
                         pantallaCompleta();
                     }
+                    entregarPremiosYCreditosAdicionales();
                 }
             }
         });
@@ -208,7 +224,7 @@ public class Interfaz extends JFrame
         labelGeneroMusical = new JLabel("Genero");
         labelGeneroMusical.setForeground(Color.WHITE);
         labelGeneroMusical.setFont(new Font("Calibri", Font.BOLD, 23));
-        labelGeneroMusical.setBounds(30,15,ancho-590,35);
+        labelGeneroMusical.setBounds(30, 15, ancho - 590, 35);
 
         if (creditosLibres) {
             labelcreditos= new JLabel("Creditos Libres");
@@ -218,24 +234,37 @@ public class Interfaz extends JFrame
 
         labelcreditos.setForeground(Color.WHITE);
         labelcreditos.setFont(new Font("Calibri", Font.BOLD, 23));
-        labelcreditos.setBorder(BorderFactory.createEmptyBorder(0,10,0,0));
+        labelcreditos.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
 
         Icon log = new ImageIcon(this.getClass().getResource("/com/mfrockola/imagenes/nombre.png"));
         labelLogo = new JLabel(log);
         labelLogo.setHorizontalAlignment(SwingConstants.RIGHT);
-        labelLogo.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
+        labelLogo.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
         labelCancionEnRepro = new JLabel("MFRockola");
         labelCancionEnRepro.setForeground(Color.WHITE);
         labelCancionEnRepro.setFont(new Font("Calibri", Font.BOLD, 23));
         labelCancionEnRepro.setHorizontalAlignment(SwingConstants.CENTER);
 
+        Icon icon = new ImageIcon(this.getClass().getResource("/com/mfrockola/imagenes/promocionLabel.png"));
+        labelPromociones = new JLabel("Aqui van las promociones",icon,JLabel.CENTER);
+        labelPromociones.setVerticalTextPosition(JLabel.BOTTOM);
+        labelPromociones.setHorizontalTextPosition(JLabel.CENTER);
+        labelPromociones.setForeground(Color.BLACK);
+        labelPromociones.setBorder(BorderFactory.createLineBorder(Color.BLACK,3));
+        labelPromociones.setFont(new Font("Calibri", Font.BOLD, 23));
+        labelPromociones.setHorizontalAlignment(SwingConstants.CENTER);
+        labelPromociones.setVisible(false);
+        labelPromociones.setOpaque(true);
+        labelPromociones.setBackground(Color.WHITE);
+        labelPromociones.setBounds((ancho/2)-250,(alto/2)-80,500,160);
+
         // Iniciar las listas
 
         listMusic = new ListMusic(configuraciones.getDireccionVideos());
 
         listaDeMusicas = new JList();
-        listaDeMusicas.setCellRenderer(new ModificadorDeCeldas(new Font("Consolas", Font.BOLD,20),
+        listaDeMusicas.setCellRenderer(new ModificadorDeCeldas(new Font("Consolas", Font.BOLD, 20),
                 configuraciones.getColor1(), configuraciones.getColor2()));
         listaDeMusicas.setListData(listMusic.getGenderSongs(0));
         listaDeMusicas.addKeyListener(new manejadorDeTeclas());
@@ -244,15 +273,15 @@ public class Interfaz extends JFrame
         listaDeMusicas.setMaximumSize(getMaximumSize());
 
         barras = new JScrollPane(listaDeMusicas);
-        barras.setBounds(30, 60, ancho-590, alto-65);
+        barras.setBounds(30, 60, ancho - 590, alto - 65);
         barras.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         barras.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
 
         listaDeReproduccion = new JList();
         listaDeReproduccion.setListData(listaReproduccion.obtenerCancionesEnLista());
-        listaDeReproduccion.setCellRenderer(new ModificadorDeCeldas(new Font("Consolas", Font.BOLD,20),
+        listaDeReproduccion.setCellRenderer(new ModificadorDeCeldas(new Font("Consolas", Font.BOLD, 20),
                 configuraciones.getColor1(), configuraciones.getColor2()));
-        listaDeReproduccion.setBounds(ancho-530, alto-260,500,250);
+        listaDeReproduccion.setBounds(ancho - 530, alto - 260, 500, 250);
         listaDeReproduccion.setFocusable(false);
 
         labelGeneroMusical.setText("Genero Musical: "+ listMusic.getNameOfGender());
@@ -262,6 +291,7 @@ public class Interfaz extends JFrame
         contenedorPrincipal = new JPanel();
         contenedorPrincipal.setOpaque(false);
         contenedorPrincipal.setLayout(null);
+        contenedorPrincipal.add(labelPromociones);
         contenedorPrincipal.add(barras);
 
         contenedorPrincipal.add(labelGeneroMusical);
@@ -332,13 +362,49 @@ public class Interfaz extends JFrame
         }
     }
 
+    public void entregarPremiosYCreditosAdicionales() {
+        // creditosInsertados es la variable de control de los clicks
+
+        if (agregarCreditoAdicional && !creditosLibres) {
+            creditosInsertados++;
+            if (creditosInsertados >= configuraciones.getCadaCantidadDeCreditos()) {
+                // Aqui va la cuestion para controlar el cartel de los creditos adicionales
+                creditosInsertados = 0;
+                creditos = creditos + configuraciones.getNumeroDeCreditosAdicionales();
+                labelcreditos.setText(String.format("Creditos: %d", creditos));
+                labelPromociones.setText(String.format("Ganaste %s creditos adicionales",
+                        configuraciones.getNumeroDeCreditosAdicionales()));
+                labelPromociones.setVisible(true);
+            }
+        }
+
+        if (entregarPremio && !creditosLibres) {
+            creditosInsertadosParaPremio++;
+            if (creditosInsertadosParaPremio % configuraciones.getCantidadDeCreditosPorPremio() == 0) {
+                // Aqui va la cuestion para controlar el cartel de premio
+                labelPromociones.setText(String.format("Ganaste %s %s!", configuraciones.getCantidadDePremios(),
+                        configuraciones.getTipoDePremio()));
+                labelPromociones.setVisible(true);
+                playSound();
+            }
+        }
+    }
+
     private class manejadorDeTeclas extends KeyAdapter
     {
         public void keyPressed(KeyEvent evento)
         {
             if (evento.getKeyCode()==10)
             {
-                pantallaCompleta();
+                if (labelPromociones.isVisible()) {
+                    labelPromociones.setVisible(false);
+                    if (sound!=null) {
+                        sound.stop();
+                        sound.close();
+                    }
+                } else {
+                    pantallaCompleta();
+                }
             }
 
             if(evento.getKeyCode()== 8 && objeto.contador > 0)
@@ -400,14 +466,12 @@ public class Interfaz extends JFrame
                 else
                     condicion = false;
 
-                if (numero >= listMusic.getSizeListOfSongs())
-                {
+                if (numero >= listMusic.getSizeListOfSongs()) {
                     labelcreditos.setText("Musica no encontrada");
                     objeto.reproducir = false;
                     objeto.reiniciarValores();
                     objeto.selectorMusica.setText("- - - -");
                     timerChangerLblCredits.start();
-
                 }
                 else
                 {
@@ -436,6 +500,10 @@ public class Interfaz extends JFrame
                             if (creditos == 0 && !creditosLibres) {
                                 timerFullScreen.restart();
                             }
+
+                            if (configuraciones.isCreditosContinuos()) {
+                                creditosInsertados = 0;
+                            }
                         }
                         else
                         {
@@ -455,6 +523,10 @@ public class Interfaz extends JFrame
                             prohibir.agregarProhibido(numero);
                             if (creditos == 0 && !creditosLibres) {
                                 timerFullScreen.restart();
+                            }
+
+                            if (configuraciones.isCreditosContinuos()) {
+                                creditosInsertados = 0;
                             }
                         }
                     }
@@ -678,5 +750,17 @@ public class Interfaz extends JFrame
         abrirRegConfigEscritura();
         agregarDatosRegConfig();
         cerrarRegConfig();
+    }
+
+    public void playSound() {
+        try {
+            BufferedInputStream bis = new BufferedInputStream(getClass().getResourceAsStream("/com/mfrockola/sounds/cash.wav"));
+            AudioInputStream ais = AudioSystem.getAudioInputStream(bis);
+            sound = AudioSystem.getClip();
+            sound.open(ais);
+            sound.start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
