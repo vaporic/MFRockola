@@ -264,7 +264,8 @@ public class Interfaz extends JFrame
         listMusic = new ListMusic(configuraciones.getDireccionVideos());
 
         listaDeMusicas = new JList();
-        listaDeMusicas.setCellRenderer(new ModificadorDeCeldas(new Font("Consolas", Font.BOLD, 20),
+        listaDeMusicas.setCellRenderer(new ModificadorDeCeldas(new Font(configuraciones.getFontCeldasName(),
+                configuraciones.getFontCeldasNegrita(), configuraciones.getFontCeldasSize()),configuraciones.getFontCeldasColor(),
                 configuraciones.getColor1(), configuraciones.getColor2()));
         listaDeMusicas.setListData(listMusic.getGenderSongs(0));
         listaDeMusicas.addKeyListener(new manejadorDeTeclas());
@@ -273,15 +274,17 @@ public class Interfaz extends JFrame
         listaDeMusicas.setMaximumSize(getMaximumSize());
 
         barras = new JScrollPane(listaDeMusicas);
-        barras.setBounds(30, 60, ancho - 590, alto - 65);
+        barras.setBounds((int)(ancho/45.533), (int)(alto/12.8),(int)(ancho/1.7603), (int)(ancho/1.0924));
         barras.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         barras.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
 
         listaDeReproduccion = new JList();
         listaDeReproduccion.setListData(listaReproduccion.obtenerCancionesEnLista());
-        listaDeReproduccion.setCellRenderer(new ModificadorDeCeldas(new Font("Consolas", Font.BOLD, 20),
+        listaDeReproduccion.setCellRenderer(new ModificadorDeCeldas(new Font(configuraciones.getFontCeldasName(),
+                configuraciones.getFontCeldasNegrita(), configuraciones.getFontCeldasSize()),configuraciones.getFontCeldasColor(),
                 configuraciones.getColor1(), configuraciones.getColor2()));
-        listaDeReproduccion.setBounds(ancho - 530, alto - 260, 500, 250);
+        listaDeReproduccion.setBounds((int)(ancho/1.633), (int)(alto/1.52), (int)(ancho/2.732), (int)(alto/2.501));
+//        listaDeReproduccion.setBounds(ancho - 530, alto - 260, 500, alto-461);
         listaDeReproduccion.setFocusable(false);
 
         labelGeneroMusical.setText("Genero Musical: "+ listMusic.getNameOfGender());
@@ -312,13 +315,13 @@ public class Interfaz extends JFrame
         repro = new Reproductor();
         contenedorVideo = new JPanel();
         contenedorVideo.setLayout(new BorderLayout());
-        contenedorVideo.setBounds(ancho-530, alto-(alto*94/100),500, 283);
+        contenedorVideo.setBounds((int)(ancho/1.633), (int)(alto/16.340),(int)(ancho/2.732), (int)(alto/2.7137));
         contenedorVideo.add(repro.obtenerReproductor(),BorderLayout.CENTER);
         contenedorPrincipal.add(contenedorVideo);
 
         panel = new JPanel();
         panel.setOpaque(false);
-        panel.setBounds(ancho-530, alto-(alto*55/100), 500, 380); // contenedorVideo.setBounds(ancho-530, alto-(alto*94/100),500, 283);
+        panel.setBounds((int)(ancho/1.633), (int)(alto/2.2222), (int)(ancho/2.732), (int)(alto/2.021));
         contenedorPrincipal.add(panel);
         panel.setLayout(new GridLayout(2, 1, 20, 0));
 
@@ -353,7 +356,7 @@ public class Interfaz extends JFrame
         }
         else
         {
-            contenedorVideo.setBounds(ancho-530, alto-(alto*94/100),500, 283);
+            contenedorVideo.setBounds((int)(ancho/1.633), (int)(alto/16.340),(int)(ancho/2.732), (int)(alto/2.7137));
             barras.setVisible(true);
             listaDeMusicas.setVisible(true);
             panel.setVisible(true);
@@ -710,6 +713,10 @@ public class Interfaz extends JFrame
                     this.configuraciones.getDireccionFondo(),
                     this.configuraciones.getColor1(),
                     this.configuraciones.getColor2(),
+                    this.configuraciones.getFontCeldasName(),
+                    this.configuraciones.getFontCeldasSize(),
+                    this.configuraciones.getFontCeldasColor(),
+                    this.configuraciones.getFontCeldasNegrita(),
                     this.configuraciones.isAgregarAdicional(),
                     this.configuraciones.getNumeroDeCreditosAdicionales(),
                     this.configuraciones.getCadaCantidadDeCreditos(),

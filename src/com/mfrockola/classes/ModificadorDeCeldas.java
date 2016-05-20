@@ -14,10 +14,11 @@ public class ModificadorDeCeldas extends JLabel implements ListCellRenderer
 	private Color color1;
 	private Color color2;
 	
-	public ModificadorDeCeldas(Font fuente, Color color1, Color color2)
+	public ModificadorDeCeldas(Font fuente,Color foreground, Color color1, Color color2)
 	{
 		setOpaque(true);
 		setFont(fuente);
+		setForeground(foreground);
 		this.color1 = color1;
 		this.color2 = color2;
 	}
@@ -26,6 +27,8 @@ public class ModificadorDeCeldas extends JLabel implements ListCellRenderer
 	public Component getListCellRendererComponent(JList list, Object value,
 			int index, boolean isSelected, boolean cellHasFocus) 
 	{
+
+
 		if (value == null) {
 			setText("Sin canciones en reproducción");
 		} else setText(value.toString());

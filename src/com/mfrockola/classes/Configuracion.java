@@ -1,10 +1,6 @@
 package com.mfrockola.classes;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.Toolkit;
+import java.awt.*;
 import java.awt.event.*;
 import java.awt.font.TextAttribute;
 import java.io.*;
@@ -12,6 +8,7 @@ import java.net.URL;
 import java.util.Map;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -62,14 +59,25 @@ public class Configuracion extends JFrame
 	private boolean cancelMusic;
 	private boolean selectVideoProm;
 	private int clickCreditos;
+
 	JFileChooser selectorArchivos = new JFileChooser();
-	private Color color1;
-	private Color color2;
-	JButton botonColor1;
-	JButton botonColor2;
-	private JLabel labelColor1;
-	private JLabel labelColor2;
-	
+
+	// variables de la pestaña apariencia
+
+	private Color color1; // color de celda 1
+	private Color color2; // color de celda 2
+	private Color colorDeFuente; // color de fuentes
+	private int typeFont;
+	private JLabel labelColor1; // label de color de celda 1
+	private JLabel labelColor2; // label de color de celda 2
+	private JLabel labelFuente; // label de resultado del tipo de fuente seleccionada
+	private JButton botonColor1; // boton selector de color de celda 1
+	private JButton botonColor2; // boton selector de color de celda 2
+	private JButton botonColorDeFuente; // boton selector del color de la fuente
+	private JComboBox<String> comboBoxSelectorDeFuente; // comboBox de fuentes disponibles
+	private JComboBox<String> comboBoxTamanioDeFuente; // comboBox de mataño de fuente de celdas
+	private JCheckBox checkBoxFuenteCeldasNegrita; // checkbox para la fuente de las celdas negritsa
+
 	public Configuracion() 
 	{	
 		setTitle("Configuración");
@@ -580,23 +588,34 @@ public class Configuracion extends JFrame
 		panel6.add(textFieldDirFondos);
 		textFieldDirFondos.setColumns(10);
 
+		JPanel panelCeldas = new JPanel();
+		panelCeldas.setBorder(BorderFactory.createTitledBorder("Celdas de Musicas"));
+		panelCeldas.setBounds(230,177,393,133);
+		panelCeldas.setBackground(Color.WHITE);
+		panelCeldas.setLayout(null);
+		panel6.add(panelCeldas);
+
 		JLabel labelCelda1 = new JLabel("Seleccionar Color #1");
-		labelCelda1.setBounds(423, 182, 99, 14);
-		panel6.add(labelCelda1);
+		labelCelda1.setBounds(10, 20, 99, 14);
+		panelCeldas.add(labelCelda1);
 
 		JLabel labelCelda2 = new JLabel("Seleccionar Color #2");
-		labelCelda2.setBounds(423, 205, 99, 14);
-		panel6.add(labelCelda2);
+		labelCelda2.setBounds(190, 20, 99, 14);
+		panelCeldas.add(labelCelda2);
+
+		Border border = BorderFactory.createLineBorder(Color.BLACK);
 
 		labelColor1 = new JLabel("");
 		labelColor1.setOpaque(true);
-		labelColor1.setBounds(567, 181, 20, 14);
-		panel6.add(labelColor1);
+		labelColor1.setBorder(border);
+		labelColor1.setBounds(144, 20, 20, 14);
+		panelCeldas.add(labelColor1);
 
 		labelColor2 = new JLabel("");
 		labelColor2.setOpaque(true);
-		labelColor2.setBounds(567, 215, 20, 14);
-		panel6.add(labelColor2);
+		labelColor2.setBorder(border);
+		labelColor2.setBounds(324, 20, 20, 14);
+		panelCeldas.add(labelColor2);
 
 		botonColor1 = new JButton("...");
 		botonColor1.addActionListener(new ActionListener() {
@@ -605,8 +624,8 @@ public class Configuracion extends JFrame
 				seleccionarColor(e);
 			}
 		});
-		botonColor1.setBounds(532, 172, 30, 23);
-		panel6.add(botonColor1);
+		botonColor1.setBounds(112, 15, 30, 23);
+		panelCeldas.add(botonColor1);
 
 		botonColor2 = new JButton("...");
 		botonColor2.addActionListener(new ActionListener() {
@@ -615,8 +634,90 @@ public class Configuracion extends JFrame
 				seleccionarColor(e);
 			}
 		});
-		botonColor2.setBounds(532, 205, 30, 23);
-		panel6.add(botonColor2);
+		botonColor2.setBounds(292, 15, 30, 23);
+		panelCeldas.add(botonColor2);
+
+		// Busca las fuentes disponibles en el sistema
+
+		String[] fuentes = null;
+		GraphicsEnvironment graphicsEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
+		fuentes = graphicsEnvironment.getAvailableFontFamilyNames();
+
+		JLabel labelTipoDeLetra = new JLabel("Tipo de Letra");
+		labelTipoDeLetra.setBounds(10,54,71,14);
+		panelCeldas.add(labelTipoDeLetra);
+
+		comboBoxSelectorDeFuente = new JComboBox<>(fuentes);
+		comboBoxSelectorDeFuente.setBounds(86,50,250,23);
+		panelCeldas.add(comboBoxSelectorDeFuente);
+
+		comboBoxSelectorDeFuente.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				actualizarResultadoDeFuente();
+			}
+		});
+
+		String [] tamanios = {"8","9","10","11","12","13","14","16","18","20","24","28","36","48","72"};
+
+		comboBoxTamanioDeFuente = new JComboBox(tamanios);
+		comboBoxTamanioDeFuente.setBounds(341,50,43,23);
+		panelCeldas.add(comboBoxTamanioDeFuente);
+
+		comboBoxTamanioDeFuente.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				actualizarResultadoDeFuente();
+			}
+		});
+
+		JLabel labelColorDeLetra = new JLabel("Color de Letra");
+		labelColorDeLetra.setBounds(10,81,71,14);
+		panelCeldas.add(labelColorDeLetra);
+
+		botonColorDeFuente = new JButton("...");
+		botonColorDeFuente.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e)
+			{
+				seleccionarColor(e);
+			}
+		});
+		botonColorDeFuente.setBounds(86, 77, 30, 23);
+		panelCeldas.add(botonColorDeFuente);
+
+		checkBoxFuenteCeldasNegrita = new JCheckBox("Negrita");
+		checkBoxFuenteCeldasNegrita.setBackground(Color.WHITE);
+		checkBoxFuenteCeldasNegrita.setOpaque(true);
+		checkBoxFuenteCeldasNegrita.setHorizontalTextPosition(SwingConstants.LEFT);
+		checkBoxFuenteCeldasNegrita.setHorizontalAlignment(SwingConstants.RIGHT);
+		checkBoxFuenteCeldasNegrita.setFocusable(false);
+		checkBoxFuenteCeldasNegrita.setBounds(20,100,99,23);
+		panelCeldas.add(checkBoxFuenteCeldasNegrita);
+
+		checkBoxFuenteCeldasNegrita.addItemListener(new ItemListener() {
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				actualizarResultadoDeFuente();
+			}
+		});
+
+		labelFuente = new JLabel("Click para cambiar color");
+		labelFuente.setHorizontalAlignment(JLabel.CENTER);
+		labelFuente.setBorder(border);
+		labelFuente.setBounds(120,77,264,46);
+		labelFuente.setOpaque(true);
+		panelCeldas.add(labelFuente);
+
+		labelFuente.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if (labelFuente.getBackground().equals(color1)) {
+					labelFuente.setBackground(color2);
+				} else {
+					labelFuente.setBackground(color1);
+				}
+			}
+		});
 
 		JPanel panel7 = new JPanel();
 		panel7.setBackground(Color.WHITE);
@@ -928,6 +1029,23 @@ public class Configuracion extends JFrame
 
 		textFieldDirFondos.setText(configuraciones.getDireccionFondo().getFile());
 
+		labelFuente.setBackground(configuraciones.getColor1());
+		labelFuente.setForeground(configuraciones.getFontCeldasColor());
+
+		comboBoxSelectorDeFuente.setSelectedItem(configuraciones.getFontCeldasName());
+
+		comboBoxTamanioDeFuente.setSelectedItem(String.valueOf(configuraciones.getFontCeldasSize()));
+
+		colorDeFuente = configuraciones.getFontCeldasColor();
+
+		typeFont = configuraciones.getFontCeldasNegrita();
+
+		if (typeFont == Font.BOLD) {
+			checkBoxFuenteCeldasNegrita.setSelected(true);
+		} else {
+			checkBoxFuenteCeldasNegrita.setSelected(false);
+		}
+
 		if (configuraciones.isAgregarAdicional()) {
 			checkBoxCreditosAdicionales.setSelected(true);
 		} else {
@@ -969,6 +1087,18 @@ public class Configuracion extends JFrame
 				libre = false;
 		}
 		
+	}
+
+	private void actualizarResultadoDeFuente() {
+		if (checkBoxFuenteCeldasNegrita.isSelected()) {
+			typeFont = Font.BOLD;
+			labelFuente.setFont(new Font(comboBoxSelectorDeFuente.getSelectedItem().toString(),typeFont,
+					Integer.parseInt(comboBoxTamanioDeFuente.getSelectedItem().toString())));
+		} else {
+			typeFont = Font.PLAIN;
+			labelFuente.setFont(new Font(comboBoxSelectorDeFuente.getSelectedItem().toString(),typeFont,
+					Integer.parseInt(comboBoxTamanioDeFuente.getSelectedItem().toString())));
+		}
 	}
 	
 	public void abrirRegConfigEscritura()
@@ -1018,6 +1148,10 @@ public class Configuracion extends JFrame
 						url, // path background
 						new Color(102,204,255), // color 1 of list
 						new Color(255,255,255), // color 2 of list
+						"Consolas", // tipo de fuente
+						20, // tamaño de fuente
+						Color.BLACK, // color de fuente
+						Font.BOLD, // Fuente negrita
 						false, // is agregarAdicional?
 						0, // numero de creditos adicionales
 						0, // cada cantidad de creditos
@@ -1067,6 +1201,10 @@ public class Configuracion extends JFrame
 						url,
 						color1,
 						color2,
+						comboBoxSelectorDeFuente.getSelectedItem().toString(),
+						Integer.parseInt(comboBoxTamanioDeFuente.getSelectedItem().toString()),
+						colorDeFuente,
+						typeFont,
 						checkBoxCreditosAdicionales.isSelected(),
 						Integer.parseInt(textFieldNumeroDeCreditosAdicionales.getText()),
 						Integer.parseInt(textFieldCadaCantidadDeCreditos.getText()),
@@ -1149,11 +1287,17 @@ public class Configuracion extends JFrame
 		{
 			color1 = JColorChooser.showDialog(null, "Seleccione el Color", Color.WHITE);
 			labelColor1.setBackground(color1);
+			labelFuente.setBackground(color1);
 		}
 		else if (evento.getSource().equals(botonColor2))
 		{
 			color2 = JColorChooser.showDialog(null, "Seleccione el Color", Color.WHITE);
 			labelColor2.setBackground(color2);
+			labelFuente.setBackground(color2);
+		}
+		else if (evento.getSource().equals(botonColorDeFuente)) {
+			colorDeFuente = JColorChooser.showDialog(null, "Seleccionar el Color", Color.BLACK);
+			labelFuente.setForeground(colorDeFuente);
 		}
 		
 	}

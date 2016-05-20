@@ -26,10 +26,17 @@ public class RegConfig implements Serializable
 	private String password;
 	private int cantidadCreditosUsados;
 	private int cantidadMonedasInsertadas;
+
+	// Tab apariencia
+
 	private boolean defaultBackground;
 	private URL direccionFondo;
 	private Color color1;
 	private Color color2;
+	private String fontCeldasName;
+	private int fontCeldasSize;
+	private Color fontCeldasColor;
+	private int fontCeldasNegrita;
 
 	// Tab promociones
 
@@ -47,7 +54,8 @@ public class RegConfig implements Serializable
 			boolean videoPromocional, int clickCreditos, int teclaSubirLista, int teclaBajarLista,
 			int teclaSubirGenero, int teclaBajarGenero, int teclaPantallaCompleta, int teclaBorrar,
 			boolean cancelMusic,String password, int cantidadCreditosUsados, int CantidadMonedasInsertadas, boolean defaultBackground,
-			URL direccionFondo, Color color1, Color color2, boolean agregarAdicional, int numeroDeCreditosAdicionales,
+			URL direccionFondo, Color color1, Color color2, String fontCeldasName, int fontCeldasSize,
+			Color fontCeldasColor, int fontCeldasNegrita, boolean agregarAdicional, int numeroDeCreditosAdicionales,
 			int cadaCantidadDeCreditos, boolean creditosContinuos, boolean entregarPremio, int cantidadDePremios,
 			int cantidadDeCreditosPorPremio, String tipoDePremio)
 	{
@@ -73,6 +81,10 @@ public class RegConfig implements Serializable
 		setDireccionFondo(direccionFondo);
 		setColor1(color1);
 		setColor2(color2);
+		setFontCeldasName(fontCeldasName);
+		setFontCeldasSize(fontCeldasSize);
+		setFontCeldasColor(fontCeldasColor);
+		setFontCeldasNegrita(fontCeldasNegrita);
 		setAgregarAdicional(agregarAdicional);
 		setNumeroDeCreditosAdicionales(numeroDeCreditosAdicionales);
 		setCadaCantidadDeCreditos(cadaCantidadDeCreditos);
@@ -331,5 +343,37 @@ public class RegConfig implements Serializable
 
 	public void setTipoDePremio(String tipoDePremio) {
 		this.tipoDePremio = tipoDePremio;
+	}
+
+	public String getFontCeldasName() {
+		return fontCeldasName;
+	}
+
+	public void setFontCeldasName(String fontCeldasName) {
+		this.fontCeldasName = fontCeldasName;
+	}
+
+	public int getFontCeldasSize() {
+		return fontCeldasSize;
+	}
+
+	public void setFontCeldasSize(int fontCeldasSize) {
+		this.fontCeldasSize = fontCeldasSize;
+	}
+
+	public Color getFontCeldasColor() {
+		return fontCeldasColor;
+	}
+
+	public void setFontCeldasColor(Color fontCeldasColor) {
+		this.fontCeldasColor = fontCeldasColor;
+	}
+
+	public int getFontCeldasNegrita() {
+		return fontCeldasNegrita;
+	}
+
+	public void setFontCeldasNegrita(int fontCeldasNegrita) {
+		this.fontCeldasNegrita = fontCeldasNegrita;
 	}
 }
