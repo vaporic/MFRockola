@@ -25,12 +25,12 @@ public class Configuracion extends JFrame
 	private JTextField textFieldMusicaAleatoria;
 	private JTextField textFieldReinicioMusicas;
 	private JTextField textFieldVideoPromocional;
-	private JTextField textFieldSubirL;
-	private JTextField textFieldBajarL;
-	private JTextField textFieldSubirGenero;
-	private JTextField textFieldBajarGenero;
-	private JTextField textFieldPantallaCompleta;
-	private JTextField textFieldBorrar;
+	private TextFieldKey textFieldSubirL;
+	private TextFieldKey textFieldBajarL;
+	private TextFieldKey textFieldSubirGenero;
+	private TextFieldKey textFieldBajarGenero;
+	private TextFieldKey textFieldPantallaCompleta;
+	private TextFieldKey textFieldBorrar;
 	private JPasswordField passwordField;
 	private JTextField textFieldDirFondos;
 	private JLabel labelCreditosUsados;
@@ -399,17 +399,15 @@ public class Configuracion extends JFrame
 		lblSubirbajrLista.setBounds(262, 119, 103, 14);
 		panel5.add(lblSubirbajrLista);
 		
-		textFieldSubirL = new JTextField();
+		textFieldSubirL = new TextFieldKey(this);
 		textFieldSubirL.setBounds(375, 119, 30, 20);
 		panel5.add(textFieldSubirL);
-		textFieldSubirL.setColumns(10);
 		
 		JLabel label_2 = new JLabel("/");
 		label_2.setBounds(415, 119, 4, 14);
 		panel5.add(label_2);
 		
-		textFieldBajarL = new JTextField();
-		textFieldBajarL.setColumns(10);
+		textFieldBajarL = new TextFieldKey(this);
 		textFieldBajarL.setBounds(431, 119, 30, 20);
 		panel5.add(textFieldBajarL);
 		
@@ -418,8 +416,7 @@ public class Configuracion extends JFrame
 		lblSubirBajarGenero.setBounds(262, 144, 103, 14);
 		panel5.add(lblSubirBajarGenero);
 		
-		textFieldSubirGenero = new JTextField();
-		textFieldSubirGenero.setColumns(10);
+		textFieldSubirGenero = new TextFieldKey(this);
 		textFieldSubirGenero.setBounds(375, 144, 30, 20);
 		panel5.add(textFieldSubirGenero);
 		
@@ -427,8 +424,7 @@ public class Configuracion extends JFrame
 		label_4.setBounds(415, 144, 4, 14);
 		panel5.add(label_4);
 		
-		textFieldBajarGenero = new JTextField();
-		textFieldBajarGenero.setColumns(10);
+		textFieldBajarGenero = new TextFieldKey(this);
 		textFieldBajarGenero.setBounds(431, 144, 30, 20);
 		panel5.add(textFieldBajarGenero);
 		
@@ -437,8 +433,7 @@ public class Configuracion extends JFrame
 		lblPantallaCompleta.setBounds(262, 169, 103, 14);
 		panel5.add(lblPantallaCompleta);
 		
-		textFieldPantallaCompleta = new JTextField();
-		textFieldPantallaCompleta.setColumns(10);
+		textFieldPantallaCompleta = new TextFieldKey(this);
 		textFieldPantallaCompleta.setBounds(375, 169, 30, 20);
 		panel5.add(textFieldPantallaCompleta);
 		
@@ -447,7 +442,7 @@ public class Configuracion extends JFrame
 		lblBorrar.setBounds(262, 194, 103, 14);
 		panel5.add(lblBorrar);
 		
-		textFieldBorrar = new JTextField();
+		textFieldBorrar = new TextFieldKey(this);
 		textFieldBorrar.setColumns(10);
 		textFieldBorrar.setBounds(375, 194, 30, 20);
 		panel5.add(textFieldBorrar);
@@ -1129,17 +1124,17 @@ public class Configuracion extends JFrame
 						"C:\\Program Files\\VideoLAN\\VLC", // path of VLC
 						"Seleccione un video", // path promotional video
 						1, // time in minutes of random music
-						1, // time in minutes of reset music
+						15, // time in minutes of reset music
 						1, // credits per click
 						false, // is credit free?
 						false, // is promotional video?
 						1, // click credits
-						0, // key up list
-						0, // key down list
-						0, // key up gender
-						0, // key down gender
-						0, // key fullscreen
-						0, // key delete number selector
+						107, // key up list
+						109, // key down list
+						106, // key up gender
+						111, // key down gender
+						10, // key fullscreen
+						8, // key delete number selector
 						false, // cancel music
 						"",
 						0, // cantidad de creditos usados
@@ -1299,6 +1294,5 @@ public class Configuracion extends JFrame
 			colorDeFuente = JColorChooser.showDialog(null, "Seleccionar el Color", Color.BLACK);
 			labelFuente.setForeground(colorDeFuente);
 		}
-		
 	}
 }

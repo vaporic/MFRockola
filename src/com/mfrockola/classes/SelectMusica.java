@@ -16,13 +16,15 @@ public class SelectMusica
 	String numero = String.format("%s %s %s %s", valores[0],valores[1],valores[2],valores[3]);
 	int contador = 0;
 	boolean reproducir = false;
+	private int keyDelete;
 	
-	public SelectMusica ()
+	public SelectMusica (int keyDelete)
 	{
 		selectorMusica.setFont(new Font("Consolas", Font.BOLD, 30));
 		selectorMusica.setOpaque(false);
 		selectorMusica.setForeground(Color.WHITE);
 		selectorMusica.setHorizontalAlignment(SwingUtilities.CENTER);
+		this.keyDelete = keyDelete;
 	}
 	
 	public void reiniciarValores()
@@ -94,7 +96,7 @@ public class SelectMusica
 		}
 		
 		
-		if (evento.getKeyCode()==8 && contador > 0)
+		if (evento.getKeyCode()==keyDelete && contador > 0)
 		{
 			contador--;
 			valores[contador] = "-";

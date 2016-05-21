@@ -9,9 +9,9 @@ public class MusicasProhibidas
 {
 	int prohibidos [] = {-1};
 	
-	public MusicasProhibidas()
+	public MusicasProhibidas(int minutes)
 	{
-		int delay = 1000*1800;
+		int delay = 1000*60*minutes;
 		
 		Timer temporizador = new Timer(delay, new ActionListener() {
 			

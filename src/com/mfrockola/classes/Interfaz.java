@@ -26,7 +26,7 @@ public class Interfaz extends JFrame
     private int ancho;
     private int alto;
 
-    MusicasProhibidas prohibir = new MusicasProhibidas(); // Objeto de musicas que no se pueden repetir.
+    MusicasProhibidas prohibir; // Objeto de musicas que no se pueden repetir.
     ListaDeReproduccion listaReproduccion = new ListaDeReproduccion(); // Objeto de las musicas en reproduccion.
 
     boolean isFullScreen = false; // Objeto que determina si se entra o no en pantalla completa.
@@ -55,7 +55,7 @@ public class Interfaz extends JFrame
 
     Reproductor repro;
 
-    SelectMusica objeto = new SelectMusica();
+    SelectMusica objeto;
 
     private int monedasASubir;
     private int creditosASubir;
@@ -81,6 +81,8 @@ public class Interfaz extends JFrame
         {
             registroDatos.abrirRegConfigLectura();
             configuraciones = registroDatos.leerRegConfigLectura();
+            prohibir = new MusicasProhibidas(configuraciones.getReinicioMusicas());
+            objeto = new SelectMusica(configuraciones.getTeclaBorrar());
             monedasASubir = configuraciones.getCantidadMonedasInsertadas();
             creditosASubir = configuraciones.getCantidadCreditosUsados();
             cancelMusic = configuraciones.isCancelMusic();
@@ -224,7 +226,7 @@ public class Interfaz extends JFrame
         labelGeneroMusical = new JLabel("Genero");
         labelGeneroMusical.setForeground(Color.WHITE);
         labelGeneroMusical.setFont(new Font("Calibri", Font.BOLD, 23));
-        labelGeneroMusical.setBounds(30, 15, ancho - 590, 35);
+        labelGeneroMusical.setBounds((int)(ancho/45.533), (int)(alto/51.2), (int)(ancho/1.7603), 35);
 
         if (creditosLibres) {
             labelcreditos= new JLabel("Creditos Libres");
@@ -274,7 +276,7 @@ public class Interfaz extends JFrame
         listaDeMusicas.setMaximumSize(getMaximumSize());
 
         barras = new JScrollPane(listaDeMusicas);
-        barras.setBounds((int)(ancho/45.533), (int)(alto/12.8),(int)(ancho/1.7603), (int)(ancho/1.0924));
+        barras.setBounds((int)(ancho/45.533), (int)(alto/12.8),(int)(ancho/1.7603), (int)(alto/1.0924));
         barras.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         barras.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
 
@@ -283,7 +285,7 @@ public class Interfaz extends JFrame
         listaDeReproduccion.setCellRenderer(new ModificadorDeCeldas(new Font(configuraciones.getFontCeldasName(),
                 configuraciones.getFontCeldasNegrita(), configuraciones.getFontCeldasSize()),configuraciones.getFontCeldasColor(),
                 configuraciones.getColor1(), configuraciones.getColor2()));
-        listaDeReproduccion.setBounds((int)(ancho/1.633), (int)(alto/1.52), (int)(ancho/2.732), (int)(alto/2.501));
+        listaDeReproduccion.setBounds((int)(ancho/1.633), (int)(alto/1.52), (int)(ancho/2.732), (int)(alto/3.051));
 //        listaDeReproduccion.setBounds(ancho - 530, alto - 260, 500, alto-461);
         listaDeReproduccion.setFocusable(false);
 
@@ -397,7 +399,7 @@ public class Interfaz extends JFrame
     {
         public void keyPressed(KeyEvent evento)
         {
-            if (evento.getKeyCode()==10)
+            if (evento.getKeyCode()==configuraciones.getTeclaPantallaCompleta())
             {
                 if (labelPromociones.isVisible()) {
                     labelPromociones.setVisible(false);
@@ -410,7 +412,7 @@ public class Interfaz extends JFrame
                 }
             }
 
-            if(evento.getKeyCode()== 8 && objeto.contador > 0)
+            if(evento.getKeyCode()== configuraciones.getTeclaBorrar() && objeto.contador > 0)
             {
                 objeto.selectorMusica.setText(objeto.manejadorDeEvento(evento));
             }
@@ -536,7 +538,7 @@ public class Interfaz extends JFrame
                     else
                     {
                         labelcreditos.setForeground(Color.RED);
-                        labelcreditos.setText("Sin creditos o no se puede reproducir en 30 mins");
+                        labelcreditos.setText("Sin creditos o no se puede reproducir en " + configuraciones.getReinicioMusicas() +" mins");
                         timerChangerLblCredits.start();
                         objeto.reproducir = false;
                         objeto.reiniciarValores();
@@ -571,7 +573,7 @@ public class Interfaz extends JFrame
                 Configuracion config = new Configuracion();
             }
 
-            else if (evento.getKeyCode()==45 || evento.getKeyCode()==109)
+            else if (evento.getKeyCode()==configuraciones.getTeclaBajarLista())
             {
                 if (isFullScreen) {
                     pantallaCompleta();
@@ -589,7 +591,7 @@ public class Interfaz extends JFrame
                 }
 
             }
-            else if (evento.getKeyCode()==521 || evento.getKeyCode()==107)
+            else if (evento.getKeyCode()==configuraciones.getTeclaSubirLista())
             {
                 if (isFullScreen) {
                     pantallaCompleta();
@@ -606,7 +608,7 @@ public class Interfaz extends JFrame
                     listaDeMusicas.ensureIndexIsVisible(listaDeMusicas.getSelectedIndex());
                 }
             }
-            else if (evento.getKeyCode() == 71 || evento.getKeyCode()== 106)
+            else if (evento.getKeyCode() == configuraciones.getTeclaSubirGenero())
             {
                 if (isFullScreen) {
                     pantallaCompleta();
@@ -618,7 +620,7 @@ public class Interfaz extends JFrame
                     labelGeneroMusical.setText("Genero Musical: " + listMusic.getNameOfGender());
                 }
             }
-            else if (evento.getKeyCode() == 72 || evento.getKeyCode() == 111)
+            else if (evento.getKeyCode() == configuraciones.getTeclaBajarGenero())
             {
                 if (isFullScreen) {
                     pantallaCompleta();

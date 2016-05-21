@@ -71,6 +71,7 @@ public class RegConfig implements Serializable
 		setTeclaSubirLista(teclaSubirLista);
 		setTeclaBajarLista(teclaBajarLista);
 		setTeclaSubirGenero(teclaSubirGenero);
+		setTeclaBajarGenero(teclaBajarGenero);
 		setTeclaPantallaCompleta(teclaPantallaCompleta);
 		setTeclaBorrar(teclaBorrar);
 		setCancelMusic(cancelMusic);
