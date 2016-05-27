@@ -4,13 +4,15 @@ public class Cancion
 {
 	private int numeroCancion;
 	private String genero;
+	private String artista;
 	private String nombreCancion;
 	
-	public Cancion(int numero, String genero, String cancion)
+	public Cancion(int numero, String genero, String artista, String cancion)
 	{
-		this.establecerNumeroCancion(numero);
-		this.setGenero(genero);
-		this.establecerNombreCancion(cancion);
+		establecerNumeroCancion(numero);
+		setGenero(genero);
+		setArtista(artista);
+		establecerNombreCancion(cancion);
 	}
 	
 	public String obtenerNombreCancion()
@@ -35,7 +37,7 @@ public class Cancion
 	
 	public String toString()
 	{
-		return String.format("%04d - %s", obtenerNumero() , obtenerNombreCancion());
+		return String.format("%04d - %s - %s", obtenerNumero(),getArtista(), obtenerNombreCancion());
 	}
 
 	public String getGenero() {
@@ -44,5 +46,13 @@ public class Cancion
 
 	public void setGenero(String genero) {
 		this.genero = genero;
+	}
+
+	public String getArtista() {
+		return artista;
+	}
+
+	public void setArtista(String artista) {
+		this.artista = artista;
 	}
 }

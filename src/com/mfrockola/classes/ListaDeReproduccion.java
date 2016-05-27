@@ -48,6 +48,8 @@ public class ListaDeReproduccion
 	{
 		return cancionesEnLista[0].getGenero();
 	}
+
+	public String obtenerArtista() { return cancionesEnLista[0].getArtista(); }
 	
 	public void quitarMusica()
 	{	

@@ -64,9 +64,9 @@ public class Reproductor {
         return mediaPlayerContainer;
     }
 
-    public void reproducirMusica(String genero, String nombreCancion)
+    public void reproducirMusica(String genero, String artista, String nombreCancion)
     {
-        embeddedMediaPlayer.playMedia(String.format("%s\\%s\\%s", configuraciones.getDireccionVideos(),genero,nombreCancion));
+        embeddedMediaPlayer.playMedia(String.format("%s\\%s\\%s\\%s", configuraciones.getDireccionVideos(),genero,artista,nombreCancion));
     }
 
     public static void main (String [] args) {

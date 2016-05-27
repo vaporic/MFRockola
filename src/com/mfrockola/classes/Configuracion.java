@@ -478,7 +478,7 @@ public class Configuracion extends JFrame
 		grupoMouse.add(rdbtnClickIzquierdo);
 		grupoMouse.add(rdbtnClickDerecho);
 
-		JCheckBox checkBoxCancelMusic = new JCheckBox("Cancelar musica con click Izquierdo");
+		JCheckBox checkBoxCancelMusic = new JCheckBox("Cancelar musica con click Derecho");
 		checkBoxCancelMusic.setBounds(375,238,200, 23);
 		checkBoxCancelMusic.setBackground(Color.WHITE);
 		checkBoxCancelMusic.addItemListener(new ItemListener() {
@@ -488,7 +488,7 @@ public class Configuracion extends JFrame
 					cancelMusic = true;
 					passwordField.setEnabled(true);
 					passwordField.setText("");
-					rdbtnClickDerecho.setSelected(true);
+					rdbtnClickIzquierdo.setSelected(true);
 					lblAgregarCredito.setEnabled(false);
 					rdbtnClickDerecho.setEnabled(false);
 					rdbtnClickIzquierdo.setEnabled(false);
@@ -1128,7 +1128,7 @@ public class Configuracion extends JFrame
 						1, // credits per click
 						false, // is credit free?
 						false, // is promotional video?
-						1, // click credits
+						0, // click credits 1 = rigth click
 						107, // key up list
 						109, // key down list
 						106, // key up gender

@@ -120,6 +120,11 @@ public class Interfaz extends JFrame
             public void actionPerformed(ActionEvent e) {
                 if (!isFullScreen) {
                     pantallaCompleta();
+                    try {
+                        new Robot().keyRelease(120);
+                    } catch (AWTException exception) {
+                        exception.printStackTrace();
+                    }
                 }
             }
         };
@@ -146,7 +151,11 @@ public class Interfaz extends JFrame
             public void mouseReleased(MouseEvent e)
             {
 
-                if(configuraciones.getClickCreditos()==0 && e.isMetaDown() == false && !cancelMusic && !creditosLibres)
+                //  isMetaDown = rigth CLick
+
+                // Cuando se presiona click izquierdo y las canciones no se pueden cancelar
+
+                if(configuraciones.getClickCreditos()==0 && e.isMetaDown() == false && !creditosLibres)
                 {
                     creditos = creditos + configuraciones.getCantidadCreditos();
                     labelcreditos.setText(String.format("Creditos: %d", creditos));
@@ -157,7 +166,10 @@ public class Interfaz extends JFrame
                     }
 
                     entregarPremiosYCreditosAdicionales();
-                } else if (cancelMusic && e.isMetaDown() == false && listaReproduccion.obtenerCancionAReproducir()!=null) {
+
+                    // Click derecho y las canciones se pueden eliminar
+
+                } else if (cancelMusic && e.isMetaDown() == true && listaReproduccion.obtenerCancionAReproducir()!=null) {
 
                     if (isFullScreen) {
                         pantallaCompleta();
@@ -192,7 +204,11 @@ public class Interfaz extends JFrame
 
                         countClickCancelMusic = 0;
                     }
-                } else if (e.isMetaDown() && configuraciones.getClickCreditos() == 1 && !creditosLibres) {
+
+                    // click derecho y las canciones no se pueden eliminar
+
+                } else if (e.isMetaDown() && configuraciones.getClickCreditos() == 1 && !creditosLibres && !cancelMusic) {
+
                     creditos = creditos + configuraciones.getCantidadCreditos();
                     labelcreditos.setText(String.format("Creditos: %d", creditos));
                     agregarMonedasYCreditos();
@@ -487,7 +503,7 @@ public class Interfaz extends JFrame
                             Cancion cancionAReproducir =  listMusic.getSong(numero);
 
                             listaReproduccion.agregarCanciones(cancionAReproducir);
-                            repro.reproducirMusica(listaReproduccion.obtenerGenero(),listaReproduccion.obtenerCancionAReproducir());
+                            repro.reproducirMusica(listaReproduccion.obtenerGenero(),listaReproduccion.obtenerArtista(),listaReproduccion.obtenerCancionAReproducir());
                             listaDeReproduccion.setListData(listaReproduccion.obtenerCancionesEnLista());
                             if (creditosLibres== false)
                             {
@@ -498,10 +514,12 @@ public class Interfaz extends JFrame
                             objeto.reiniciarValores();
                             objeto.selectorMusica.setText("- - - -");
                             prohibir.agregarProhibido(numero);
-                            labelMusica.setText(String.format("%04d - %s",listaReproduccion.obtenerNumero()
-                                    ,listaReproduccion.obtenerCancionAReproducir()));
-                            labelCancionEnRepro.setText(String.format("%04d - %s",
-                                    listaReproduccion.obtenerNumero(), listaReproduccion.obtenerCancionAReproducir()));
+                            labelMusica.setText(String.format("%04d - %s - %s",listaReproduccion.obtenerNumero(),
+                                    listaReproduccion.obtenerArtista(),
+                                    listaReproduccion.obtenerCancionAReproducir()));
+                            labelCancionEnRepro.setText(String.format("%04d - %s - %s",
+                                    listaReproduccion.obtenerNumero(), listaReproduccion.obtenerArtista(),
+                                    listaReproduccion.obtenerCancionAReproducir()));
                             if (creditos == 0 && !creditosLibres) {
                                 timerFullScreen.restart();
                             }
@@ -579,6 +597,8 @@ public class Interfaz extends JFrame
                     pantallaCompleta();
                 }
 
+                labelPromociones.setVisible(false);
+
                 if (listaDeMusicas.getSelectedIndex() - 20 < 0)
                 {
                     listaDeMusicas.setSelectedIndex(0);
@@ -597,6 +617,8 @@ public class Interfaz extends JFrame
                     pantallaCompleta();
                 }
 
+                labelPromociones.setVisible(false);
+
                 if(listaDeMusicas.getSelectedIndex()+20 > listMusic.getGenderSongs(listMusic.getSelectedGender()).length)
                 {
                     listaDeMusicas.setSelectedIndex(listMusic.getGenderSongs(listMusic.getSelectedGender()).length-1);
@@ -614,6 +636,7 @@ public class Interfaz extends JFrame
                     pantallaCompleta();
                 }
                 if (listMusic.upGender()) {
+                    labelPromociones.setVisible(false);
                     listaDeMusicas.setListData(listMusic.getGenderSongs(listMusic.getSelectedGender()));
                     listaDeMusicas.setSelectedIndex(0);
                     listaDeMusicas.ensureIndexIsVisible(0);
@@ -626,6 +649,7 @@ public class Interfaz extends JFrame
                     pantallaCompleta();
                 }
                 if (listMusic.downGender()) {
+                    labelPromociones.setVisible(false);
                     listaDeMusicas.setListData(listMusic.getGenderSongs(listMusic.getSelectedGender()));
                     listaDeMusicas.setSelectedIndex(0);
                     listaDeMusicas.ensureIndexIsVisible(0);
@@ -664,11 +688,13 @@ public class Interfaz extends JFrame
             }
             else
             {
-                repro.reproducirMusica(listaReproduccion.obtenerGenero(), listaReproduccion.obtenerCancionAReproducir());
-                labelMusica.setText(String.format("%04d - %s",
-                        listaReproduccion.obtenerNumero(), listaReproduccion.obtenerCancionAReproducir()));
-                labelCancionEnRepro.setText(String.format("%04d - %s",
-                        listaReproduccion.obtenerNumero(), listaReproduccion.obtenerCancionAReproducir()));
+                repro.reproducirMusica(listaReproduccion.obtenerGenero(),listaReproduccion.obtenerArtista(), listaReproduccion.obtenerCancionAReproducir());
+                labelMusica.setText(String.format("%04d - %s - %s",
+                        listaReproduccion.obtenerNumero(), listaReproduccion.obtenerArtista(),
+                        listaReproduccion.obtenerCancionAReproducir()));
+                labelCancionEnRepro.setText(String.format("%04d - %s - %s",
+                        listaReproduccion.obtenerNumero(),listaReproduccion.obtenerArtista(),
+                        listaReproduccion.obtenerCancionAReproducir()));
             }
         }
     }
