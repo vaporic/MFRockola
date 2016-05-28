@@ -129,13 +129,8 @@ public class ListMusic {
 
             for (int k = 0; k < provisionalGender.size(); k++) {
                 gender[k] = provisionalGender.get(k);
-
-                System.out.println(provisionalGender.get(k));
             }
         }
-
-        System.out.println("Genero terminado");
-
         return gender;
     }
 
