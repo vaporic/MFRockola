@@ -415,7 +415,7 @@ public class Interfaz extends JFrame
     {
         public void keyPressed(KeyEvent evento)
         {
-            if (evento.getKeyCode()==configuraciones.getTeclaPantallaCompleta())
+            if (evento.getKeyCode()==configuraciones.getTeclaPantallaCompleta() && creditos > 0)
             {
                 if (labelPromociones.isVisible()) {
                     labelPromociones.setVisible(false);
@@ -433,43 +433,43 @@ public class Interfaz extends JFrame
                 objeto.selectorMusica.setText(objeto.manejadorDeEvento(evento));
             }
 
-            if (evento.getKeyCode()==48 || evento.getKeyCode()==96)
+            if ((evento.getKeyCode()==48 || evento.getKeyCode()==96) && creditos > 0)
             {
                 objeto.selectorMusica.setText(objeto.manejadorDeEvento(evento));
             }
-            else if (evento.getKeyCode()==49 || evento.getKeyCode()==97)
+            else if ((evento.getKeyCode()==49 || evento.getKeyCode()==97) && creditos > 0)
             {
                 objeto.selectorMusica.setText(objeto.manejadorDeEvento(evento));
             }
-            else if (evento.getKeyCode()==50 || evento.getKeyCode()==98)
+            else if ((evento.getKeyCode()==50 || evento.getKeyCode()==98) && creditos > 0)
             {
                 objeto.selectorMusica.setText(objeto.manejadorDeEvento(evento));
             }
-            else if (evento.getKeyCode()==51 || evento.getKeyCode()==99)
+            else if ((evento.getKeyCode()==51 || evento.getKeyCode()==99) && creditos > 0)
             {
                 objeto.selectorMusica.setText(objeto.manejadorDeEvento(evento));
             }
-            else if (evento.getKeyCode()==52 || evento.getKeyCode()==100)
+            else if ((evento.getKeyCode()==52 || evento.getKeyCode()==100) && creditos > 0)
             {
                 objeto.selectorMusica.setText(objeto.manejadorDeEvento(evento));
             }
-            else if (evento.getKeyCode()==53 || evento.getKeyCode()==101)
+            else if ((evento.getKeyCode()==53 || evento.getKeyCode()==101) && creditos > 0)
             {
                 objeto.selectorMusica.setText(objeto.manejadorDeEvento(evento));
             }
-            else if (evento.getKeyCode()==54 || evento.getKeyCode()==102)
+            else if ((evento.getKeyCode()==54 || evento.getKeyCode()==102) && creditos > 0)
             {
                 objeto.selectorMusica.setText(objeto.manejadorDeEvento(evento));
             }
-            else if (evento.getKeyCode()==55 || evento.getKeyCode()==103)
+            else if ((evento.getKeyCode()==55 || evento.getKeyCode()==103) && creditos > 0)
             {
                 objeto.selectorMusica.setText(objeto.manejadorDeEvento(evento));
             }
-            else if (evento.getKeyCode()==56 || evento.getKeyCode()==104)
+            else if ((evento.getKeyCode()==56 || evento.getKeyCode()==104) && creditos > 0)
             {
                 objeto.selectorMusica.setText(objeto.manejadorDeEvento(evento));
             }
-            else if (evento.getKeyCode()==57 || evento.getKeyCode()==105)
+            else if ((evento.getKeyCode()==57 || evento.getKeyCode()==105) && creditos > 0)
             {
                 objeto.selectorMusica.setText(objeto.manejadorDeEvento(evento));
             }
@@ -591,7 +591,7 @@ public class Interfaz extends JFrame
                 Configuracion config = new Configuracion();
             }
 
-            else if (evento.getKeyCode()==configuraciones.getTeclaBajarLista())
+            else if (evento.getKeyCode()==configuraciones.getTeclaBajarLista() && creditos > 0)
             {
                 if (isFullScreen) {
                     pantallaCompleta();
@@ -611,7 +611,7 @@ public class Interfaz extends JFrame
                 }
 
             }
-            else if (evento.getKeyCode()==configuraciones.getTeclaSubirLista())
+            else if (evento.getKeyCode()==configuraciones.getTeclaSubirLista() && creditos > 0)
             {
                 if (isFullScreen) {
                     pantallaCompleta();
@@ -630,7 +630,7 @@ public class Interfaz extends JFrame
                     listaDeMusicas.ensureIndexIsVisible(listaDeMusicas.getSelectedIndex());
                 }
             }
-            else if (evento.getKeyCode() == configuraciones.getTeclaSubirGenero())
+            else if (evento.getKeyCode() == configuraciones.getTeclaSubirGenero() && creditos > 0)
             {
                 if (isFullScreen) {
                     pantallaCompleta();
@@ -643,7 +643,7 @@ public class Interfaz extends JFrame
                     labelGeneroMusical.setText("Genero Musical: " + listMusic.getNameOfGender());
                 }
             }
-            else if (evento.getKeyCode() == configuraciones.getTeclaBajarGenero())
+            else if (evento.getKeyCode() == configuraciones.getTeclaBajarGenero() && creditos > 0)
             {
                 if (isFullScreen) {
                     pantallaCompleta();
@@ -655,6 +655,25 @@ public class Interfaz extends JFrame
                     listaDeMusicas.ensureIndexIsVisible(0);
                     labelGeneroMusical.setText("Genero Musical: " + listMusic.getNameOfGender());
                 }
+            }
+            else if (evento.getKeyCode()==configuraciones.getTeclaSaltarCancion() && listaReproduccion.obtenerCancionAReproducir()!=null) {
+                repro.embeddedMediaPlayer.stop();
+            }
+            else if (evento.getKeyCode()==configuraciones.getTeclaAgregarCredito()) {
+                creditos = creditos + configuraciones.getCantidadCreditos();
+                labelcreditos.setText(String.format("Creditos: %d", creditos));
+                agregarMonedasYCreditos();
+                labelcreditos.setForeground(Color.WHITE);
+                if (isFullScreen) {
+                    pantallaCompleta();
+                }
+
+                entregarPremiosYCreditosAdicionales();
+
+            }
+            else if (evento.getKeyCode()==configuraciones.getTeclaBorrarCredito() && creditos > 0) {
+                creditos--;
+                labelcreditos.setText(String.format("Creditos: %d", creditos));
             }
         }
     }
@@ -733,6 +752,9 @@ public class Interfaz extends JFrame
                     this.configuraciones.getTeclaBajarGenero(),
                     this.configuraciones.getTeclaPantallaCompleta(),
                     this.configuraciones.getTeclaBorrar(),
+                    this.configuraciones.getTeclaSaltarCancion(),
+                    this.configuraciones.getTeclaAgregarCredito(),
+                    this.configuraciones.getTeclaBorrarCredito(),
                     this.configuraciones.isCancelMusic(),
                     this.configuraciones.getPassword(),
                     creditosASubir,

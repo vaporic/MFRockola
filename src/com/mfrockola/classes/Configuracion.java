@@ -1022,6 +1022,9 @@ public class Configuracion extends JFrame
 		textFieldBajarGenero.setText(String.format("%s", configuraciones.getTeclaBajarGenero()));
 		textFieldPantallaCompleta.setText(String.format("%s", configuraciones.getTeclaPantallaCompleta()));
 		textFieldBorrar.setText(String.format("%s", configuraciones.getTeclaBorrar()));
+		textFieldSaltarCancion.setText(String.format("%s", configuraciones.getTeclaSaltarCancion()));
+		textFieldAgregarCreditos.setText(String.format("%s", configuraciones.getTeclaAgregarCredito()));
+		textFieldBorrarCredito.setText(String.format("%s", configuraciones.getTeclaBorrarCredito()));
 		labelCreditosUsados.setText(String.format("%s", configuraciones.getCantidadCreditosUsados()));
 		labelMonedasInsertadas.setText(String.format("%s", configuraciones.getCantidadMonedasInsertadas()));
 		checkBoxFoundDefaultBackground.setSelected(configuraciones.isDefaultBackground());
@@ -1168,6 +1171,9 @@ public class Configuracion extends JFrame
 						111, // key down gender
 						10, // key fullscreen
 						8, // key delete number selector
+						83, // key end song
+						65, // key add credit
+						66, // key delete credit
 						false, // cancel music
 						"",
 						0, // cantidad de creditos usados
@@ -1221,6 +1227,9 @@ public class Configuracion extends JFrame
 						Integer.parseInt(textFieldBajarGenero.getText()),
 						Integer.parseInt(textFieldPantallaCompleta.getText()),
 						Integer.parseInt(textFieldBorrar.getText()),
+						Integer.parseInt(textFieldSaltarCancion.getText()),
+						Integer.parseInt(textFieldAgregarCreditos.getText()),
+						Integer.parseInt(textFieldBorrarCredito.getText()),
 						cancelMusic,
 						new String(passwordField.getPassword()),
 						Integer.parseInt(labelCreditosUsados.getText()),

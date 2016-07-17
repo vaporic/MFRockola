@@ -22,6 +22,9 @@ public class RegConfig implements Serializable
 	private int teclaBajarGenero;
 	private int teclaPantallaCompleta;
 	private int teclaBorrar;
+	private int teclaSaltarCancion;
+	private int teclaAgregarCredito;
+	private int teclaBorrarCredito;
 	private boolean cancelMusic;
 	private String password;
 	private int cantidadCreditosUsados;
@@ -53,6 +56,7 @@ public class RegConfig implements Serializable
 			String direccionVideoPromocional, int musicAleatoria,int reinicioMusicas,int cantidadCreditos, boolean libre,
 			boolean videoPromocional, int clickCreditos, int teclaSubirLista, int teclaBajarLista,
 			int teclaSubirGenero, int teclaBajarGenero, int teclaPantallaCompleta, int teclaBorrar,
+			int teclaSaltarCancion, int teclaAgregarCredito, int teclaBorrarCredito,
 			boolean cancelMusic,String password, int cantidadCreditosUsados, int CantidadMonedasInsertadas, boolean defaultBackground,
 			URL direccionFondo, Color color1, Color color2, String fontCeldasName, int fontCeldasSize,
 			Color fontCeldasColor, int fontCeldasNegrita, boolean agregarAdicional, int numeroDeCreditosAdicionales,
@@ -74,6 +78,9 @@ public class RegConfig implements Serializable
 		setTeclaBajarGenero(teclaBajarGenero);
 		setTeclaPantallaCompleta(teclaPantallaCompleta);
 		setTeclaBorrar(teclaBorrar);
+		setTeclaSaltarCancion(teclaSaltarCancion);
+		setTeclaAgregarCredito(teclaAgregarCredito);
+		setTeclaBorrarCredito(teclaBorrarCredito);
 		setCancelMusic(cancelMusic);
 		setPassword(password);
 		setCantidadCreditosUsados(cantidadCreditosUsados);
@@ -376,5 +383,29 @@ public class RegConfig implements Serializable
 
 	public void setFontCeldasNegrita(int fontCeldasNegrita) {
 		this.fontCeldasNegrita = fontCeldasNegrita;
+	}
+
+	public int getTeclaSaltarCancion() {
+		return teclaSaltarCancion;
+	}
+
+	public void setTeclaSaltarCancion(int teclaSaltarCancion) {
+		this.teclaSaltarCancion = teclaSaltarCancion;
+	}
+
+	public int getTeclaAgregarCredito() {
+		return teclaAgregarCredito;
+	}
+
+	public void setTeclaAgregarCredito(int teclaAgregarCredito) {
+		this.teclaAgregarCredito = teclaAgregarCredito;
+	}
+
+	public int getTeclaBorrarCredito() {
+		return teclaBorrarCredito;
+	}
+
+	public void setTeclaBorrarCredito(int teclaBorrarCredito) {
+		this.teclaBorrarCredito = teclaBorrarCredito;
 	}
 }
