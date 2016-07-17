@@ -121,7 +121,9 @@ public class Interfaz extends JFrame
                 if (!isFullScreen) {
                     pantallaCompleta();
                     try {
-                        new Robot().keyRelease(120);
+                        Robot robot = new Robot();
+                        robot.keyPress(120);
+                        robot.keyRelease(120);
                     } catch (AWTException exception) {
                         exception.printStackTrace();
                     }
@@ -674,6 +676,9 @@ public class Interfaz extends JFrame
             else if (evento.getKeyCode()==configuraciones.getTeclaBorrarCredito() && creditos > 0) {
                 creditos--;
                 labelcreditos.setText(String.format("Creditos: %d", creditos));
+                if (creditos == 0 && !creditosLibres) {
+                    timerFullScreen.restart();
+                }
             }
         }
     }
@@ -811,7 +816,7 @@ public class Interfaz extends JFrame
 
     public void playSound() {
         try {
-            BufferedInputStream bis = new BufferedInputStream(getClass().getResourceAsStream("/com/mfrockola/sounds/cash.wav"));
+            BufferedInputStream bis = new BufferedInputStream(getClass().getResourceAsStream("/com/mfrockola/sounds/felicitaciones.wav"));
             AudioInputStream ais = AudioSystem.getAudioInputStream(bis);
             sound = AudioSystem.getClip();
             sound.open(ais);

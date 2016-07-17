@@ -182,11 +182,11 @@ public class Configuracion extends JFrame
 		panel2.add(textFieldMusicaAleatoria);
 		
 		JTextPane txtpnTiempoNecesarioPara_1 = new JTextPane();
-		txtpnTiempoNecesarioPara_1.setText("Tiempo necesario para reiniciar las musicas introducidas (Minutos)");
+		txtpnTiempoNecesarioPara_1.setText("Tiempo necesario para reiniciar el contador de las musicas bloqueadas al reproducirlas (Minutos)");
 		txtpnTiempoNecesarioPara_1.setFont(new Font("Calibri", Font.PLAIN, 15));
 		txtpnTiempoNecesarioPara_1.setFocusable(false);
 		txtpnTiempoNecesarioPara_1.setEditable(false);
-		txtpnTiempoNecesarioPara_1.setBounds(220, 158, 225, 48);
+		txtpnTiempoNecesarioPara_1.setBounds(220, 158, 225, 83);
 		panel2.add(txtpnTiempoNecesarioPara_1);
 		
 		textFieldReinicioMusicas = new JTextField();
@@ -201,7 +201,7 @@ public class Configuracion extends JFrame
 		textFieldVideoPromocional.setHorizontalAlignment(SwingConstants.LEFT);
 		textFieldVideoPromocional.setFont(new Font("Calibri", Font.PLAIN, 13));
 		textFieldVideoPromocional.setColumns(10);
-		textFieldVideoPromocional.setBounds(364, 230, 177, 23);
+		textFieldVideoPromocional.setBounds(364, 245, 177, 23);
 		panel2.add(textFieldVideoPromocional);
 
 		final JButton buttonPathPromotionalVideo = new JButton("...");
@@ -210,7 +210,7 @@ public class Configuracion extends JFrame
 				textFieldVideoPromocional.setText(seleccionarArchivo());
 			}
 		});
-		buttonPathPromotionalVideo.setBounds(551, 230, 45, 23);
+		buttonPathPromotionalVideo.setBounds(551, 245, 45, 23);
 		buttonPathPromotionalVideo.setEnabled(false);
 		panel2.add(buttonPathPromotionalVideo);
 
@@ -237,7 +237,7 @@ public class Configuracion extends JFrame
 		chckbxNewCheckBox.setBackground(Color.WHITE);
 		chckbxNewCheckBox.setFont(new Font("Calibri", Font.PLAIN, 15));
 		chckbxNewCheckBox.setHorizontalAlignment(SwingConstants.RIGHT);
-		chckbxNewCheckBox.setBounds(207, 230, 154, 23);
+		chckbxNewCheckBox.setBounds(207, 245, 154, 23);
 		panel2.add(chckbxNewCheckBox);
 
 		JPanel panel3 = new JPanel();
@@ -372,7 +372,7 @@ public class Configuracion extends JFrame
 		txtpnAdvertenciaTengaCuidado.setText("Advertencia: Tenga cuidado al modificar el directorio del VLC. Consulte la documentación antes de realizar modificaciones");
 		txtpnAdvertenciaTengaCuidado.setEditable(false);
 		txtpnAdvertenciaTengaCuidado.setFocusable(false);
-		txtpnAdvertenciaTengaCuidado.setBounds(10, 265, 585, 23);
+		txtpnAdvertenciaTengaCuidado.setBounds(10, 340, 585, 23);
 		panel4.add(txtpnAdvertenciaTengaCuidado);
 		
 		Icon teclas = new ImageIcon(this.getClass().getResource("/com/mfrockola/imagenes/teclas.png"));
