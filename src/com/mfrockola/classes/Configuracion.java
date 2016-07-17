@@ -31,6 +31,9 @@ public class Configuracion extends JFrame
 	private TextFieldKey textFieldBajarGenero;
 	private TextFieldKey textFieldPantallaCompleta;
 	private TextFieldKey textFieldBorrar;
+	private TextFieldKey textFieldSaltarCancion;
+	private TextFieldKey textFieldAgregarCreditos;
+	private TextFieldKey textFieldBorrarCredito;
 	private JPasswordField passwordField;
 	private JTextField textFieldDirFondos;
 	private JLabel labelCreditosUsados;
@@ -446,22 +449,52 @@ public class Configuracion extends JFrame
 		textFieldBorrar.setColumns(10);
 		textFieldBorrar.setBounds(375, 194, 30, 20);
 		panel5.add(textFieldBorrar);
+
+		JLabel labelSaltarCancion = new JLabel("Tecla para saltar canción");
+		labelSaltarCancion.setBounds(167,219,200,23);
+		labelSaltarCancion.setHorizontalAlignment(SwingConstants.RIGHT);
+		panel5.add(labelSaltarCancion);
+
+		textFieldSaltarCancion = new TextFieldKey(this); // tecla 83 S
+		textFieldSaltarCancion.setBounds(375, 219, 30, 20);
+		textFieldSaltarCancion.setColumns(10);
+		panel5.add(textFieldSaltarCancion);
+
+		JLabel labelTeclaAgregarCredito = new JLabel("Tecla para agregar credito");
+		labelTeclaAgregarCredito.setBounds(167,244,200,23);
+		labelTeclaAgregarCredito.setHorizontalAlignment(SwingConstants.RIGHT);
+		panel5.add(labelTeclaAgregarCredito);
+
+		textFieldAgregarCreditos = new TextFieldKey(this); // tecla 65 A
+		textFieldAgregarCreditos.setColumns(10);
+		textFieldAgregarCreditos.setBounds(375, 244, 30, 20);
+		panel5.add(textFieldAgregarCreditos);
+
+		JLabel labelTeclaParaBorrarCredito = new JLabel("Tecla para borrar credito"); // tecla 66 S
+		labelTeclaParaBorrarCredito.setBounds(167,269,200,23);
+		labelTeclaParaBorrarCredito.setHorizontalAlignment(SwingConstants.RIGHT);
+		panel5.add(labelTeclaParaBorrarCredito);
+
+		textFieldBorrarCredito = new TextFieldKey(this);
+		textFieldBorrarCredito.setColumns(10);
+		textFieldBorrarCredito.setBounds(375, 269, 30, 20);
+		panel5.add(textFieldBorrarCredito);
 		
 		JLabel lblAgregarCredito = new JLabel("Agregar Credito");
 		lblAgregarCredito.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblAgregarCredito.setBounds(262, 219, 103, 14);
+		lblAgregarCredito.setBounds(262, 294, 103, 14);
 		panel5.add(lblAgregarCredito);
 		
 		final JRadioButton rdbtnClickIzquierdo = new JRadioButton("Click Izquierdo");
 		
 
 		rdbtnClickIzquierdo.setBackground(Color.WHITE);
-		rdbtnClickIzquierdo.setBounds(375, 215, 95, 23);
+		rdbtnClickIzquierdo.setBounds(375, 290, 95, 23);
 		panel5.add(rdbtnClickIzquierdo);
 		
 		JRadioButton rdbtnClickDerecho = new JRadioButton("Click Derecho");
 		rdbtnClickDerecho.setBackground(Color.WHITE);
-		rdbtnClickDerecho.setBounds(475, 215, 89, 23);
+		rdbtnClickDerecho.setBounds(475, 290, 89, 23);
 		panel5.add(rdbtnClickDerecho);
 		
 		ButtonGroup grupoMouse = new ButtonGroup();
@@ -479,7 +512,7 @@ public class Configuracion extends JFrame
 		grupoMouse.add(rdbtnClickDerecho);
 
 		JCheckBox checkBoxCancelMusic = new JCheckBox("Cancelar musica con click Derecho");
-		checkBoxCancelMusic.setBounds(375,238,200, 23);
+		checkBoxCancelMusic.setBounds(375,313,200, 23);
 		checkBoxCancelMusic.setBackground(Color.WHITE);
 		checkBoxCancelMusic.addItemListener(new ItemListener() {
 			@Override
@@ -506,12 +539,12 @@ public class Configuracion extends JFrame
 		panel5.add(checkBoxCancelMusic);
 
 		JLabel labelPassword = new JLabel("Contraseña para eliminar canciones");
-		labelPassword.setBounds(165, 261, 200, 23);
+		labelPassword.setBounds(165, 336, 200, 23);
 		labelPassword.setHorizontalAlignment(SwingConstants.RIGHT);
 		panel5.add(labelPassword);
 
 		passwordField = new JPasswordField(5);
-		passwordField.setBounds(375,265,200, 23);
+		passwordField.setBounds(375,336,200, 23);
 		panel5.add(passwordField);
 		
 		JPanel panel6 = new JPanel();
@@ -944,7 +977,7 @@ public class Configuracion extends JFrame
 		getContentPane().add(panelPrincipal);
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 642, 420); // posicion de la ventana
+		setBounds(100, 100, 642, 475); // posicion de la ventana
 		setVisible(true);
 		setResizable(false);
 
