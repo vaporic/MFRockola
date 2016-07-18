@@ -11,6 +11,9 @@ import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Date;
 import java.util.Random;
 
 /**
@@ -415,6 +418,8 @@ public class Interfaz extends JFrame
 
     private class manejadorDeTeclas extends KeyAdapter
     {
+        SQLiteConsultor consultor = new SQLiteConsultor();
+
         public void keyPressed(KeyEvent evento)
         {
             if (evento.getKeyCode()==configuraciones.getTeclaPantallaCompleta() && creditos > 0)
@@ -529,6 +534,8 @@ public class Interfaz extends JFrame
                             if (configuraciones.isCreditosContinuos()) {
                                 creditosInsertados = 0;
                             }
+
+                            updateDB(cancionAReproducir);
                         }
                         else
                         {
@@ -553,6 +560,8 @@ public class Interfaz extends JFrame
                             if (configuraciones.isCreditosContinuos()) {
                                 creditosInsertados = 0;
                             }
+
+                            updateDB(cancionAReproducir);
                         }
                     }
                     else
@@ -679,6 +688,53 @@ public class Interfaz extends JFrame
                 if (creditos == 0 && !creditosLibres) {
                     timerFullScreen.restart();
                 }
+            }
+        }
+
+        private void updateDB(Cancion cancionAReproducir) {
+            try {
+                String consulta = "SELECT * FROM most_popular WHERE number = " + cancionAReproducir.obtenerNumero();
+
+                System.out.println(consulta);
+
+                ResultSet resultSet = consultor.query(consulta);
+
+                if (resultSet.isClosed()) {
+                    resultSet.close();
+
+                    String insertar = "INSERT INTO most_popular(number, name, artist, genre, times, last_date)" +
+                            " VALUES ("+cancionAReproducir.obtenerNumero()+",'" +
+                            cancionAReproducir.obtenerNombreCancion()+ "','" +
+                            cancionAReproducir.getArtista() + "','" +
+                            cancionAReproducir.getGenero() + "'," +
+                            1 + ", "+ new Date().getTime() +");";
+
+                    System.out.println(insertar);
+
+                    consultor.insert(insertar);
+                } else {
+
+                    int times = 0;
+                    while (resultSet.next()) {
+
+                        times = resultSet.getInt("times") + 1;
+
+                        System.out.println(String.format("%s - %s - %s - %s - %s",
+                                resultSet.getInt("_ID"),
+                                resultSet.getInt("number"),
+                                resultSet.getString("name"),
+                                resultSet.getInt("times"),
+                                resultSet.getLong("last_date")));
+                    }
+
+                    resultSet.close();
+
+                    consultor.update("UPDATE most_popular SET times = " + times + ", last_date = " + new Date().getTime() + " WHERE number = " + cancionAReproducir.obtenerNumero());
+
+                    consultor.closeConnection();
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace();
             }
         }
     }

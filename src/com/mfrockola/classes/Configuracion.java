@@ -84,6 +84,7 @@ public class Configuracion extends JFrame
 	public Configuracion() 
 	{	
 		setTitle("Configuración");
+
 		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/com/mfrockola/imagenes/icono.png")));
 		JPanel panelPrincipal = new JPanel();
 		panelPrincipal.setLayout(new BorderLayout(0, 0));
@@ -790,6 +791,17 @@ public class Configuracion extends JFrame
 		labelMonedasInsertadas.setBounds(475, 149, 47, 14);
 		panel7.add(labelMonedasInsertadas);
 
+		JButton buttonMasPopulares = new JButton("Canciones mas populares");
+		buttonMasPopulares.setBounds(308,174,160,25);
+		panel7.add(buttonMasPopulares);
+
+		buttonMasPopulares.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new SQLiteEditor();
+			}
+		});
+
 		JPanel panel8 = new JPanel();
 		panel8.setBackground(Color.WHITE);
 		fichas.addTab("Promociones",null,panel8, "Configuración de las promociones de MFRockola");
@@ -977,9 +989,13 @@ public class Configuracion extends JFrame
 		getContentPane().add(panelPrincipal);
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 642, 475); // posicion de la ventana
-		setVisible(true);
+		setBounds(0, 0, 642, 475); // posicion de la ventana
+
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		setLocation((screenSize.width-getWidth())/2,(screenSize.height-getHeight())/2);
+
 		setResizable(false);
+		setVisible(true);
 
 		try {
 			File file = new File("config.mfr");
