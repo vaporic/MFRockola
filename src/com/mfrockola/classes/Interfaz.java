@@ -7,14 +7,14 @@ import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.swing.*;
+import javax.swing.Timer;
 import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Date;
-import java.util.Random;
+import java.util.*;
 
 /**
  * Created by Angel C on 17/04/2016.
@@ -74,6 +74,9 @@ public class Interfaz extends JFrame
     private JScrollPane barras;
     private Timer timerChangerLblCredits;
     private Timer timerFullScreen;
+    private Timer timer;
+
+    ManejadorDeTeclas manejadorDeTeclas;
 
     private Clip sound;
 
@@ -123,16 +126,27 @@ public class Interfaz extends JFrame
             public void actionPerformed(ActionEvent e) {
                 if (!isFullScreen) {
                     pantallaCompleta();
-                    try {
-                        Robot robot = new Robot();
-                        robot.keyPress(120);
-                        robot.keyRelease(120);
-                    } catch (AWTException exception) {
-                        exception.printStackTrace();
-                    }
+
+                    timer.restart();
                 }
             }
         };
+
+        ActionListener pressKey = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    Robot robot = new Robot();
+                    robot.keyPress(120);
+                    robot.keyRelease(120);
+                } catch (AWTException exception) {
+                    exception.printStackTrace();
+                }
+            }
+        };
+
+        timer = new Timer(500, pressKey);
+        timer.setRepeats(false);
 
         timerFullScreen = new Timer(10000, changeFullScreen);
         timerFullScreen.setRepeats(false);
@@ -226,9 +240,11 @@ public class Interfaz extends JFrame
             }
         });
 
-        this.addKeyListener(new manejadorDeTeclas());
+        manejadorDeTeclas = new ManejadorDeTeclas();
 
-        panelInferior.addKeyListener(new manejadorDeTeclas());
+        this.addKeyListener(manejadorDeTeclas);
+
+        panelInferior.addKeyListener(manejadorDeTeclas);
     }
 
     public void initComponents() {
@@ -291,7 +307,7 @@ public class Interfaz extends JFrame
                 configuraciones.getFontCeldasNegrita(), configuraciones.getFontCeldasSize()),configuraciones.getFontCeldasColor(),
                 configuraciones.getColor1(), configuraciones.getColor2()));
         listaDeMusicas.setListData(listMusic.getGenderSongs(0));
-        listaDeMusicas.addKeyListener(new manejadorDeTeclas());
+        listaDeMusicas.addKeyListener(manejadorDeTeclas);
         listaDeMusicas.setVisibleRowCount(20);
         listaDeMusicas.setFocusable(false);
         listaDeMusicas.setMaximumSize(getMaximumSize());
@@ -416,7 +432,7 @@ public class Interfaz extends JFrame
         }
     }
 
-    private class manejadorDeTeclas extends KeyAdapter
+    private class ManejadorDeTeclas extends KeyAdapter
     {
         SQLiteConsultor consultor = new SQLiteConsultor();
 
@@ -863,6 +879,7 @@ public class Interfaz extends JFrame
 
     public void agregarMonedasYCreditos()
     {
+        timerFullScreen.stop();
         creditosASubir = creditosASubir + configuraciones.getCantidadCreditos();
         monedasASubir++;
         abrirRegConfigEscritura();

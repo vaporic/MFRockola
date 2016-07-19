@@ -110,15 +110,23 @@ public class SQLiteEditor extends JFrame {
             public void valueChanged(ListSelectionEvent e) {
                 int index = list.getSelectedIndex();
 
-                CancionDB cancionSeleccionada = cancionesDB.get(index);
+                if (index != -1) {
+                    CancionDB cancionSeleccionada = cancionesDB.get(index);
 
-                date.setTime(cancionSeleccionada.getDate());
+                    date.setTime(cancionSeleccionada.getDate());
 
-                labelNumero.setText(String.format("Numero: %04d", cancionSeleccionada.getNumber()));
-                labelFecha.setText("Fecha: " + dateFormat.format(date));
-                labelVecesReproducida.setText("Nº Reproducciones: " + cancionSeleccionada.getTimes());
-                labelArtista.setText("Artista: " + cancionSeleccionada.getArtist());
-                labelGenero.setText("Genero: " + cancionSeleccionada.getGenre());
+                    labelNumero.setText(String.format("Numero: %04d", cancionSeleccionada.getNumber()));
+                    labelFecha.setText("Fecha: " + dateFormat.format(date));
+                    labelVecesReproducida.setText("Nº Reproducciones: " + cancionSeleccionada.getTimes());
+                    labelArtista.setText("Artista: " + cancionSeleccionada.getArtist());
+                    labelGenero.setText("Genero: " + cancionSeleccionada.getGenre());
+                } else {
+                    labelNumero.setText("Numero: ");
+                    labelFecha.setText("Fecha: ");
+                    labelVecesReproducida.setText("Nº Reproducciones: ");
+                    labelArtista.setText("Artista: ");
+                    labelGenero.setText("Genero: ");
+                }
             }
         });
 
@@ -129,6 +137,9 @@ public class SQLiteEditor extends JFrame {
 
                 if (result == JOptionPane.YES_OPTION) {
                     sQLiteConsultor.delete();
+                    data = new Object[0];
+                    list.setListData(data);
+                    list.updateUI();
                     JOptionPane.showMessageDialog(null,"Base de datos borrada","Borrar base de datos",JOptionPane.INFORMATION_MESSAGE);
                 }
             }
@@ -138,7 +149,7 @@ public class SQLiteEditor extends JFrame {
     private void refreshList() {
         cancionesDB = new ArrayList<CancionDB>();
         try {
-            ResultSet resultSet = sQLiteConsultor.query("SELECT * FROM most_popular");
+            ResultSet resultSet = sQLiteConsultor.query("SELECT * FROM most_popular ORDER BY times DESC, number ASC");
             while (resultSet.next()) {
                 cancionesDB.add(new CancionDB(
                         resultSet.getInt("_ID"),
