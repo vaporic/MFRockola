@@ -8,6 +8,7 @@ import java.net.URL;
 public class RegConfig implements Serializable
 {
 	private String direccionVideos;
+	private String direccionVideosMp3;
 	private String direccionVlc;
 	private String direccionVideoPromocional;
 	private int musicAleatoria;
@@ -52,7 +53,7 @@ public class RegConfig implements Serializable
 	private int cantidadDeCreditosPorPremio;
 	private String tipoDePremio;
 	
-	public RegConfig(String direccionVideos, String direccionVlc,
+	public RegConfig(String direccionVideos, String direccionVideosMp3, String direccionVlc,
 			String direccionVideoPromocional, int musicAleatoria,int reinicioMusicas,int cantidadCreditos, boolean libre,
 			boolean videoPromocional, int clickCreditos, int teclaSubirLista, int teclaBajarLista,
 			int teclaSubirGenero, int teclaBajarGenero, int teclaPantallaCompleta, int teclaBorrar,
@@ -64,6 +65,7 @@ public class RegConfig implements Serializable
 			int cantidadDeCreditosPorPremio, String tipoDePremio)
 	{
 		setDireccionVideos(direccionVideos);
+		setDireccionVideosMp3(direccionVideosMp3);
 		setDireccionVlc(direccionVlc);
 		setMusicAleatoria(musicAleatoria);
 		setReinicioMusicas(reinicioMusicas);
@@ -407,5 +409,13 @@ public class RegConfig implements Serializable
 
 	public void setTeclaBorrarCredito(int teclaBorrarCredito) {
 		this.teclaBorrarCredito = teclaBorrarCredito;
+	}
+
+	public String getDireccionVideosMp3() {
+		return direccionVideosMp3;
+	}
+
+	public void setDireccionVideosMp3(String direccionVideosMp3) {
+		this.direccionVideosMp3 = direccionVideosMp3;
 	}
 }

@@ -20,6 +20,7 @@ public class Configuracion extends JFrame
 	private RegConfig configuraciones;
 
 	private JTextField textFieldVideos;
+	private JTextField textFieldVideosParaMp3;
 	private JTextField textFieldVlc;
 	private JTextField textFieldCantCreditos;
 	private JTextField textFieldMusicaAleatoria;
@@ -317,8 +318,20 @@ public class Configuracion extends JFrame
 				textFieldVideos.setText(seleccionarDirectorio());
 			}
 		});
+
 		buttonPathVideos.setBounds(563, 127, 32, 23);
 		panel4.add(buttonPathVideos);
+
+
+		JButton buttonPathVideosParaMp3 = new JButton("...");
+		buttonPathVideosParaMp3.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				textFieldVideosParaMp3.setText(seleccionarDirectorio());
+			}
+		});
+		buttonPathVideosParaMp3.setBounds(563, 161, 32, 23);
+		panel4.add(buttonPathVideosParaMp3);
 		
 		JButton buttonPathVLC = new JButton("...");
 		buttonPathVLC.addActionListener(new ActionListener() {
@@ -327,7 +340,7 @@ public class Configuracion extends JFrame
 				textFieldVlc.setText(seleccionarDirectorio());
 			}
 		});
-		buttonPathVLC.setBounds(563, 161, 32, 23);
+		buttonPathVLC.setBounds(563, 195, 32, 23);
 		panel4.add(buttonPathVLC);
 		
 		textFieldVideos = new JTextField();
@@ -335,20 +348,31 @@ public class Configuracion extends JFrame
 		textFieldVideos.setColumns(10);
 		textFieldVideos.setBounds(328, 128, 225, 20);
 		panel4.add(textFieldVideos);
+
+		textFieldVideosParaMp3 = new JTextField();
+		textFieldVideosParaMp3.setText("");
+		textFieldVideosParaMp3.setColumns(10);
+		textFieldVideosParaMp3.setBounds(328, 162, 225, 20);
+		panel4.add(textFieldVideosParaMp3);
 		
 		textFieldVlc = new JTextField();
 		textFieldVlc.setColumns(10);
-		textFieldVlc.setBounds(328, 162, 225, 20);
+		textFieldVlc.setBounds(328, 196, 225, 20);
 		panel4.add(textFieldVlc);
 		
 		JLabel lblVideos = new JLabel("Directorio de Videos");
 		lblVideos.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblVideos.setBounds(217, 131, 101, 14);
 		panel4.add(lblVideos);
+
+		JLabel lblVideosParaMp3 = new JLabel("Directorio de Videos para MP3");
+		lblVideosParaMp3.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblVideosParaMp3.setBounds(157, 165, 161, 14);
+		panel4.add(lblVideosParaMp3);
 		
 		JLabel lblVlc = new JLabel("Directorio del VLC");
 		lblVlc.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblVlc.setBounds(217, 165, 101, 14);
+		lblVlc.setBounds(217, 199, 101, 14);
 		panel4.add(lblVlc);
 		
 		Icon carpeta = new ImageIcon(this.getClass().getResource("/com/mfrockola/imagenes/carpeta.png"));
@@ -1031,6 +1055,7 @@ public class Configuracion extends JFrame
 		chckbxNewCheckBox.setSelected(configuraciones.isVideoPromocional());
 		textFieldVideos.setText(String.format("%s", configuraciones.getDireccionVideos()));
 		textFieldVlc.setText(String.format("%s", configuraciones.getDireccionVlc()));
+		textFieldVideosParaMp3.setText(String.format("%s", configuraciones.getDireccionVideosMp3()));
 		textFieldVideoPromocional.setText(String.format("%s", configuraciones.getDireccionVideoPromocional()));
 		textFieldSubirL.setText(String.format("%s", configuraciones.getTeclaSubirLista()));
 		textFieldBajarL.setText(String.format("%s", configuraciones.getTeclaBajarLista()));
@@ -1173,6 +1198,7 @@ public class Configuracion extends JFrame
 
 				configuraciones = new RegConfig(
 						"C:\\videos", // path of videos
+						"C:\\MFRockola\\Videos para MP3",
 						"C:\\Program Files\\VideoLAN\\VLC", // path of VLC
 						"Seleccione un video", // path promotional video
 						1, // time in minutes of random music
@@ -1229,6 +1255,7 @@ public class Configuracion extends JFrame
 
 				configuraciones = new RegConfig(
 						textFieldVideos.getText(),
+						textFieldVideosParaMp3.getText(),
 						textFieldVlc.getText(),
 						textFieldVideoPromocional.getText(),
 						Integer.parseInt(textFieldMusicaAleatoria.getText()),

@@ -3,6 +3,7 @@ package com.mfrockola.classes;
 import java.io.File;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * Created by Angel C on 03/05/2016.
@@ -12,20 +13,28 @@ public class ListMusic {
     private ArrayList <Cancion> listOfSongs;
     private ArrayList<Gender> gender;
     private String path;
+    private String pathPromVideos;
     private int selectedGender;
     private int songNumber;
 
+    private String [] promVideos;
+
+    private Random random;
+
     public static void main (String [] args) {
-        new ListMusic("C:\\videos");
+        new ListMusic("C:\\videos","");
     }
 
-    public ListMusic (String path) {
+    public ListMusic (String path, String pathPromVideos) {
         setPath(path);
+        setPathPromVideos(pathPromVideos);
         setGender(new ArrayList<>());
         setListOfSongs(new ArrayList<>());
 
         selectedGender = 0;
         countGender();
+
+        random = new Random();
     }
 
     public int getSelectedGender (){
@@ -59,6 +68,12 @@ public class ListMusic {
                 gender.add(new Gender(listaArchivos[i],countSongs(archivoActual)));
             }
         }
+
+        File directorioVideosPromocionales = new File(getPathPromVideos());
+
+        if (directorioVideosPromocionales.isDirectory()) {
+            promVideos = directorioVideosPromocionales.list();
+        }
     }
 
     public boolean upGender() {
@@ -87,20 +102,6 @@ public class ListMusic {
 
     public Cancion[] countSongs(File file) {
 
-        // creamos el ArrayList para ir almacenando todas las canciones en el genero
-
-        // primero debemos validar la direccion del genero
-
-        // luego determinar los artistas
-
-        // luego contar artista por artista
-
-        // agregar la cancion.
-
-        // pasar las canciones del ArrayList al arreglo
-
-        // agregar el genero
-
         String [] artistas = file.list();
 
         ArrayList<Cancion> provisionalGender = new ArrayList<>();
@@ -108,10 +109,6 @@ public class ListMusic {
         Cancion[] gender = new Cancion[0];
 
         for (int i = 0; i < artistas.length; i++) {
-
-//            gender[i] = new Cancion(songNumber,file.getName(),files[i]);
-//            listOfSongs.add(new Cancion(songNumber,file.getName(),files[i]));
-//            songNumber++;
 
             File artista = new File(String.format("%s\\%s\\%s", path,file.getName(), artistas[i]));
 
@@ -146,4 +143,16 @@ public class ListMusic {
         return gender.get(i).getSongs();
     }
 
+    public String getPromVideo() {
+        String promVideo = promVideos[random.nextInt(promVideos.length)];
+        return promVideo;
+    }
+
+    public String getPathPromVideos() {
+        return pathPromVideos;
+    }
+
+    public void setPathPromVideos(String pathPromVideos) {
+        this.pathPromVideos = pathPromVideos;
+    }
 }

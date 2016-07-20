@@ -16,7 +16,6 @@ public class SQLiteConsultor {
     public SQLiteConsultor() {
         String userHome = System.getProperty("user.dir");
         ruta = userHome+ "\\canciones_populares.s3db";
-        System.out.println(ruta);
     }
 
     public void connect() {

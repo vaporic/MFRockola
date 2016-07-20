@@ -18,7 +18,9 @@ import com.sun.jna.NativeLibrary;
 public class Reproductor {
     private MediaPlayerFactory mediaPlayerFactory;
     EmbeddedMediaPlayer embeddedMediaPlayer;
+    EmbeddedMediaPlayer embeddedMediaPlayerMp3;
     private Canvas canvas;
+    private Canvas canvasMp3;
     private JPanel mediaPlayerContainer;
 
     OperacionesRegConfig registroDatos = new OperacionesRegConfig();
@@ -49,6 +51,7 @@ public class Reproductor {
 
             mediaPlayerFactory = new MediaPlayerFactory("--no-video-title-show");
             embeddedMediaPlayer = mediaPlayerFactory.newEmbeddedMediaPlayer();
+            embeddedMediaPlayerMp3 = mediaPlayerFactory.newEmbeddedMediaPlayer();
 
             embeddedMediaPlayer.setVideoSurface(mediaPlayerFactory.newVideoSurface(canvas));
         }
@@ -64,8 +67,13 @@ public class Reproductor {
         return mediaPlayerContainer;
     }
 
-    public void reproducirMusica(String genero, String artista, String nombreCancion)
+    public void reproducirMusicaMp3(String genero, String artista, String nombreCancion, String pathPromVideo)
     {
+        embeddedMediaPlayerMp3.playMedia(String.format("%s\\%s\\%s\\%s", configuraciones.getDireccionVideos(),genero,artista,nombreCancion));
+        embeddedMediaPlayer.playMedia(pathPromVideo);
+    }
+
+    public void reproducirVideo(String genero, String artista, String nombreCancion) {
         embeddedMediaPlayer.playMedia(String.format("%s\\%s\\%s\\%s", configuraciones.getDireccionVideos(),genero,artista,nombreCancion));
     }
 

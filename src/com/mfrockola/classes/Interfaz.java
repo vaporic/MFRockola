@@ -12,9 +12,13 @@ import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
+import java.nio.file.Files;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
+
+import static com.mfrockola.classes.Utils.EXT_MP3;
+import static com.mfrockola.classes.Utils.EXT_MP4;
 
 /**
  * Created by Angel C on 17/04/2016.
@@ -158,7 +162,10 @@ public class Interfaz extends JFrame
         setSize(resolucion);
         setVisible(true);
 
-        repro.embeddedMediaPlayer.addMediaPlayerEventListener(new manejadorDeReproductor());
+        ManejadorDeReproductor manejadorDeReproductor = new ManejadorDeReproductor();
+
+        repro.embeddedMediaPlayer.addMediaPlayerEventListener(manejadorDeReproductor);
+        repro.embeddedMediaPlayerMp3.addMediaPlayerEventListener(manejadorDeReproductor);
 
         if(configuraciones.isVideoPromocional()) {
             repro.embeddedMediaPlayer.playMedia(configuraciones.getDireccionVideoPromocional());
@@ -300,7 +307,7 @@ public class Interfaz extends JFrame
 
         // Iniciar las listas
 
-        listMusic = new ListMusic(configuraciones.getDireccionVideos());
+        listMusic = new ListMusic(configuraciones.getDireccionVideos(),configuraciones.getDireccionVideosMp3()); //Aqui falta la direccion de los videos promocionales
 
         listaDeMusicas = new JList();
         listaDeMusicas.setCellRenderer(new ModificadorDeCeldas(new Font(configuraciones.getFontCeldasName(),
@@ -526,7 +533,19 @@ public class Interfaz extends JFrame
                             Cancion cancionAReproducir =  listMusic.getSong(numero);
 
                             listaReproduccion.agregarCanciones(cancionAReproducir);
-                            repro.reproducirMusica(listaReproduccion.obtenerGenero(),listaReproduccion.obtenerArtista(),listaReproduccion.obtenerCancionAReproducir());
+
+                            int extension = Utils.getExtension(String.format("%s\\%s\\%s\\%s", configuraciones.getDireccionVideos(),listaReproduccion.obtenerGenero(),listaReproduccion.obtenerArtista(), listaReproduccion.obtenerCancionAReproducir()));
+
+                            if (extension == EXT_MP4) {
+                                repro.reproducirVideo(listaReproduccion.obtenerGenero(),listaReproduccion.obtenerArtista(),listaReproduccion.obtenerCancionAReproducir());
+                            } else if (extension == EXT_MP3) {
+                                repro.reproducirMusicaMp3(
+                                        listaReproduccion.obtenerGenero(),
+                                        listaReproduccion.obtenerArtista(),
+                                        listaReproduccion.obtenerCancionAReproducir(),
+                                        configuraciones.getDireccionVideosMp3() + "\\" + listMusic.getPromVideo());
+                            }
+
                             listaDeReproduccion.setListData(listaReproduccion.obtenerCancionesEnLista());
                             if (creditosLibres== false)
                             {
@@ -684,7 +703,11 @@ public class Interfaz extends JFrame
                 }
             }
             else if (evento.getKeyCode()==configuraciones.getTeclaSaltarCancion() && listaReproduccion.obtenerCancionAReproducir()!=null) {
-                repro.embeddedMediaPlayer.stop();
+                if (repro.embeddedMediaPlayerMp3.isPlaying()) {
+                    repro.embeddedMediaPlayerMp3.stop();
+                } else {
+                    repro.embeddedMediaPlayer.stop();
+                }
             }
             else if (evento.getKeyCode()==configuraciones.getTeclaAgregarCredito()) {
                 creditos = creditos + configuraciones.getCantidadCreditos();
@@ -711,8 +734,6 @@ public class Interfaz extends JFrame
             try {
                 String consulta = "SELECT * FROM most_popular WHERE number = " + cancionAReproducir.obtenerNumero();
 
-                System.out.println(consulta);
-
                 ResultSet resultSet = consultor.query(consulta);
 
                 if (resultSet.isClosed()) {
@@ -725,8 +746,6 @@ public class Interfaz extends JFrame
                             cancionAReproducir.getGenero() + "'," +
                             1 + ", "+ new Date().getTime() +");";
 
-                    System.out.println(insertar);
-
                     consultor.insert(insertar);
                 } else {
 
@@ -734,13 +753,6 @@ public class Interfaz extends JFrame
                     while (resultSet.next()) {
 
                         times = resultSet.getInt("times") + 1;
-
-                        System.out.println(String.format("%s - %s - %s - %s - %s",
-                                resultSet.getInt("_ID"),
-                                resultSet.getInt("number"),
-                                resultSet.getString("name"),
-                                resultSet.getInt("times"),
-                                resultSet.getLong("last_date")));
                     }
 
                     resultSet.close();
@@ -755,7 +767,7 @@ public class Interfaz extends JFrame
         }
     }
 
-    private class manejadorDeReproductor extends MediaPlayerEventAdapter
+    private class ManejadorDeReproductor extends MediaPlayerEventAdapter
     {
         @Override
         public void stopped(MediaPlayer mediaPlayer) {
@@ -764,7 +776,11 @@ public class Interfaz extends JFrame
 
         public void finished(MediaPlayer mediaPlayer)
         {
-            nextMusic();
+            if (repro.embeddedMediaPlayerMp3.isPlaying()) {
+                repro.embeddedMediaPlayer.playMedia(configuraciones.getDireccionVideosMp3() + "\\" + listMusic.getPromVideo());
+            } else {
+                nextMusic();
+            }
         }
 
         public void nextMusic() {
@@ -784,12 +800,30 @@ public class Interfaz extends JFrame
             }
             else
             {
-                repro.reproducirMusica(listaReproduccion.obtenerGenero(),listaReproduccion.obtenerArtista(), listaReproduccion.obtenerCancionAReproducir());
+                int extension = Utils.getExtension(String.format("%s\\%s\\%s\\%s", configuraciones.getDireccionVideos(),listaReproduccion.obtenerGenero(),listaReproduccion.obtenerArtista(), listaReproduccion.obtenerCancionAReproducir()));
+
+                if (extension == EXT_MP4) {
+                    repro.reproducirVideo(
+                            listaReproduccion.obtenerGenero(),
+                            listaReproduccion.obtenerArtista(),
+                            listaReproduccion.obtenerCancionAReproducir());
+
+                } else if (extension == EXT_MP3) {
+                    repro.reproducirMusicaMp3(
+                            listaReproduccion.obtenerGenero(),
+                            listaReproduccion.obtenerArtista(),
+                            listaReproduccion.obtenerCancionAReproducir(),
+                            configuraciones.getDireccionVideosMp3() + "\\" + listMusic.getPromVideo());
+                }
+
                 labelMusica.setText(String.format("%04d - %s - %s",
-                        listaReproduccion.obtenerNumero(), listaReproduccion.obtenerArtista(),
+                        listaReproduccion.obtenerNumero(),
+                        listaReproduccion.obtenerArtista(),
                         listaReproduccion.obtenerCancionAReproducir()));
+
                 labelCancionEnRepro.setText(String.format("%04d - %s - %s",
-                        listaReproduccion.obtenerNumero(),listaReproduccion.obtenerArtista(),
+                        listaReproduccion.obtenerNumero(),
+                        listaReproduccion.obtenerArtista(),
                         listaReproduccion.obtenerCancionAReproducir()));
             }
         }
@@ -815,6 +849,7 @@ public class Interfaz extends JFrame
         {
             configuraciones = new RegConfig(
                     this.configuraciones.getDireccionVideos(),
+                    this.configuraciones.getDireccionVideosMp3(),
                     this.configuraciones.getDireccionVlc(),
                     this.configuraciones.getDireccionVideoPromocional(),
                     this.configuraciones.getMusicAleatoria(),
