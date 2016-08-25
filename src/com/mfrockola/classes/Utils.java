@@ -14,6 +14,7 @@ public class Utils {
     public static int EXT_WMA = 4;
     public static int EXT_WAV = 5;
     public static int EXT_AAC = 6;
+    public static int EXT_FLV = 7;
 
     public static int getExtension(String path) {
 
@@ -47,6 +48,10 @@ public class Utils {
 
         if (extension.equals("aac") || extension.equals("AAC")) {
             return EXT_AAC;
+        }
+
+        if (extension.equals("flv") || extension.equals("FLV")) {
+            return EXT_FLV;
         }
 
         return EXT_MP4;

@@ -537,7 +537,7 @@ public class Interfaz extends JFrame
 
                             int extension = Utils.getExtension(String.format("%s\\%s\\%s\\%s", configuraciones.getDireccionVideos(),listaReproduccion.obtenerGenero(),listaReproduccion.obtenerArtista(), listaReproduccion.obtenerCancionAReproducir()));
 
-                            if (extension == EXT_MP4 || extension == EXT_AVI || extension == EXT_MPG) {
+                            if (extension == EXT_MP4 || extension == EXT_AVI || extension == EXT_MPG || extension == EXT_FLV) {
                                 repro.reproducirVideo(listaReproduccion.obtenerGenero(),listaReproduccion.obtenerArtista(),listaReproduccion.obtenerCancionAReproducir());
                             } else if (extension == EXT_MP3 || extension == EXT_WMA || extension == EXT_WAV || extension == EXT_AAC) {
                                 repro.reproducirMusicaMp3(
