@@ -8,11 +8,9 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.swing.*;
 import javax.swing.Timer;
-import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
-import java.nio.file.Files;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
@@ -219,7 +217,11 @@ public class Interfaz extends JFrame
 
                         if (optionPane.getValue()!=null && optionPane.getValue().equals(JOptionPane.OK_OPTION)) {
                             if (new String(passwordPanel.getPassword()).equals(configuraciones.getPassword())) {
-                                repro.embeddedMediaPlayer.stop();
+                                if (repro.embeddedMediaPlayerMp3.isPlaying()) {
+                                    repro.embeddedMediaPlayerMp3.stop();
+                                } else {
+                                    repro.embeddedMediaPlayer.stop();
+                                }
                                 dlg.dispatchEvent(new WindowEvent(dlg, WindowEvent.WINDOW_CLOSING));
                                 dlg.dispose(); // else java VM will wait for dialog to be disposed of (forever)
                             }
