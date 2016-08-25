@@ -15,8 +15,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 
-import static com.mfrockola.classes.Utils.EXT_MP3;
-import static com.mfrockola.classes.Utils.EXT_MP4;
+import static com.mfrockola.classes.Utils.*;
 
 /**
  * Created by Angel C on 17/04/2016.
@@ -538,9 +537,9 @@ public class Interfaz extends JFrame
 
                             int extension = Utils.getExtension(String.format("%s\\%s\\%s\\%s", configuraciones.getDireccionVideos(),listaReproduccion.obtenerGenero(),listaReproduccion.obtenerArtista(), listaReproduccion.obtenerCancionAReproducir()));
 
-                            if (extension == EXT_MP4) {
+                            if (extension == EXT_MP4 || extension == EXT_AVI || extension == EXT_MPG) {
                                 repro.reproducirVideo(listaReproduccion.obtenerGenero(),listaReproduccion.obtenerArtista(),listaReproduccion.obtenerCancionAReproducir());
-                            } else if (extension == EXT_MP3) {
+                            } else if (extension == EXT_MP3 || extension == EXT_WMA || extension == EXT_WAV || extension == EXT_AAC) {
                                 repro.reproducirMusicaMp3(
                                         listaReproduccion.obtenerGenero(),
                                         listaReproduccion.obtenerArtista(),
@@ -804,13 +803,13 @@ public class Interfaz extends JFrame
             {
                 int extension = Utils.getExtension(String.format("%s\\%s\\%s\\%s", configuraciones.getDireccionVideos(),listaReproduccion.obtenerGenero(),listaReproduccion.obtenerArtista(), listaReproduccion.obtenerCancionAReproducir()));
 
-                if (extension == EXT_MP4) {
+                if (extension == EXT_MP4 || extension == EXT_AVI || extension == EXT_MPG) {
                     repro.reproducirVideo(
                             listaReproduccion.obtenerGenero(),
                             listaReproduccion.obtenerArtista(),
                             listaReproduccion.obtenerCancionAReproducir());
 
-                } else if (extension == EXT_MP3) {
+                } else if (extension == EXT_MP3 || extension == EXT_WMA || extension == EXT_WAV || extension == EXT_AAC) {
                     repro.reproducirMusicaMp3(
                             listaReproduccion.obtenerGenero(),
                             listaReproduccion.obtenerArtista(),
