@@ -603,7 +603,7 @@ public class Interfaz extends JFrame
                     else
                     {
                         labelcreditos.setForeground(Color.RED);
-                        labelcreditos.setText("Sin creditos o no se puede reproducir en " + configuraciones.getReinicioMusicas() +" mins");
+                        labelcreditos.setText("La canción que ha seleccionado no se puede reproducir en " + configuraciones.getReinicioMusicas() +" mins");
                         timerChangerLblCredits.start();
                         objeto.reproducir = false;
                         objeto.reiniciarValores();
@@ -648,8 +648,17 @@ public class Interfaz extends JFrame
 
                 if (listaDeMusicas.getSelectedIndex() - 20 < 0)
                 {
-                    listaDeMusicas.setSelectedIndex(0);
-                    listaDeMusicas.ensureIndexIsVisible(0);
+                    if (listaDeMusicas.getSelectedIndex() == 0) {
+                        if (listMusic.downGender()) {
+                            listaDeMusicas.setListData(listMusic.getGenderSongs(listMusic.getSelectedGender()));
+                            listaDeMusicas.setSelectedIndex(listMusic.getGenderSongs(listMusic.getSelectedGender()).length-1);
+                            listaDeMusicas.ensureIndexIsVisible(listMusic.getGenderSongs(listMusic.getSelectedGender()).length-1);
+                            labelGeneroMusical.setText("Genero Musical: " + listMusic.getNameOfGender());
+                        }
+                    } else {
+                        listaDeMusicas.setSelectedIndex(0);
+                        listaDeMusicas.ensureIndexIsVisible(0);
+                    }
                 }
                 else
                 {
@@ -668,8 +677,17 @@ public class Interfaz extends JFrame
 
                 if(listaDeMusicas.getSelectedIndex()+20 > listMusic.getGenderSongs(listMusic.getSelectedGender()).length)
                 {
-                    listaDeMusicas.setSelectedIndex(listMusic.getGenderSongs(listMusic.getSelectedGender()).length-1);
-                    listaDeMusicas.ensureIndexIsVisible(listaDeMusicas.getSelectedIndex());
+                    if (listaDeMusicas.getSelectedIndex()==listMusic.getGenderSongs(listMusic.getSelectedGender()).length-1) {
+                        if (listMusic.upGender()) {
+                            listaDeMusicas.setListData(listMusic.getGenderSongs(listMusic.getSelectedGender()));
+                            listaDeMusicas.setSelectedIndex(0);
+                            listaDeMusicas.ensureIndexIsVisible(0);
+                            labelGeneroMusical.setText("Genero Musical: " + listMusic.getNameOfGender());
+                        }
+                    } else {
+                        listaDeMusicas.setSelectedIndex(listMusic.getGenderSongs(listMusic.getSelectedGender()).length-1);
+                        listaDeMusicas.ensureIndexIsVisible(listaDeMusicas.getSelectedIndex());
+                    }
                 }
                 else
                 {

@@ -105,7 +105,7 @@ public class Configuracion extends JFrame
 		JTextPane txtpnBienvenidoAlPanel = new JTextPane();
 		txtpnBienvenidoAlPanel.setText("Bienvenido al panel de configuración de MFRockola.\n\nAquí podrás modificar los aspectos"+" " +
 				"básicos del funcionamiento de MFRockola como el precio de los créditos, la cantidad de tiempo necesario para la reproducción"+
-				" aleatoria de una música y también las teclas de acción en el teclado.\n\nPuedes oprimir la tecla ESC en cualquier momento para "+
+				" aleatoria de una canción y también las teclas de acción en el teclado.\n\nPuedes oprimir la tecla ESC en cualquier momento para "+
 				"salir de la configuración sin modificarla.");
 		txtpnBienvenidoAlPanel.setEditable(false);
 		txtpnBienvenidoAlPanel.setFocusable(false);
@@ -170,7 +170,7 @@ public class Configuracion extends JFrame
 		panel2.add(textPane);
 
 		JTextPane txtpnTiempoNecesarioPara = new JTextPane();
-		txtpnTiempoNecesarioPara.setText("Tiempo necesario para reproducir una Musica Aleatoria (Minutos)");
+		txtpnTiempoNecesarioPara.setText("Tiempo necesario para reproducir una canción Aleatoria (Minutos)");
 		txtpnTiempoNecesarioPara.setBounds(220, 107, 225, 48);
 		txtpnTiempoNecesarioPara.setFocusable(false);
 		txtpnTiempoNecesarioPara.setEditable(false);
@@ -184,7 +184,7 @@ public class Configuracion extends JFrame
 		panel2.add(textFieldMusicaAleatoria);
 
 		JTextPane txtpnTiempoNecesarioPara_1 = new JTextPane();
-		txtpnTiempoNecesarioPara_1.setText("Tiempo necesario para reiniciar el contador de las musicas bloqueadas al reproducirlas (Minutos)");
+		txtpnTiempoNecesarioPara_1.setText("Límite de tiempo para poder repetir una misma canción");
 		txtpnTiempoNecesarioPara_1.setFocusable(false);
 		txtpnTiempoNecesarioPara_1.setEditable(false);
 		txtpnTiempoNecesarioPara_1.setBounds(220, 163, 225, 63);
