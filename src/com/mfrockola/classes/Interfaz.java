@@ -603,7 +603,7 @@ public class Interfaz extends JFrame
                     else
                     {
                         labelcreditos.setForeground(Color.RED);
-                        labelcreditos.setText("La canción que ha seleccionado no se puede reproducir en " + configuraciones.getReinicioMusicas() +" mins");
+                        labelcreditos.setText("La canción que ha seleccionado no se puede reproducir antes de " + configuraciones.getReinicioMusicas() +" mins");
                         timerChangerLblCredits.start();
                         objeto.reproducir = false;
                         objeto.reiniciarValores();
