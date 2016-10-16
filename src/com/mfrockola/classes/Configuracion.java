@@ -63,6 +63,7 @@ public class Configuracion extends JFrame
 	private boolean cancelMusic;
 	private boolean selectVideoProm;
 	private int clickCreditos;
+	private int creditosGuardados;
 
 	JFileChooser selectorArchivos = new JFileChooser();
 
@@ -1142,6 +1143,8 @@ public class Configuracion extends JFrame
 		} else {
 			labelTextoDelPremio.setText("Ganaste " + configuraciones.getCantidadDePremios() +" "+ configuraciones.getTipoDePremio());
 		}
+
+		creditosGuardados = configuraciones.getCreditosGuardados();
 	}
 
 	private class manejadorRadioButtons implements ItemListener
@@ -1230,7 +1233,8 @@ public class Configuracion extends JFrame
 						false, // is entregarPremio?
 						0,
 						0,
-						""
+						"",
+						0
 				);
 
 				salida.writeObject(configuraciones);
@@ -1287,7 +1291,8 @@ public class Configuracion extends JFrame
 						checkBoxPremio.isSelected(),
 						Integer.parseInt(textFieldNumeroDePremios.getText()),
 						Integer.parseInt(textFieldPremioCadaCreditos.getText()),
-						textFieldTipoDePremio.getText()
+						textFieldTipoDePremio.getText(),
+						creditosGuardados
 				);
 
 				salida.writeObject(configuraciones);

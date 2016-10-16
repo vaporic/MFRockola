@@ -52,6 +52,8 @@ public class RegConfig implements Serializable
 	private int cantidadDePremios;
 	private int cantidadDeCreditosPorPremio;
 	private String tipoDePremio;
+
+	private int creditosGuardados;
 	
 	public RegConfig(String direccionVideos, String direccionVideosMp3, String direccionVlc,
 			String direccionVideoPromocional, int musicAleatoria,int reinicioMusicas,int cantidadCreditos, boolean libre,
@@ -62,7 +64,7 @@ public class RegConfig implements Serializable
 			URL direccionFondo, Color color1, Color color2, String fontCeldasName, int fontCeldasSize,
 			Color fontCeldasColor, int fontCeldasNegrita, boolean agregarAdicional, int numeroDeCreditosAdicionales,
 			int cadaCantidadDeCreditos, boolean creditosContinuos, boolean entregarPremio, int cantidadDePremios,
-			int cantidadDeCreditosPorPremio, String tipoDePremio)
+			int cantidadDeCreditosPorPremio, String tipoDePremio, int creditosGuardados)
 	{
 		setDireccionVideos(direccionVideos);
 		setDireccionVideosMp3(direccionVideosMp3);
@@ -103,6 +105,7 @@ public class RegConfig implements Serializable
 		setCantidadDePremios(cantidadDePremios);
 		setCantidadDeCreditosPorPremio(cantidadDeCreditosPorPremio);
 		setTipoDePremio(tipoDePremio);
+		setCreditosGuardados(creditosGuardados);
 	}
 
 	public String getDireccionVideos() 
@@ -417,5 +420,13 @@ public class RegConfig implements Serializable
 
 	public void setDireccionVideosMp3(String direccionVideosMp3) {
 		this.direccionVideosMp3 = direccionVideosMp3;
+	}
+
+	public int getCreditosGuardados() {
+		return creditosGuardados;
+	}
+
+	public void setCreditosGuardados(int creditosGuardados) {
+		this.creditosGuardados = creditosGuardados;
 	}
 }
