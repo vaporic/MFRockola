@@ -17,14 +17,22 @@ public class SelectMusica
 	int contador = 0;
 	boolean reproducir = false;
 	private int keyDelete;
+	private int keyUpList;
+	private int keyDownList;
+	private int keyUpGender;
+	private int keyDownGender;
 	
-	public SelectMusica (int keyDelete)
+	public SelectMusica (int keyDelete, int keyUpList, int keyDownList, int keyUpGender, int keyDownGender)
 	{
-		selectorMusica.setFont(new Font("Consolas", Font.BOLD, 30));
+		selectorMusica.setFont(new Font("Consolas", Font.BOLD, 50));
 		selectorMusica.setOpaque(false);
 		selectorMusica.setForeground(Color.WHITE);
 		selectorMusica.setHorizontalAlignment(SwingUtilities.CENTER);
 		this.keyDelete = keyDelete;
+		this.keyUpList = keyUpList;
+		this.keyDownList = keyDownList;
+		this.keyUpGender = keyUpGender;
+		this.keyDownGender = keyDownGender;
 	}
 	
 	public void reiniciarValores()
@@ -102,8 +110,11 @@ public class SelectMusica
 			valores[contador] = "-";
 			numero = String.format("%s %s %s %s",valores[0],valores[1],valores[2],valores[3]);
 		}
-		else
-		{
+		else if (evento.getKeyCode() == keyUpList || evento.getKeyCode() == keyDownList || evento.getKeyCode() == keyUpGender || evento.getKeyCode() == keyDownGender) {
+			contador = 0;
+			reiniciarValores();
+			numero = String.format("%s %s %s %s",valores[0],valores[1],valores[2],valores[3]);
+		} else {
 			if (contador < 3)
 				++contador;
 			else

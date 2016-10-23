@@ -89,7 +89,8 @@ public class Interfaz extends JFrame
             registroDatos.abrirRegConfigLectura();
             configuraciones = registroDatos.leerRegConfigLectura();
             prohibir = new MusicasProhibidas(configuraciones.getReinicioMusicas());
-            objeto = new SelectMusica(configuraciones.getTeclaBorrar());
+            objeto = new SelectMusica(configuraciones.getTeclaBorrar(), configuraciones.getTeclaSubirLista(),
+                    configuraciones.getTeclaBajarLista(), configuraciones.getTeclaSubirGenero(),configuraciones.getTeclaBajarGenero());
             monedasASubir = configuraciones.getCantidadMonedasInsertadas();
             creditosASubir = configuraciones.getCantidadCreditosUsados();
             cancelMusic = configuraciones.isCancelMusic();
@@ -257,7 +258,7 @@ public class Interfaz extends JFrame
 
     public void initComponents() {
 
-        creditos = 0;
+        creditos = configuraciones.getCreditosGuardados();
 
         resolucion = Toolkit.getDefaultToolkit().getScreenSize();
 
@@ -276,7 +277,7 @@ public class Interfaz extends JFrame
         if (creditosLibres) {
             labelcreditos= new JLabel("Creditos Libres");
         } else {
-            labelcreditos = new JLabel("Creditos: 0");
+            labelcreditos = new JLabel(String.format("Creditos: %d", configuraciones.getCreditosGuardados()));
         }
 
         labelcreditos.setForeground(Color.WHITE);
@@ -446,6 +447,10 @@ public class Interfaz extends JFrame
 
         public void keyPressed(KeyEvent evento)
         {
+            // tecla bloque numerico = 144
+            if (evento.getKeyCode()==KeyEvent.VK_NUM_LOCK) {
+                Toolkit.getDefaultToolkit().setLockingKeyState(KeyEvent.VK_NUM_LOCK,true);
+            }
             if (evento.getKeyCode()==configuraciones.getTeclaPantallaCompleta() && creditos > 0)
             {
                 if (labelPromociones.isVisible()) {
@@ -551,6 +556,9 @@ public class Interfaz extends JFrame
                             if (creditosLibres== false)
                             {
                                 --creditos;
+                                abrirRegConfigEscritura();
+                                agregarDatosRegConfig();
+                                cerrarRegConfig();
                                 labelcreditos.setText(String.format("%s: %d","Creditos",creditos));
                             }
                             objeto.reproducir = false;
@@ -582,6 +590,9 @@ public class Interfaz extends JFrame
                             if (creditosLibres == false)
                             {
                                 --creditos;
+                                abrirRegConfigEscritura();
+                                agregarDatosRegConfig();
+                                cerrarRegConfig();
                                 labelcreditos.setForeground(Color.WHITE);
                                 labelcreditos.setText(String.format("%s: %d","Creditos",creditos));
                             }
@@ -644,6 +655,8 @@ public class Interfaz extends JFrame
                     pantallaCompleta();
                 }
 
+                objeto.selectorMusica.setText(objeto.manejadorDeEvento(evento));
+
                 labelPromociones.setVisible(false);
 
                 if (listaDeMusicas.getSelectedIndex() - 20 < 0)
@@ -673,6 +686,8 @@ public class Interfaz extends JFrame
                     pantallaCompleta();
                 }
 
+                objeto.selectorMusica.setText(objeto.manejadorDeEvento(evento));
+
                 labelPromociones.setVisible(false);
 
                 if(listaDeMusicas.getSelectedIndex()+20 > listMusic.getGenderSongs(listMusic.getSelectedGender()).length)
@@ -700,6 +715,8 @@ public class Interfaz extends JFrame
                 if (isFullScreen) {
                     pantallaCompleta();
                 }
+
+                objeto.selectorMusica.setText(objeto.manejadorDeEvento(evento));
                 if (listMusic.upGender()) {
                     labelPromociones.setVisible(false);
                     listaDeMusicas.setListData(listMusic.getGenderSongs(listMusic.getSelectedGender()));
@@ -713,6 +730,9 @@ public class Interfaz extends JFrame
                 if (isFullScreen) {
                     pantallaCompleta();
                 }
+
+                objeto.selectorMusica.setText(objeto.manejadorDeEvento(evento));
+
                 if (listMusic.downGender()) {
                     labelPromociones.setVisible(false);
                     listaDeMusicas.setListData(listMusic.getGenderSongs(listMusic.getSelectedGender()));
@@ -741,7 +761,10 @@ public class Interfaz extends JFrame
 
             }
             else if (evento.getKeyCode()==configuraciones.getTeclaBorrarCredito() && creditos > 0) {
-                creditos--;
+                --creditos;
+                abrirRegConfigEscritura();
+                agregarDatosRegConfig();
+                cerrarRegConfig();
                 labelcreditos.setText(String.format("Creditos: %d", creditos));
                 if (creditos == 0 && !creditosLibres) {
                     timerFullScreen.restart();
@@ -905,7 +928,8 @@ public class Interfaz extends JFrame
                     this.configuraciones.isEntregarPremio(),
                     this.configuraciones.getCantidadDePremios(),
                     this.configuraciones.getCantidadDeCreditosPorPremio(),
-                    this.configuraciones.getTipoDePremio()
+                    this.configuraciones.getTipoDePremio(),
+                    creditos
             );
 
             salida.writeObject(configuraciones);
