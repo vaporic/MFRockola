@@ -1,5 +1,6 @@
 package com.mfrockola.classes;
 
+import javax.rmi.CORBA.Util;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
@@ -13,9 +14,13 @@ import java.awt.event.MouseEvent;
 public class TextFieldKey extends JTextField {
 
     private Frame frame;
+    private char keyChar;
+    private int keyCode;
 
-    public TextFieldKey(Frame parentDialog) {
+    public TextFieldKey(Frame parentDialog, char keyChar, int keyCode) {
 
+        setKeyChar(keyChar);
+        setKeyCode(keyCode);
         frame = parentDialog;
         setHorizontalAlignment(SwingConstants.CENTER);
         setEditable(false);
@@ -26,17 +31,35 @@ public class TextFieldKey extends JTextField {
                 PressKeyDialog dialog = new PressKeyDialog(frame,true);
                 dialog.setVisible(true);
                 dialog.pack();
-                if (dialog.keyCode!=0)
-                    setText(String.valueOf(dialog.keyCode));
+                if (dialog.keyCodeDialog!=0)
+                    setKeyCode(dialog.keyCodeDialog);
+                    setText(Utils.printKeyCharCode(dialog.keyCodeDialog));
             }
         });
 
     }
 
+    public int getKeyCode() {
+        return keyCode;
+    }
+
+    public void setKeyCode(int keyCode) {
+        this.keyCode = keyCode;
+    }
+
+    public char getKeyChar() {
+        return keyChar;
+    }
+
+    public void setKeyChar(char keyChar) {
+        this.keyChar = keyChar;
+    }
+
     private class PressKeyDialog extends JDialog {
 
         private JLabel label;
-        public int keyCode;
+        public char keyCharDialog;
+        public int keyCodeDialog;
 
         public PressKeyDialog (Frame parent, boolean modal) {
 
@@ -49,7 +72,8 @@ public class TextFieldKey extends JTextField {
             addKeyListener(new KeyAdapter() {
                 @Override
                 public void keyPressed(KeyEvent e) {
-                    keyCode = e.getKeyCode();
+                    keyCharDialog = e.getKeyChar();
+                    keyCodeDialog = e.getKeyCode();
                     dispose();
                 }
             });

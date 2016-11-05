@@ -423,16 +423,16 @@ public class Configuracion extends JFrame
 		lblSubirbajrLista.setBounds(262, 119, 103, 14);
 		panel5.add(lblSubirbajrLista);
 
-		textFieldSubirL = new TextFieldKey(this);
-		textFieldSubirL.setBounds(375, 119, 30, 20);
+		textFieldSubirL = new TextFieldKey(this,' ',0);
+		textFieldSubirL.setBounds(375, 119, 50, 20);
 		panel5.add(textFieldSubirL);
 
 		JLabel label_2 = new JLabel("/");
-		label_2.setBounds(415, 119, 4, 14);
+		label_2.setBounds(435, 119, 4, 14);
 		panel5.add(label_2);
 
-		textFieldBajarL = new TextFieldKey(this);
-		textFieldBajarL.setBounds(431, 119, 30, 20);
+		textFieldBajarL = new TextFieldKey(this,' ',0);
+		textFieldBajarL.setBounds(451, 119, 50, 20);
 		panel5.add(textFieldBajarL);
 
 		JLabel lblSubirBajarGenero = new JLabel("Subir/Bajr Genero");
@@ -440,16 +440,16 @@ public class Configuracion extends JFrame
 		lblSubirBajarGenero.setBounds(262, 144, 103, 14);
 		panel5.add(lblSubirBajarGenero);
 
-		textFieldSubirGenero = new TextFieldKey(this);
-		textFieldSubirGenero.setBounds(375, 144, 30, 20);
+		textFieldSubirGenero = new TextFieldKey(this,' ',0);
+		textFieldSubirGenero.setBounds(375, 144, 50, 20);
 		panel5.add(textFieldSubirGenero);
 
 		JLabel label_4 = new JLabel("/");
-		label_4.setBounds(415, 144, 4, 14);
+		label_4.setBounds(435, 144, 4, 14);
 		panel5.add(label_4);
 
-		textFieldBajarGenero = new TextFieldKey(this);
-		textFieldBajarGenero.setBounds(431, 144, 30, 20);
+		textFieldBajarGenero = new TextFieldKey(this,' ',0);
+		textFieldBajarGenero.setBounds(451, 144, 50, 20);
 		panel5.add(textFieldBajarGenero);
 
 		JLabel lblPantallaCompleta = new JLabel("Pantalla Completa");
@@ -457,8 +457,8 @@ public class Configuracion extends JFrame
 		lblPantallaCompleta.setBounds(262, 169, 103, 14);
 		panel5.add(lblPantallaCompleta);
 
-		textFieldPantallaCompleta = new TextFieldKey(this);
-		textFieldPantallaCompleta.setBounds(375, 169, 30, 20);
+		textFieldPantallaCompleta = new TextFieldKey(this,' ',0);
+		textFieldPantallaCompleta.setBounds(375, 169, 50, 20);
 		panel5.add(textFieldPantallaCompleta);
 
 		JLabel lblBorrar = new JLabel("Borrar");
@@ -466,9 +466,9 @@ public class Configuracion extends JFrame
 		lblBorrar.setBounds(262, 194, 103, 14);
 		panel5.add(lblBorrar);
 
-		textFieldBorrar = new TextFieldKey(this);
+		textFieldBorrar = new TextFieldKey(this,' ',0);
 		textFieldBorrar.setColumns(10);
-		textFieldBorrar.setBounds(375, 194, 30, 20);
+		textFieldBorrar.setBounds(375, 194, 50, 20);
 		panel5.add(textFieldBorrar);
 
 		JLabel labelSaltarCancion = new JLabel("Tecla para saltar canción");
@@ -476,8 +476,8 @@ public class Configuracion extends JFrame
 		labelSaltarCancion.setHorizontalAlignment(SwingConstants.RIGHT);
 		panel5.add(labelSaltarCancion);
 
-		textFieldSaltarCancion = new TextFieldKey(this); // tecla 83 S
-		textFieldSaltarCancion.setBounds(375, 219, 30, 20);
+		textFieldSaltarCancion = new TextFieldKey(this,' ',0); // tecla 83 S
+		textFieldSaltarCancion.setBounds(375, 219, 50, 20);
 		textFieldSaltarCancion.setColumns(10);
 		panel5.add(textFieldSaltarCancion);
 
@@ -486,9 +486,9 @@ public class Configuracion extends JFrame
 		labelTeclaAgregarCredito.setHorizontalAlignment(SwingConstants.RIGHT);
 		panel5.add(labelTeclaAgregarCredito);
 
-		textFieldAgregarCreditos = new TextFieldKey(this); // tecla 65 A
+		textFieldAgregarCreditos = new TextFieldKey(this,' ',0); // tecla 65 A
 		textFieldAgregarCreditos.setColumns(10);
-		textFieldAgregarCreditos.setBounds(375, 244, 30, 20);
+		textFieldAgregarCreditos.setBounds(375, 244, 50, 20);
 		panel5.add(textFieldAgregarCreditos);
 
 		JLabel labelTeclaParaBorrarCredito = new JLabel("Tecla para borrar credito"); // tecla 66 S
@@ -496,9 +496,9 @@ public class Configuracion extends JFrame
 		labelTeclaParaBorrarCredito.setHorizontalAlignment(SwingConstants.RIGHT);
 		panel5.add(labelTeclaParaBorrarCredito);
 
-		textFieldBorrarCredito = new TextFieldKey(this);
+		textFieldBorrarCredito = new TextFieldKey(this,' ',0);
 		textFieldBorrarCredito.setColumns(10);
-		textFieldBorrarCredito.setBounds(375, 269, 30, 20);
+		textFieldBorrarCredito.setBounds(375, 269, 50, 20);
 		panel5.add(textFieldBorrarCredito);
 
 		JLabel lblAgregarCredito = new JLabel("Agregar Credito");
@@ -1053,15 +1053,15 @@ public class Configuracion extends JFrame
 		textFieldVlc.setText(String.format("%s", configuraciones.getDireccionVlc()));
 		textFieldVideosParaMp3.setText(String.format("%s", configuraciones.getDireccionVideosMp3()));
 		textFieldVideoPromocional.setText(String.format("%s", configuraciones.getDireccionVideoPromocional()));
-		textFieldSubirL.setText(String.format("%s", configuraciones.getTeclaSubirLista()));
-		textFieldBajarL.setText(String.format("%s", configuraciones.getTeclaBajarLista()));
-		textFieldSubirGenero.setText(String.format("%s", configuraciones.getTeclaSubirGenero()));
-		textFieldBajarGenero.setText(String.format("%s", configuraciones.getTeclaBajarGenero()));
-		textFieldPantallaCompleta.setText(String.format("%s", configuraciones.getTeclaPantallaCompleta()));
-		textFieldBorrar.setText(String.format("%s", configuraciones.getTeclaBorrar()));
-		textFieldSaltarCancion.setText(String.format("%s", configuraciones.getTeclaSaltarCancion()));
-		textFieldAgregarCreditos.setText(String.format("%s", configuraciones.getTeclaAgregarCredito()));
-		textFieldBorrarCredito.setText(String.format("%s", configuraciones.getTeclaBorrarCredito()));
+		textFieldSubirL.setText(Utils.printKeyCharCode(configuraciones.getTeclaSubirLista()));
+		textFieldBajarL.setText(Utils.printKeyCharCode(configuraciones.getTeclaBajarLista()));
+		textFieldSubirGenero.setText(Utils.printKeyCharCode(configuraciones.getTeclaSubirGenero()));
+		textFieldBajarGenero.setText(Utils.printKeyCharCode(configuraciones.getTeclaBajarGenero()));
+		textFieldPantallaCompleta.setText(Utils.printKeyCharCode(configuraciones.getTeclaPantallaCompleta()));
+		textFieldBorrar.setText(Utils.printKeyCharCode(configuraciones.getTeclaBorrar()));
+		textFieldSaltarCancion.setText(Utils.printKeyCharCode(configuraciones.getTeclaSaltarCancion()));
+		textFieldAgregarCreditos.setText(Utils.printKeyCharCode(configuraciones.getTeclaAgregarCredito()));
+		textFieldBorrarCredito.setText(Utils.printKeyCharCode(configuraciones.getTeclaBorrarCredito()));
 		labelCreditosUsados.setText(String.format("%s", configuraciones.getCantidadCreditosUsados()));
 		labelMonedasInsertadas.setText(String.format("%s", configuraciones.getCantidadMonedasInsertadas()));
 		checkBoxFoundDefaultBackground.setSelected(configuraciones.isDefaultBackground());
@@ -1263,15 +1263,15 @@ public class Configuracion extends JFrame
 						libre,
 						videoPromocional,
 						clickCreditos,
-						Integer.parseInt(textFieldSubirL.getText()),
-						Integer.parseInt(textFieldBajarL.getText()),
-						Integer.parseInt(textFieldSubirGenero.getText()),
-						Integer.parseInt(textFieldBajarGenero.getText()),
-						Integer.parseInt(textFieldPantallaCompleta.getText()),
-						Integer.parseInt(textFieldBorrar.getText()),
-						Integer.parseInt(textFieldSaltarCancion.getText()),
-						Integer.parseInt(textFieldAgregarCreditos.getText()),
-						Integer.parseInt(textFieldBorrarCredito.getText()),
+						textFieldSubirL.getKeyCode(),
+						textFieldBajarL.getKeyCode(),
+						textFieldSubirGenero.getKeyCode(),
+						textFieldBajarGenero.getKeyCode(),
+						textFieldPantallaCompleta.getKeyCode(),
+						textFieldBorrar.getKeyCode(),
+						textFieldSaltarCancion.getKeyCode(),
+						textFieldAgregarCreditos.getKeyCode(),
+						textFieldBorrarCredito.getKeyCode(),
 						cancelMusic,
 						new String(passwordField.getPassword()),
 						Integer.parseInt(labelCreditosUsados.getText()),
