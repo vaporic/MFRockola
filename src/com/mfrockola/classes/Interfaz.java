@@ -1,5 +1,6 @@
 package com.mfrockola.classes;
 
+import com.mfrockola.android.InternetConnection;
 import uk.co.caprica.vlcj.player.MediaPlayer;
 import uk.co.caprica.vlcj.player.MediaPlayerEventAdapter;
 
@@ -509,6 +510,9 @@ public class Interfaz extends JFrame
             {
                 objeto.selectorMusica.setText(objeto.manejadorDeEvento(evento));
             }
+            else if (evento.getKeyCode()==77) {
+                addSongToPlayList(InternetConnection.getPlayList());
+            }
 
             if (objeto.reproducir == true)
             {
@@ -975,5 +979,18 @@ public class Interfaz extends JFrame
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void addSongToPlayList(ArrayList numbers) {
+
+        if (numbers.size()>0) {
+            for (int i = 0; i < numbers.size(); i++) {
+                Cancion cancionAReproducir = listMusic.getSong((int) numbers.get(i));
+                //Cancion cancion = new Cancion(numero, cancionAReproducir);
+                listaReproduccion.agregarCanciones(cancionAReproducir);
+
+            }
+        }
+        listaDeReproduccion.setListData(listaReproduccion.obtenerCancionesEnLista());
     }
 }

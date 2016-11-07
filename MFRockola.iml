@@ -17,17 +17,5 @@
         <jarDirectory url="file://$MODULE_DIR$/src/lib" recursive="false" />
       </library>
     </orderEntry>
-    <orderEntry type="module-library" exported="">
-      <library>
-        <CLASSES>
-          <root url="jar://$USER_HOME$/Nelselys/sqlite-jdbc-3.8.11.2.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES>
-          <root url="jar://$USER_HOME$/Nelselys/sqlite-jdbc-3.8.11.2.jar!/" />
-        </SOURCES>
-      </library>
-    </orderEntry>
-    <orderEntry type="library" exported="" name="sqlite-jdbc-3.8.11.2" level="project" />
   </component>
 </module>

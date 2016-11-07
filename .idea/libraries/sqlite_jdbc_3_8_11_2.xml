@@ -2,10 +2,12 @@
   <library name="sqlite-jdbc-3.8.11.2">
     <CLASSES>
       <root url="jar://$USER_HOME$/Programacion/sqlite-jdbc-3.8.11.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/src/lib/java-json.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>
       <root url="jar://$USER_HOME$/Programacion/sqlite-jdbc-3.8.11.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/src/lib/java-json.jar!/" />
     </SOURCES>
   </library>
 </component>
