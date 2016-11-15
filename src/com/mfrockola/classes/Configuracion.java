@@ -12,9 +12,11 @@ import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import static com.mfrockola.classes.Utils.SELECT_VIDEO;
+
 @SuppressWarnings("serial")
-public class Configuracion extends JFrame
-{
+public class Configuracion extends JFrame {
+
 	private ObjectOutputStream salida;
 	private OperacionesRegConfig registroDatos = new OperacionesRegConfig();
 	private RegConfig configuraciones;
@@ -233,7 +235,7 @@ public class Configuracion extends JFrame
 		final JButton buttonPathPromotionalVideo = new JButton("...");
 		buttonPathPromotionalVideo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				textFieldVideoPromocional.setText(seleccionarArchivo());
+				textFieldVideoPromocional.setText(seleccionarArchivo(SELECT_VIDEO));
 			}
 		});
 		buttonPathPromotionalVideo.setBounds(551, 245, 45, 23);
@@ -447,7 +449,7 @@ public class Configuracion extends JFrame
 		lblSubirbajrLista.setBounds(262, 119, 103, 14);
 		panel5.add(lblSubirbajrLista);
 
-		textFieldSubirL = new TextFieldKey(this,' ',configuraciones.getTeclaSubirLista());
+		textFieldSubirL = new TextFieldKey(this,configuraciones.getTeclaSubirLista());
 		textFieldSubirL.setBounds(375, 119, 50, 20);
 		panel5.add(textFieldSubirL);
 
@@ -455,7 +457,7 @@ public class Configuracion extends JFrame
 		label_2.setBounds(435, 119, 4, 14);
 		panel5.add(label_2);
 
-		textFieldBajarL = new TextFieldKey(this,' ',configuraciones.getTeclaBajarLista());
+		textFieldBajarL = new TextFieldKey(this,configuraciones.getTeclaBajarLista());
 		textFieldBajarL.setBounds(451, 119, 50, 20);
 		panel5.add(textFieldBajarL);
 
@@ -464,7 +466,7 @@ public class Configuracion extends JFrame
 		lblSubirBajarGenero.setBounds(262, 144, 103, 14);
 		panel5.add(lblSubirBajarGenero);
 
-		textFieldSubirGenero = new TextFieldKey(this,' ',configuraciones.getTeclaSubirGenero());
+		textFieldSubirGenero = new TextFieldKey(this,configuraciones.getTeclaSubirGenero());
 		textFieldSubirGenero.setBounds(375, 144, 50, 20);
 		panel5.add(textFieldSubirGenero);
 
@@ -472,7 +474,7 @@ public class Configuracion extends JFrame
 		label_4.setBounds(435, 144, 4, 14);
 		panel5.add(label_4);
 
-		textFieldBajarGenero = new TextFieldKey(this,' ',configuraciones.getTeclaBajarGenero());
+		textFieldBajarGenero = new TextFieldKey(this,configuraciones.getTeclaBajarGenero());
 		textFieldBajarGenero.setBounds(451, 144, 50, 20);
 		panel5.add(textFieldBajarGenero);
 
@@ -481,7 +483,7 @@ public class Configuracion extends JFrame
 		lblPantallaCompleta.setBounds(262, 169, 103, 14);
 		panel5.add(lblPantallaCompleta);
 
-		textFieldPantallaCompleta = new TextFieldKey(this,' ',configuraciones.getTeclaPantallaCompleta());
+		textFieldPantallaCompleta = new TextFieldKey(this,configuraciones.getTeclaPantallaCompleta());
 		textFieldPantallaCompleta.setBounds(375, 169, 50, 20);
 		panel5.add(textFieldPantallaCompleta);
 
@@ -490,7 +492,7 @@ public class Configuracion extends JFrame
 		lblBorrar.setBounds(262, 194, 103, 14);
 		panel5.add(lblBorrar);
 
-		textFieldBorrar = new TextFieldKey(this,' ',configuraciones.getTeclaBorrar());
+		textFieldBorrar = new TextFieldKey(this,configuraciones.getTeclaBorrar());
 		textFieldBorrar.setColumns(10);
 		textFieldBorrar.setBounds(375, 194, 50, 20);
 		panel5.add(textFieldBorrar);
@@ -500,7 +502,7 @@ public class Configuracion extends JFrame
 		labelSaltarCancion.setHorizontalAlignment(SwingConstants.RIGHT);
 		panel5.add(labelSaltarCancion);
 
-		textFieldSaltarCancion = new TextFieldKey(this,' ',configuraciones.getTeclaSaltarCancion()); // tecla 83 S
+		textFieldSaltarCancion = new TextFieldKey(this,configuraciones.getTeclaSaltarCancion()); // tecla 83 S
 		textFieldSaltarCancion.setBounds(375, 219, 50, 20);
 		textFieldSaltarCancion.setColumns(10);
 		panel5.add(textFieldSaltarCancion);
@@ -510,7 +512,7 @@ public class Configuracion extends JFrame
 		labelTeclaAgregarCredito.setHorizontalAlignment(SwingConstants.RIGHT);
 		panel5.add(labelTeclaAgregarCredito);
 
-		textFieldAgregarCreditos = new TextFieldKey(this,' ',configuraciones.getTeclaAgregarCredito()); // tecla 65 A
+		textFieldAgregarCreditos = new TextFieldKey(this,configuraciones.getTeclaAgregarCredito()); // tecla 65 A
 		textFieldAgregarCreditos.setColumns(10);
 		textFieldAgregarCreditos.setBounds(375, 244, 50, 20);
 		panel5.add(textFieldAgregarCreditos);
@@ -520,7 +522,7 @@ public class Configuracion extends JFrame
 		labelTeclaParaBorrarCredito.setHorizontalAlignment(SwingConstants.RIGHT);
 		panel5.add(labelTeclaParaBorrarCredito);
 
-		textFieldBorrarCredito = new TextFieldKey(this,' ',configuraciones.getTeclaBorrarCredito());
+		textFieldBorrarCredito = new TextFieldKey(this,configuraciones.getTeclaBorrarCredito());
 		textFieldBorrarCredito.setColumns(10);
 		textFieldBorrarCredito.setBounds(375, 269, 50, 20);
 		panel5.add(textFieldBorrarCredito);
@@ -620,7 +622,7 @@ public class Configuracion extends JFrame
 		buttonPathFunds.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e)
 			{
-				textFieldDirFondos.setText(seleccionarArchivo());
+				textFieldDirFondos.setText(seleccionarArchivo(Utils.SELECT_IMAGE));
 			}
 		});
 		buttonPathFunds.setBounds(532, 138, 30, 23);
@@ -1338,14 +1340,17 @@ public class Configuracion extends JFrame
 		return directorio;
 	}
 
-	public String seleccionarArchivo ()
+	public String seleccionarArchivo (int type)
 	{
 
 		String directorio = null;
-		FileNameExtensionFilter filtro = new FileNameExtensionFilter("Imagen JPEG", "jpg");
 
 		selectorArchivos.setFileSelectionMode(JFileChooser.FILES_ONLY);
-		selectorArchivos.setFileFilter(filtro);
+
+		if (type == Utils.SELECT_IMAGE) {
+			FileNameExtensionFilter filtro = new FileNameExtensionFilter("Imagen JPEG", "jpg");
+			selectorArchivos.setFileFilter(filtro);
+		}
 
 		selectorArchivos.setDialogTitle("Seleccione el Archivo");
 

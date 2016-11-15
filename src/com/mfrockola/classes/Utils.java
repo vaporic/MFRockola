@@ -7,6 +7,9 @@ import java.util.Random;
  */
 public class Utils {
 
+    public static final int SELECT_VIDEO = 0;
+    public static final int SELECT_IMAGE = 1;
+
     public static int EXT_MP4 = 0;
     public static int EXT_MP3 = 1;
     public static int EXT_AVI = 2;
@@ -57,9 +60,9 @@ public class Utils {
         return EXT_MP4;
     }
 
-    public static String printKeyCharCode(int keyCode) {
-        switch (keyCode) {
-            case 0:
+    public static String printKeyCharCode(int extendedKeyCode) {
+        switch (extendedKeyCode) {
+            case 16777425:
                 return "Ñ";
             case 8:
                 return "BORRAR";
@@ -190,7 +193,7 @@ public class Utils {
             case 524:
                 return "WIN";
             default:
-                return String.format("%s", keyCode);
+                return String.format("%s", extendedKeyCode);
         }
     }
 }

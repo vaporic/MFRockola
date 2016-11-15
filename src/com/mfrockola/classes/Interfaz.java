@@ -510,9 +510,9 @@ public class Interfaz extends JFrame
             {
                 objeto.selectorMusica.setText(objeto.manejadorDeEvento(evento));
             }
-            else if (evento.getKeyCode()==77) {
-                addSongToPlayList(InternetConnection.getPlayList());
-            }
+//            else if (evento.getKeyCode()==77) {
+//                addSongToPlayList(InternetConnection.getPlayList());
+//            }
 
             if (objeto.reproducir == true)
             {
@@ -569,12 +569,13 @@ public class Interfaz extends JFrame
                             objeto.reiniciarValores();
                             objeto.selectorMusica.setText("- - - -");
                             prohibir.agregarProhibido(numero);
-                            labelMusica.setText(String.format("%04d - %s - %s",listaReproduccion.obtenerNumero(),
+                            labelMusica.setText(String.format("%04d - %s - %s - %s",listaReproduccion.obtenerNumero(),
+                                    listaReproduccion.obtenerGenero(),
                                     listaReproduccion.obtenerArtista(),
                                     listaReproduccion.obtenerCancionAReproducir()));
-                            labelCancionEnRepro.setText(String.format("%04d - %s - %s",
-                                    listaReproduccion.obtenerNumero(), listaReproduccion.obtenerArtista(),
-                                    listaReproduccion.obtenerCancionAReproducir()));
+                            labelCancionEnRepro.setText(String.format("%04d - %s - %s - %s",
+                                    listaReproduccion.obtenerNumero(),listaReproduccion.obtenerGenero(),
+                                    listaReproduccion.obtenerArtista(), listaReproduccion.obtenerCancionAReproducir()));
                             if (creditos == 0 && !creditosLibres) {
                                 timerFullScreen.restart();
                             }
@@ -862,13 +863,15 @@ public class Interfaz extends JFrame
                             configuraciones.getDireccionVideosMp3() + "\\" + listMusic.getPromVideo());
                 }
 
-                labelMusica.setText(String.format("%04d - %s - %s",
+                labelMusica.setText(String.format("%04d - %s - %s - %s",
                         listaReproduccion.obtenerNumero(),
+                        listaReproduccion.obtenerGenero(),
                         listaReproduccion.obtenerArtista(),
                         listaReproduccion.obtenerCancionAReproducir()));
 
-                labelCancionEnRepro.setText(String.format("%04d - %s - %s",
+                labelCancionEnRepro.setText(String.format("%04d - %s - %s - %s",
                         listaReproduccion.obtenerNumero(),
+                        listaReproduccion.obtenerGenero(),
                         listaReproduccion.obtenerArtista(),
                         listaReproduccion.obtenerCancionAReproducir()));
             }

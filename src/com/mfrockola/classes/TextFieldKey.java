@@ -13,13 +13,13 @@ import java.awt.event.MouseEvent;
  */
 public class TextFieldKey extends JTextField {
 
+    public static final String LOG_TAG = TextFieldKey.class.getSimpleName();
+
     private Frame frame;
-    private char keyChar;
-    private int keyCode;
+    private int extendedKeyCode;
 
-    public TextFieldKey(Frame parentDialog, char keyChar, int keyCode) {
+    public TextFieldKey(Frame parentDialog, int keyCode) {
 
-        setKeyChar(keyChar);
         setKeyCode(keyCode);
         frame = parentDialog;
         setHorizontalAlignment(SwingConstants.CENTER);
@@ -31,34 +31,27 @@ public class TextFieldKey extends JTextField {
                 PressKeyDialog dialog = new PressKeyDialog(frame,true);
                 dialog.setVisible(true);
                 dialog.pack();
-                if (dialog.keyCodeDialog!=0)
+                if (dialog.keyCodeDialog!=0) {
                     setKeyCode(dialog.keyCodeDialog);
+                    System.out.println(LOG_TAG + ": "+ String.valueOf(getKeyCode()));
                     setText(Utils.printKeyCharCode(dialog.keyCodeDialog));
+                }
             }
         });
 
     }
 
     public int getKeyCode() {
-        return keyCode;
+        return extendedKeyCode;
     }
 
     public void setKeyCode(int keyCode) {
-        this.keyCode = keyCode;
-    }
-
-    public char getKeyChar() {
-        return keyChar;
-    }
-
-    public void setKeyChar(char keyChar) {
-        this.keyChar = keyChar;
+        this.extendedKeyCode = keyCode;
     }
 
     private class PressKeyDialog extends JDialog {
 
         private JLabel label;
-        public char keyCharDialog;
         public int keyCodeDialog;
 
         public PressKeyDialog (Frame parent, boolean modal) {
@@ -72,8 +65,7 @@ public class TextFieldKey extends JTextField {
             addKeyListener(new KeyAdapter() {
                 @Override
                 public void keyPressed(KeyEvent e) {
-                    keyCharDialog = e.getKeyChar();
-                    keyCodeDialog = e.getKeyCode();
+                    keyCodeDialog = e.getExtendedKeyCode();
                     dispose();
                 }
             });

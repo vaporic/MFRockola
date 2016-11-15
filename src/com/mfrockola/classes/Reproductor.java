@@ -20,7 +20,6 @@ public class Reproductor {
     EmbeddedMediaPlayer embeddedMediaPlayer;
     EmbeddedMediaPlayer embeddedMediaPlayerMp3;
     private Canvas canvas;
-    private Canvas canvasMp3;
     private JPanel mediaPlayerContainer;
 
     OperacionesRegConfig registroDatos = new OperacionesRegConfig();
