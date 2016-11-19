@@ -22,9 +22,9 @@ public class SelectMusica
 	private int keyUpGender;
 	private int keyDownGender;
 	
-	public SelectMusica (int keyDelete, int keyUpList, int keyDownList, int keyUpGender, int keyDownGender)
+	public SelectMusica (int keyDelete, int keyUpList, int keyDownList, int keyUpGender, int keyDownGender, int sizeSelector)
 	{
-		selectorMusica.setFont(new Font("Consolas", Font.BOLD, 50));
+		selectorMusica.setFont(new Font("Consolas", Font.BOLD, sizeSelector));
 		selectorMusica.setOpaque(false);
 		selectorMusica.setForeground(Color.WHITE);
 		selectorMusica.setHorizontalAlignment(SwingUtilities.CENTER);

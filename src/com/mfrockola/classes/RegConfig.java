@@ -39,6 +39,7 @@ public class RegConfig implements Serializable
 	private Color color2;
 	private String fontCeldasName;
 	private int fontCeldasSize;
+	private int fontSelectorSize;
 	private Color fontCeldasColor;
 	private int fontCeldasNegrita;
 
@@ -61,7 +62,7 @@ public class RegConfig implements Serializable
 			int teclaSubirGenero, int teclaBajarGenero, int teclaPantallaCompleta, int teclaBorrar,
 			int teclaSaltarCancion, int teclaAgregarCredito, int teclaBorrarCredito,
 			boolean cancelMusic,String password, int cantidadCreditosUsados, int CantidadMonedasInsertadas, boolean defaultBackground,
-			URL direccionFondo, Color color1, Color color2, String fontCeldasName, int fontCeldasSize,
+			URL direccionFondo, Color color1, Color color2, String fontCeldasName, int fontCeldasSize, int fontSelectorSize,
 			Color fontCeldasColor, int fontCeldasNegrita, boolean agregarAdicional, int numeroDeCreditosAdicionales,
 			int cadaCantidadDeCreditos, boolean creditosContinuos, boolean entregarPremio, int cantidadDePremios,
 			int cantidadDeCreditosPorPremio, String tipoDePremio, int creditosGuardados)
@@ -95,6 +96,7 @@ public class RegConfig implements Serializable
 		setColor2(color2);
 		setFontCeldasName(fontCeldasName);
 		setFontCeldasSize(fontCeldasSize);
+		setFontSelectorSize(fontSelectorSize);
 		setFontCeldasColor(fontCeldasColor);
 		setFontCeldasNegrita(fontCeldasNegrita);
 		setAgregarAdicional(agregarAdicional);
@@ -428,5 +430,13 @@ public class RegConfig implements Serializable
 
 	public void setCreditosGuardados(int creditosGuardados) {
 		this.creditosGuardados = creditosGuardados;
+	}
+
+	public int getFontSelectorSize() {
+		return fontSelectorSize;
+	}
+
+	public void setFontSelectorSize(int fontSelectorSize) {
+		this.fontSelectorSize = fontSelectorSize;
 	}
 }

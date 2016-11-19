@@ -78,11 +78,13 @@ public class Configuracion extends JFrame {
 	private JLabel labelColor1; // label de color de celda 1
 	private JLabel labelColor2; // label de color de celda 2
 	private JLabel labelFuente; // label de resultado del tipo de fuente seleccionada
+	private JLabel labelSelector; // label del resultado del tamaño del seletor
 	private JButton botonColor1; // boton selector de color de celda 1
 	private JButton botonColor2; // boton selector de color de celda 2
 	private JButton botonColorDeFuente; // boton selector del color de la fuente
 	private JComboBox<String> comboBoxSelectorDeFuente; // comboBox de fuentes disponibles
-	private JComboBox<String> comboBoxTamanioDeFuente; // comboBox de mataño de fuente de celdas
+	private JComboBox<String> comboBoxTamanioDeFuente; // comboBox de tamaño de fuente de celdas
+	private JComboBox<String> comboBoxTamanioDeFuenteSelector; // comboBox de tamaño de fuente de selector de musicas
 	private JCheckBox checkBoxFuenteCeldasNegrita; // checkbox para la fuente de las celdas negritsa
 
 	public Configuracion()
@@ -328,6 +330,34 @@ public class Configuracion extends JFrame {
 		txtpnEnEstePanel.setFocusable(false);
 		txtpnEnEstePanel.setBounds(220, 50, 367, 48);
 		panel3.add(txtpnEnEstePanel);
+
+		Border border = BorderFactory.createLineBorder(Color.BLACK);
+
+		JLabel labelTamanioDeLetraSelector = new JLabel("Tamaño del Selector de musicas");
+		labelTamanioDeLetraSelector.setBounds(291,171,200,14);
+		labelTamanioDeLetraSelector.setHorizontalAlignment(SwingConstants.RIGHT);
+		panel3.add(labelTamanioDeLetraSelector);
+
+		String [] tamanios = {"8","9","10","11","12","13","14","16","18","20","24","28","36","48","50","55","60","65","70","72"};
+
+		comboBoxTamanioDeFuenteSelector = new JComboBox(tamanios);
+		comboBoxTamanioDeFuenteSelector.setBounds(498,166,43,23);
+		panel3.add(comboBoxTamanioDeFuenteSelector);
+
+		comboBoxTamanioDeFuenteSelector.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				actualizarResultadoDeFuenteSelector();
+			}
+		});
+
+		labelSelector = new JLabel("- - 2 8");
+		labelSelector.setHorizontalAlignment(JLabel.CENTER);
+		labelSelector.setBorder(border);
+		labelSelector.setBounds(220,195,321,106);
+		labelSelector.setOpaque(true);
+		panel3.add(labelSelector);
+
 		JPanel panel4 = new JPanel();
 		panel4.setBackground(Color.WHITE);
 		fichas.addTab("Carpetas",null,panel4, "Configuración de las carpetas y directorios de músicas y videos");
@@ -678,8 +708,6 @@ public class Configuracion extends JFrame {
 		labelCelda2.setBounds(190, 20, 99, 14);
 		panelCeldas.add(labelCelda2);
 
-		Border border = BorderFactory.createLineBorder(Color.BLACK);
-
 		labelColor1 = new JLabel("");
 		labelColor1.setOpaque(true);
 		labelColor1.setBorder(border);
@@ -732,8 +760,6 @@ public class Configuracion extends JFrame {
 				actualizarResultadoDeFuente();
 			}
 		});
-
-		String [] tamanios = {"8","9","10","11","12","13","14","16","18","20","24","28","36","48","72"};
 
 		comboBoxTamanioDeFuente = new JComboBox(tamanios);
 		comboBoxTamanioDeFuente.setBounds(341,50,43,23);
@@ -793,17 +819,6 @@ public class Configuracion extends JFrame {
 				}
 			}
 		});
-
-		JLabel labelTamanioDeLetraSelector = new JLabel("Selector");
-		labelTamanioDeLetraSelector.setBounds(10,136,91,14);
-		panelCeldas.add(labelTamanioDeLetraSelector);
-
-		JLabel labelSelector = new JLabel("- - 2 8");
-		labelSelector.setHorizontalAlignment(JLabel.CENTER);
-		labelSelector.setBorder(border);
-		labelSelector.setBounds(120,131,264,46);
-		labelSelector.setOpaque(true);
-		panelCeldas.add(labelSelector);
 
 		JPanel panel7 = new JPanel();
 		panel7.setBackground(Color.WHITE);
@@ -1113,9 +1128,13 @@ public class Configuracion extends JFrame {
 		labelFuente.setBackground(configuraciones.getColor1());
 		labelFuente.setForeground(configuraciones.getFontCeldasColor());
 
+		labelSelector.setFont(new Font("Console",Font.BOLD,configuraciones.getFontSelectorSize()));
+
 		comboBoxSelectorDeFuente.setSelectedItem(configuraciones.getFontCeldasName());
 
 		comboBoxTamanioDeFuente.setSelectedItem(String.valueOf(configuraciones.getFontCeldasSize()));
+
+		comboBoxTamanioDeFuenteSelector.setSelectedItem(String.valueOf(configuraciones.getFontSelectorSize()));
 
 		colorDeFuente = configuraciones.getFontCeldasColor();
 
@@ -1184,6 +1203,12 @@ public class Configuracion extends JFrame {
 		}
 	}
 
+	private void actualizarResultadoDeFuenteSelector() {
+			typeFont = Font.BOLD;
+			labelSelector.setFont(new Font("Consolas",typeFont,
+					Integer.parseInt(comboBoxTamanioDeFuenteSelector.getSelectedItem().toString())));
+	}
+
 	public void abrirRegConfigEscritura()
 	{
 		try
@@ -1247,6 +1272,7 @@ public class Configuracion extends JFrame {
 						new Color(255,255,255), // color 2 of list
 						"Consolas", // tipo de fuente
 						20, // tamaño de fuente
+						50, // tamaño fuente selector
 						Color.BLACK, // color de fuente
 						Font.BOLD, // Fuente negrita
 						false, // is agregarAdicional?
@@ -1305,6 +1331,7 @@ public class Configuracion extends JFrame {
 						color2,
 						comboBoxSelectorDeFuente.getSelectedItem().toString(),
 						Integer.parseInt(comboBoxTamanioDeFuente.getSelectedItem().toString()),
+						Integer.parseInt(comboBoxTamanioDeFuenteSelector.getSelectedItem().toString()),
 						colorDeFuente,
 						typeFont,
 						checkBoxCreditosAdicionales.isSelected(),

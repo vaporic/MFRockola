@@ -91,7 +91,8 @@ public class Interfaz extends JFrame
             configuraciones = registroDatos.leerRegConfigLectura();
             prohibir = new MusicasProhibidas(configuraciones.getReinicioMusicas());
             objeto = new SelectMusica(configuraciones.getTeclaBorrar(), configuraciones.getTeclaSubirLista(),
-                    configuraciones.getTeclaBajarLista(), configuraciones.getTeclaSubirGenero(),configuraciones.getTeclaBajarGenero());
+                    configuraciones.getTeclaBajarLista(), configuraciones.getTeclaSubirGenero(),
+                    configuraciones.getTeclaBajarGenero(),configuraciones.getFontSelectorSize());
             monedasASubir = configuraciones.getCantidadMonedasInsertadas();
             creditosASubir = configuraciones.getCantidadCreditosUsados();
             cancelMusic = configuraciones.isCancelMusic();
@@ -926,6 +927,7 @@ public class Interfaz extends JFrame
                     this.configuraciones.getColor2(),
                     this.configuraciones.getFontCeldasName(),
                     this.configuraciones.getFontCeldasSize(),
+                    this.configuraciones.getFontSelectorSize(),
                     this.configuraciones.getFontCeldasColor(),
                     this.configuraciones.getFontCeldasNegrita(),
                     this.configuraciones.isAgregarAdicional(),
