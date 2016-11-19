@@ -665,7 +665,7 @@ public class Configuracion extends JFrame {
 
 		JPanel panelCeldas = new JPanel();
 		panelCeldas.setBorder(BorderFactory.createTitledBorder("Celdas de Musicas"));
-		panelCeldas.setBounds(230,177,393,133);
+		panelCeldas.setBounds(230,177,393,188);
 		panelCeldas.setBackground(Color.WHITE);
 		panelCeldas.setLayout(null);
 		panel6.add(panelCeldas);
@@ -793,6 +793,17 @@ public class Configuracion extends JFrame {
 				}
 			}
 		});
+
+		JLabel labelTamanioDeLetraSelector = new JLabel("Selector");
+		labelTamanioDeLetraSelector.setBounds(10,136,91,14);
+		panelCeldas.add(labelTamanioDeLetraSelector);
+
+		JLabel labelSelector = new JLabel("- - 2 8");
+		labelSelector.setHorizontalAlignment(JLabel.CENTER);
+		labelSelector.setBorder(border);
+		labelSelector.setBounds(120,131,264,46);
+		labelSelector.setOpaque(true);
+		panelCeldas.add(labelSelector);
 
 		JPanel panel7 = new JPanel();
 		panel7.setBackground(Color.WHITE);
@@ -1196,6 +1207,16 @@ public class Configuracion extends JFrame {
 
 				System.out.println(url);
 
+				// + 107
+				// - 109
+				// / 106
+				// * 111
+				// F 70
+				// C 67
+				// N 78
+				// A 65
+				// B 66
+
 				configuraciones = new RegConfig(
 						"C:\\videos", // path of videos
 						"C:\\MFRockola\\Videos para MP3",
@@ -1207,13 +1228,13 @@ public class Configuracion extends JFrame {
 						false, // is credit free?
 						false, // is promotional video?
 						0, // click credits 1 = rigth click
-						107, // key up list
-						109, // key down list
-						106, // key up gender
-						111, // key down gender
-						10, // key fullscreen
-						8, // key delete number selector
-						83, // key end song
+						111, // key up list
+						106, // key down list
+						109, // key up gender
+						107, // key down gender
+						70, // key fullscreen
+						67, // key delete number selector
+						78, // key end song
 						65, // key add credit
 						66, // key delete credit
 						false, // cancel music
