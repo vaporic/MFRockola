@@ -695,7 +695,7 @@ public class Configuracion extends JFrame {
 
 		JPanel panelCeldas = new JPanel();
 		panelCeldas.setBorder(BorderFactory.createTitledBorder("Celdas de Musicas"));
-		panelCeldas.setBounds(230,177,393,188);
+		panelCeldas.setBounds(230,177,393,133);
 		panelCeldas.setBackground(Color.WHITE);
 		panelCeldas.setLayout(null);
 		panel6.add(panelCeldas);
