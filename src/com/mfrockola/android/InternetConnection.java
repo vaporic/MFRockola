@@ -22,7 +22,7 @@ import java.util.Map;
  * Esta clase permitirá realizar peticiones POST al servidor donde se almacenan algunos datos de
  * MFRockola.
  */
-public class InternetConnection {
+public class InternetConnection implements Runnable{
 
     public static void send() throws IOException {
         // Esta es la URL a la que enviareamos nuestras peticiones POST.
@@ -76,8 +76,12 @@ public class InternetConnection {
         }
     }
 
-    public static ArrayList getPlayList() {
+    // con este metodo llamamos a la lista de reproduccion en cola que hayan introducido los usuarios a la base de
+    // datos del servidor.
 
+    public ArrayList getPlayList() {
+
+        // creamos un ArrayList para manejar facilmente los elementos de la lista de musicas que vamos a obtener
         ArrayList arrayList = new ArrayList();
 
         try {
@@ -86,28 +90,34 @@ public class InternetConnection {
 
             final String API_KEY_USER = "7b449827785fccb2ba1cbb0aea226a88"; // esta es la api de usuario en la base de datos
 
+            // creamos nuestra conexion GET para realizar nuestra peticion
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
             connection.setRequestProperty("Content-Type","application/x-www-form-urlencoded");
             connection.setRequestProperty("authorization",API_KEY_USER);
             connection.connect();
 
+            // creamos un buffer y un reader para almacenar los paquetes enviados por el servidor
             Reader in = new BufferedReader(new InputStreamReader(
                     connection.getInputStream(),"UTF-8"
             ));
 
+            // creamos un StringBuilder para pasar nuestra respuesta en paquetes a un String
             StringBuilder responseStringBuilder = new StringBuilder();
 
             for (int c = in.read(); c != -1; c=in.read()) {
                 responseStringBuilder.append((char) c);
             }
 
+            // convertimos nuestro String anterior en un JSONObject
             JSONObject jsonObject = new JSONObject(responseStringBuilder.toString());
 
             System.out.println(jsonObject.toString());
 
+            // obtenemos del JSONObject el array "songs"
             JSONArray jsonArray = jsonObject.getJSONArray("songs");
 
+            // si tenemos canciones en espera, las guardamos en el array
             if (jsonArray.length()>0) {
                 for (int i = 0; i < jsonArray.length(); i++) {
                     arrayList.add(jsonArray.getJSONObject(i).getInt("song"));
@@ -121,7 +131,8 @@ public class InternetConnection {
         return arrayList;
     }
 
-    public static void main (String [] args) {
-            getPlayList();
+    @Override
+    public void run() {
+        getPlayList();
     }
 }

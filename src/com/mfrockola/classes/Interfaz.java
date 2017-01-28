@@ -511,9 +511,10 @@ public class Interfaz extends JFrame
             {
                 objeto.selectorMusica.setText(objeto.manejadorDeEvento(evento));
             }
-//            else if (evento.getKeyCode()==77) {
-//                addSongToPlayList(InternetConnection.getPlayList());
-//            }
+            else if (evento.getKeyCode()==77) {
+                Thread ic = new Thread(new InternetConnection());
+//                addSongToPlayList(ic.start());
+            }
 
             if (objeto.reproducir == true)
             {

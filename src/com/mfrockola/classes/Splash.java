@@ -16,13 +16,26 @@ import javax.swing.SwingConstants;
 import javax.swing.Timer;
 import javax.swing.UIManager;
 
+/*
+	This class will be used to execute MFRockola. Since the configuration must be external, a splash is made so that the
+	user can press a key that opens the configuration window. It also has additional controls that determine if some
+ 	MFRockola requirements are well configured
+*/
+
+
 @SuppressWarnings("serial")
-public class Splash extends JFrame implements Runnable
-{
+public class Splash extends JFrame implements Runnable {
+	// Determines whether the mouse can be moved or locked in the lower right corner of the screen
 	public static boolean moveMouse = true;
 
-	public Splash()
-	{
+	// constructor without attributes
+	public Splash() {
+        initComponents();
+	}
+
+	// Generate the splash window and init components
+	public void initComponents() {
+		// Will load JPanel external class that has the ability to have a background image
 		JEImagePanel panel = new JEImagePanel(
 				this.getClass().getResource("/com/mfrockola/imagenes/fondoSmall.jpg"));
 
@@ -41,29 +54,26 @@ public class Splash extends JFrame implements Runnable
 		this.setVisible(true);
 	}
 	
-	
-	public static void main(String args [])
-	{
-		try
-		{
-			JFrame.setDefaultLookAndFeelDecorated(true);
+	// Starts MFRockola
+    public static void main(String args [])	{
+		try {
+            // Change the look and feel of windows to the running environment that is Windows
+            JFrame.setDefaultLookAndFeelDecorated(true);
 			JDialog.setDefaultLookAndFeelDecorated(true);
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
-		new Thread(new Splash()).start();
+
+        // Execute an additional thread for the time we have to press Q and hold the mouse in the lower right corner
+        new Thread(new Splash()).start();
 	}
-	
-	public void run()
-	{
-		final Timer temporizador = new Timer(1000*2, new ActionListener()
-		{
-			public void actionPerformed(ActionEvent e) 
-			{
+
+    // thread for the time we have to press Q and hold the mouse in the lower right corner
+	public void run() {
+
+		final Timer temporizador = new Timer(1000*2, new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
 				File file = new File("config.mfr");
 				if (file.exists()) {
 					file = null;
@@ -81,19 +91,15 @@ public class Splash extends JFrame implements Runnable
 		temporizador.setRepeats(false);
 		temporizador.start();
 		
-		addKeyListener(new KeyAdapter() 
-		{
-			public void keyReleased(KeyEvent evento)
-			{
-				if (evento.getKeyCode()==81)
-				{
+		addKeyListener(new KeyAdapter()	{
+			public void keyReleased(KeyEvent evento) {
+				if (evento.getKeyCode()==81) {
 					temporizador.stop();
 					moveMouse = false;
 					new Configuracion();
 					dispose();
 				}
-				else
-				{
+				else {
 					evento.consume();
 				}
 			}
