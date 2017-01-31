@@ -6,12 +6,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.File;
-import java.net.URL;
 
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import javax.swing.Timer;
 import javax.swing.UIManager;
@@ -72,7 +70,7 @@ public class Splash extends JFrame implements Runnable {
     // thread for the time we have to press Q and hold the mouse in the lower right corner
 	public void run() {
 
-		final Timer temporizador = new Timer(1000*2, new ActionListener() {
+		final Timer timer = new Timer(1000*2, new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				File file = new File("config.mfr");
 				if (file.exists()) {
@@ -82,25 +80,27 @@ public class Splash extends JFrame implements Runnable {
 				} else {
 					file = null;
 					moveMouse = false;
-					new Configuracion();
+					new SettingsWindow();
 					dispose();
 				}
 			}
 		});
 		
-		temporizador.setRepeats(false);
-		temporizador.start();
-		
+		timer.setRepeats(false);
+		timer.start();
+
+		// These instructions listen to the keyboard events, in the event that the Q key is pressed,
+		// the configuration window opens and unlocks the movement of the mouse
 		addKeyListener(new KeyAdapter()	{
-			public void keyReleased(KeyEvent evento) {
-				if (evento.getKeyCode()==81) {
-					temporizador.stop();
+			public void keyReleased(KeyEvent e) {
+				if (e.getKeyCode()==81) {
+					timer.stop();
 					moveMouse = false;
-					new Configuracion();
+					new SettingsWindow();
 					dispose();
 				}
 				else {
-					evento.consume();
+					e.consume();
 				}
 			}
 		});

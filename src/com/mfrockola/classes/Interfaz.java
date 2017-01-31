@@ -1,7 +1,6 @@
 package com.mfrockola.classes;
 
 import com.mfrockola.android.InternetConnection;
-import uk.co.caprica.vlcj.player.MediaPlayer;
 import uk.co.caprica.vlcj.player.MediaPlayerEventAdapter;
 
 import javax.sound.sampled.AudioInputStream;
@@ -24,25 +23,25 @@ import static com.mfrockola.classes.Utils.*;
 public class Interfaz extends JFrame
 {
     private ObjectOutputStream salida;
-    OperacionesRegConfig registroDatos = new OperacionesRegConfig();
-    RegConfig configuraciones;
+    private UserSettingsManagement mUserSettingsManagement = new UserSettingsManagement();
+    private UserSettings mUserSettings;
 
     private int creditos;
     private int ancho;
     private int alto;
 
-    MusicasProhibidas prohibir; // Objeto de musicas que no se pueden repetir.
-    ListaDeReproduccion listaReproduccion = new ListaDeReproduccion(); // Objeto de las musicas en reproduccion.
+    private MusicasProhibidas prohibir; // Objeto de musicas que no se pueden repetir.
+    private ListaDeReproduccion listaReproduccion = new ListaDeReproduccion(); // Objeto de las musicas en reproduccion.
 
-    boolean isFullScreen = false; // Objeto que determina si se entra o no en pantalla completa.
+    private boolean isFullScreen = false; // Objeto que determina si se entra o no en pantalla completa.
 
-    JEImagePanel panelFondo;
-    JPanel contenedorPrincipal;
-    JPanel contenedorVideo;
-    JPanel panel;
-    JPanel panelInferior;
+    private JEImagePanel panelFondo;
+    private JPanel contenedorPrincipal;
+    private JPanel contenedorVideo;
+    private JPanel panel;
+    private JPanel panelInferior;
 
-    Dimension resolucion; // Objeto para determinar la resolucion de la pantalla
+    private Dimension resolucion; // Objeto para determinar la resolucion de la pantalla
 
     @SuppressWarnings("rawtypes")
     private JList listaDeMusicas; // JList para colocar el listado de los videos disponibles en el directorio.
@@ -51,16 +50,16 @@ public class Interfaz extends JFrame
 
     // JLabels
 
-    JLabel labelGeneroMusical;
-    JLabel labelMusica = new JLabel();
-    JLabel labelCancionEnRepro;
-    JLabel labelcreditos;
-    JLabel labelLogo;
-    JLabel labelPromociones;
+    private JLabel labelGeneroMusical;
+    private JLabel labelMusica = new JLabel();
+    private JLabel labelCancionEnRepro;
+    private JLabel labelcreditos;
+    private JLabel labelLogo;
+    private JLabel labelPromociones;
 
-    Reproductor repro;
+    private MediaPlayer repro;
 
-    SelectMusica objeto;
+    private SelectMusica objeto;
 
     private int monedasASubir;
     private int creditosASubir;
@@ -78,7 +77,7 @@ public class Interfaz extends JFrame
     private Timer timerFullScreen;
     private Timer timer;
 
-    ManejadorDeTeclas manejadorDeTeclas;
+    private ManejadorDeTeclas manejadorDeTeclas;
 
     private Clip sound;
 
@@ -87,23 +86,23 @@ public class Interfaz extends JFrame
     {
         try
         {
-            registroDatos.abrirRegConfigLectura();
-            configuraciones = registroDatos.leerRegConfigLectura();
-            prohibir = new MusicasProhibidas(configuraciones.getReinicioMusicas());
-            objeto = new SelectMusica(configuraciones.getTeclaBorrar(), configuraciones.getTeclaSubirLista(),
-                    configuraciones.getTeclaBajarLista(), configuraciones.getTeclaSubirGenero(),
-                    configuraciones.getTeclaBajarGenero(),configuraciones.getFontSelectorSize());
-            monedasASubir = configuraciones.getCantidadMonedasInsertadas();
-            creditosASubir = configuraciones.getCantidadCreditosUsados();
-            cancelMusic = configuraciones.isCancelMusic();
-            creditosLibres = configuraciones.isLibre();
-            agregarCreditoAdicional = configuraciones.isAgregarAdicional();
-            entregarPremio = configuraciones.isEntregarPremio();
+            mUserSettingsManagement.openUserSettings();
+            mUserSettings = mUserSettingsManagement.readUserSettings();
+            prohibir = new MusicasProhibidas(mUserSettings.getReinicioMusicas());
+            objeto = new SelectMusica(mUserSettings.getTeclaBorrar(), mUserSettings.getTeclaSubirLista(),
+                    mUserSettings.getTeclaBajarLista(), mUserSettings.getTeclaSubirGenero(),
+                    mUserSettings.getTeclaBajarGenero(),mUserSettings.getFontSelectorSize());
+            monedasASubir = mUserSettings.getCantidadMonedasInsertadas();
+            creditosASubir = mUserSettings.getCantidadCreditosUsados();
+            cancelMusic = mUserSettings.isCancelMusic();
+            creditosLibres = mUserSettings.isLibre();
+            agregarCreditoAdicional = mUserSettings.isAgregarAdicional();
+            entregarPremio = mUserSettings.isEntregarPremio();
         }
         catch (NullPointerException excepcion)
         {
             @SuppressWarnings("unused")
-            Configuracion configurar = new Configuracion();
+            SettingsWindow configurar = new SettingsWindow();
         }
 
         initComponents();
@@ -136,16 +135,13 @@ public class Interfaz extends JFrame
             }
         };
 
-        ActionListener pressKey = new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    Robot robot = new Robot();
-                    robot.keyPress(120);
-                    robot.keyRelease(120);
-                } catch (AWTException exception) {
-                    exception.printStackTrace();
-                }
+        ActionListener pressKey = e -> {
+            try {
+                Robot robot = new Robot();
+                robot.keyPress(120);
+                robot.keyRelease(120);
+            } catch (AWTException exception) {
+                exception.printStackTrace();
             }
         };
 
@@ -167,8 +163,8 @@ public class Interfaz extends JFrame
         repro.embeddedMediaPlayer.addMediaPlayerEventListener(manejadorDeReproductor);
         repro.embeddedMediaPlayerMp3.addMediaPlayerEventListener(manejadorDeReproductor);
 
-        if(configuraciones.isVideoPromocional()) {
-            repro.embeddedMediaPlayer.playMedia(configuraciones.getDireccionVideoPromocional());
+        if(mUserSettings.isVideoPromocional()) {
+            repro.embeddedMediaPlayer.playMedia(mUserSettings.getDireccionVideoPromocional());
             pantallaCompleta();
         }
 
@@ -181,9 +177,9 @@ public class Interfaz extends JFrame
 
                 // Cuando se presiona click izquierdo y las canciones no se pueden cancelar
 
-                if(configuraciones.getClickCreditos()==0 && e.isMetaDown() == false && !creditosLibres)
+                if(mUserSettings.getClickCreditos()==0 && !e.isMetaDown() && !creditosLibres)
                 {
-                    creditos = creditos + configuraciones.getCantidadCreditos();
+                    creditos = creditos + mUserSettings.getCantidadCreditos();
                     labelcreditos.setText(String.format("Creditos: %d", creditos));
                     agregarMonedasYCreditos();
                     labelcreditos.setForeground(Color.WHITE);
@@ -195,7 +191,7 @@ public class Interfaz extends JFrame
 
                     // Click derecho y las canciones se pueden eliminar
 
-                } else if (cancelMusic && e.isMetaDown() == true && listaReproduccion.obtenerCancionAReproducir()!=null) {
+                } else if (cancelMusic && e.isMetaDown() && listaReproduccion.obtenerCancionAReproducir()!=null) {
 
                     if (isFullScreen) {
                         pantallaCompleta();
@@ -218,7 +214,7 @@ public class Interfaz extends JFrame
                         dlg.setVisible(true);
 
                         if (optionPane.getValue()!=null && optionPane.getValue().equals(JOptionPane.OK_OPTION)) {
-                            if (new String(passwordPanel.getPassword()).equals(configuraciones.getPassword())) {
+                            if (new String(passwordPanel.getPassword()).equals(mUserSettings.getPassword())) {
                                 if (repro.embeddedMediaPlayerMp3.isPlaying()) {
                                     repro.embeddedMediaPlayerMp3.stop();
                                 } else {
@@ -237,9 +233,9 @@ public class Interfaz extends JFrame
 
                     // click derecho y las canciones no se pueden eliminar
 
-                } else if (e.isMetaDown() && configuraciones.getClickCreditos() == 1 && !creditosLibres && !cancelMusic) {
+                } else if (e.isMetaDown() && mUserSettings.getClickCreditos() == 1 && !creditosLibres && !cancelMusic) {
 
-                    creditos = creditos + configuraciones.getCantidadCreditos();
+                    creditos = creditos + mUserSettings.getCantidadCreditos();
                     labelcreditos.setText(String.format("Creditos: %d", creditos));
                     agregarMonedasYCreditos();
                     labelcreditos.setForeground(Color.WHITE);
@@ -260,7 +256,7 @@ public class Interfaz extends JFrame
 
     public void initComponents() {
 
-        creditos = configuraciones.getCreditosGuardados();
+        creditos = mUserSettings.getCreditosGuardados();
 
         resolucion = Toolkit.getDefaultToolkit().getScreenSize();
 
@@ -279,7 +275,7 @@ public class Interfaz extends JFrame
         if (creditosLibres) {
             labelcreditos= new JLabel("Creditos Libres");
         } else {
-            labelcreditos = new JLabel(String.format("Creditos: %d", configuraciones.getCreditosGuardados()));
+            labelcreditos = new JLabel(String.format("Creditos: %d", mUserSettings.getCreditosGuardados()));
         }
 
         labelcreditos.setForeground(Color.WHITE);
@@ -311,12 +307,12 @@ public class Interfaz extends JFrame
 
         // Iniciar las listas
 
-        listMusic = new ListMusic(configuraciones.getDireccionVideos(),configuraciones.getDireccionVideosMp3()); //Aqui falta la direccion de los videos promocionales
+        listMusic = new ListMusic(mUserSettings.getDireccionVideos(),mUserSettings.getDireccionVideosMp3()); //Aqui falta la direccion de los videos promocionales
 
         listaDeMusicas = new JList();
-        listaDeMusicas.setCellRenderer(new ModificadorDeCeldas(new Font(configuraciones.getFontCeldasName(),
-                configuraciones.getFontCeldasNegrita(), configuraciones.getFontCeldasSize()),configuraciones.getFontCeldasColor(),
-                configuraciones.getColor1(), configuraciones.getColor2()));
+        listaDeMusicas.setCellRenderer(new ModificadorDeCeldas(new Font(mUserSettings.getFontCeldasName(),
+                mUserSettings.getFontCeldasNegrita(), mUserSettings.getFontCeldasSize()),mUserSettings.getFontCeldasColor(),
+                mUserSettings.getColor1(), mUserSettings.getColor2()));
         listaDeMusicas.setListData(listMusic.getGenderSongs(0));
         listaDeMusicas.addKeyListener(manejadorDeTeclas);
         listaDeMusicas.setVisibleRowCount(20);
@@ -330,9 +326,9 @@ public class Interfaz extends JFrame
 
         listaDeReproduccion = new JList();
         listaDeReproduccion.setListData(listaReproduccion.obtenerCancionesEnLista());
-        listaDeReproduccion.setCellRenderer(new ModificadorDeCeldas(new Font(configuraciones.getFontCeldasName(),
-                configuraciones.getFontCeldasNegrita(), configuraciones.getFontCeldasSize()),configuraciones.getFontCeldasColor(),
-                configuraciones.getColor1(), configuraciones.getColor2()));
+        listaDeReproduccion.setCellRenderer(new ModificadorDeCeldas(new Font(mUserSettings.getFontCeldasName(),
+                mUserSettings.getFontCeldasNegrita(), mUserSettings.getFontCeldasSize()),mUserSettings.getFontCeldasColor(),
+                mUserSettings.getColor1(), mUserSettings.getColor2()));
         listaDeReproduccion.setBounds((int)(ancho/1.633), (int)(alto/1.52), (int)(ancho/2.732), (int)(alto/3.051));
 //        listaDeReproduccion.setBounds(ancho - 530, alto - 260, 500, alto-461);
         listaDeReproduccion.setFocusable(false);
@@ -354,7 +350,7 @@ public class Interfaz extends JFrame
         panelInferior.setOpaque(false);
         panelInferior.add(labelLogo,BorderLayout.EAST);
 
-        panelFondo = new JEImagePanel(configuraciones.getDireccionFondo());
+        panelFondo = new JEImagePanel(mUserSettings.getDireccionFondo());
         panelFondo.setLayout(new BorderLayout());
         panelFondo.add(panelInferior,BorderLayout.SOUTH);
 
@@ -362,11 +358,11 @@ public class Interfaz extends JFrame
 
         panelFondo.add(contenedorPrincipal,BorderLayout.CENTER);
 
-        repro = new Reproductor();
+        repro = new MediaPlayer();
         contenedorVideo = new JPanel();
         contenedorVideo.setLayout(new BorderLayout());
         contenedorVideo.setBounds((int)(ancho/1.633), (int)(alto/16.340),(int)(ancho/2.732), (int)(alto/2.7137));
-        contenedorVideo.add(repro.obtenerReproductor(),BorderLayout.CENTER);
+        contenedorVideo.add(repro.getMediaPlayerContainer(),BorderLayout.CENTER);
         contenedorPrincipal.add(contenedorVideo);
 
         panel = new JPanel();
@@ -393,9 +389,9 @@ public class Interfaz extends JFrame
         contenedorPrincipal.add(listaDeReproduccion);
     }
 
-    public void pantallaCompleta()
+    private void pantallaCompleta()
     {
-        if (isFullScreen == false)
+        if (!isFullScreen)
         {
             barras.setVisible(false);
             listaDeMusicas.setVisible(false);
@@ -415,28 +411,28 @@ public class Interfaz extends JFrame
         }
     }
 
-    public void entregarPremiosYCreditosAdicionales() {
+    private void entregarPremiosYCreditosAdicionales() {
         // creditosInsertados es la variable de control de los clicks
 
         if (agregarCreditoAdicional && !creditosLibres) {
             creditosInsertados++;
-            if (creditosInsertados >= configuraciones.getCadaCantidadDeCreditos()) {
+            if (creditosInsertados >= mUserSettings.getCadaCantidadDeCreditos()) {
                 // Aqui va la cuestion para controlar el cartel de los creditos adicionales
                 creditosInsertados = 0;
-                creditos = creditos + configuraciones.getNumeroDeCreditosAdicionales();
+                creditos = creditos + mUserSettings.getNumeroDeCreditosAdicionales();
                 labelcreditos.setText(String.format("Creditos: %d", creditos));
                 labelPromociones.setText(String.format("Ganaste %s creditos adicionales",
-                        configuraciones.getNumeroDeCreditosAdicionales()));
+                        mUserSettings.getNumeroDeCreditosAdicionales()));
                 labelPromociones.setVisible(true);
             }
         }
 
         if (entregarPremio && !creditosLibres) {
             creditosInsertadosParaPremio++;
-            if (creditosInsertadosParaPremio % configuraciones.getCantidadDeCreditosPorPremio() == 0) {
+            if (creditosInsertadosParaPremio % mUserSettings.getCantidadDeCreditosPorPremio() == 0) {
                 // Aqui va la cuestion para controlar el cartel de premio
-                labelPromociones.setText(String.format("Ganaste %s %s!", configuraciones.getCantidadDePremios(),
-                        configuraciones.getTipoDePremio()));
+                labelPromociones.setText(String.format("Ganaste %s %s!", mUserSettings.getCantidadDePremios(),
+                        mUserSettings.getTipoDePremio()));
                 labelPromociones.setVisible(true);
                 playSound();
             }
@@ -453,7 +449,7 @@ public class Interfaz extends JFrame
             if (evento.getKeyCode()==KeyEvent.VK_NUM_LOCK) {
                 Toolkit.getDefaultToolkit().setLockingKeyState(KeyEvent.VK_NUM_LOCK,true);
             }
-            if (evento.getKeyCode()==configuraciones.getTeclaPantallaCompleta() && creditos > 0)
+            if (evento.getKeyCode()==mUserSettings.getTeclaPantallaCompleta() && creditos > 0)
             {
                 if (labelPromociones.isVisible()) {
                     labelPromociones.setVisible(false);
@@ -466,7 +462,7 @@ public class Interfaz extends JFrame
                 }
             }
 
-            if(evento.getKeyCode()== configuraciones.getTeclaBorrar() && objeto.contador > 0)
+            if(evento.getKeyCode()== mUserSettings.getTeclaBorrar() && objeto.contador > 0)
             {
                 objeto.selectorMusica.setText(objeto.manejadorDeEvento(evento));
             }
@@ -516,7 +512,7 @@ public class Interfaz extends JFrame
 //                addSongToPlayList(ic.start());
             }
 
-            if (objeto.reproducir == true)
+            if (objeto.reproducir)
             {
                 int numero;
                 boolean condicion = false;
@@ -524,7 +520,7 @@ public class Interfaz extends JFrame
                 numero = Integer.parseInt(String.format("%s%s%s%s", objeto.valores[0],objeto.valores[1],
                         objeto.valores[2],objeto.valores[3]));
 
-                if (prohibir.revisarProhibido(numero)== true)
+                if (prohibir.revisarProhibido(numero))
                     condicion = true;
                 else
                     condicion = false;
@@ -538,7 +534,7 @@ public class Interfaz extends JFrame
                 }
                 else
                 {
-                    if ((creditos > 0 && condicion == true)||(creditosLibres == true && condicion == true))
+                    if ((creditos > 0 && condicion)||(creditosLibres && condicion))
                     {
                         if (listaReproduccion.obtenerCancionAReproducir()==null)
                         {
@@ -546,20 +542,20 @@ public class Interfaz extends JFrame
 
                             listaReproduccion.agregarCanciones(cancionAReproducir);
 
-                            int extension = Utils.getExtension(String.format("%s\\%s\\%s\\%s", configuraciones.getDireccionVideos(),listaReproduccion.obtenerGenero(),listaReproduccion.obtenerArtista(), listaReproduccion.obtenerCancionAReproducir()));
+                            int extension = Utils.getExtension(String.format("%s\\%s\\%s\\%s", mUserSettings.getDireccionVideos(),listaReproduccion.obtenerGenero(),listaReproduccion.obtenerArtista(), listaReproduccion.obtenerCancionAReproducir()));
 
                             if (extension == EXT_MP4 || extension == EXT_AVI || extension == EXT_MPG || extension == EXT_FLV) {
-                                repro.reproducirVideo(listaReproduccion.obtenerGenero(),listaReproduccion.obtenerArtista(),listaReproduccion.obtenerCancionAReproducir());
+                                repro.playVideo(listaReproduccion.obtenerGenero(),listaReproduccion.obtenerArtista(),listaReproduccion.obtenerCancionAReproducir());
                             } else if (extension == EXT_MP3 || extension == EXT_WMA || extension == EXT_WAV || extension == EXT_AAC) {
-                                repro.reproducirMusicaMp3(
+                                repro.playAudio(
                                         listaReproduccion.obtenerGenero(),
                                         listaReproduccion.obtenerArtista(),
                                         listaReproduccion.obtenerCancionAReproducir(),
-                                        configuraciones.getDireccionVideosMp3() + "\\" + listMusic.getPromVideo());
+                                        mUserSettings.getDireccionVideosMp3() + "\\" + listMusic.getPromVideo());
                             }
 
                             listaDeReproduccion.setListData(listaReproduccion.obtenerCancionesEnLista());
-                            if (creditosLibres== false)
+                            if (!creditosLibres)
                             {
                                 --creditos;
                                 abrirRegConfigEscritura();
@@ -582,7 +578,7 @@ public class Interfaz extends JFrame
                                 timerFullScreen.restart();
                             }
 
-                            if (configuraciones.isCreditosContinuos()) {
+                            if (mUserSettings.isCreditosContinuos()) {
                                 creditosInsertados = 0;
                             }
 
@@ -594,7 +590,7 @@ public class Interfaz extends JFrame
                             //Cancion cancion = new Cancion(numero, cancionAReproducir);
                             listaReproduccion.agregarCanciones(cancionAReproducir);
                             listaDeReproduccion.setListData(listaReproduccion.obtenerCancionesEnLista());
-                            if (creditosLibres == false)
+                            if (!creditosLibres)
                             {
                                 --creditos;
                                 abrirRegConfigEscritura();
@@ -611,7 +607,7 @@ public class Interfaz extends JFrame
                                 timerFullScreen.restart();
                             }
 
-                            if (configuraciones.isCreditosContinuos()) {
+                            if (mUserSettings.isCreditosContinuos()) {
                                 creditosInsertados = 0;
                             }
 
@@ -621,7 +617,7 @@ public class Interfaz extends JFrame
                     else
                     {
                         labelcreditos.setForeground(Color.RED);
-                        labelcreditos.setText("La canción que ha seleccionado no se puede reproducir antes de " + configuraciones.getReinicioMusicas() +" mins");
+                        labelcreditos.setText("La canción que ha seleccionado no se puede reproducir antes de " + mUserSettings.getReinicioMusicas() +" mins");
                         timerChangerLblCredits.start();
                         objeto.reproducir = false;
                         objeto.reiniciarValores();
@@ -631,33 +627,23 @@ public class Interfaz extends JFrame
 
                 }
             }
-            else if (evento.getKeyCode()==122)
-            {
+            else if (evento.getKeyCode()==122) {
                 String contrasenia = JOptionPane.showInputDialog("Introduzca la clave");
-                if (contrasenia.equals("12345"))
-                {
-                    if (creditosLibres == false)
-                    {
+                if (contrasenia.equals("12345")) {
+                    if (!creditosLibres) {
                         creditosLibres = true;
                         labelcreditos.setText("Creditos: Libres");
-                    }
-                    else
-                    {
+                    } else {
                         creditosLibres = false;
                         labelcreditos.setText(String.format("Creditos: %d", creditos));
                     }
-                }
-                else
+                } else {
                     JOptionPane.showMessageDialog(null, "Contraseña Incorrecta");
-            }
-            else if (evento.getKeyCode()==123)
-            {
+                }
+            } else if (evento.getKeyCode()==123) {
                 @SuppressWarnings("unused")
-                Configuracion config = new Configuracion();
-            }
-
-            else if (evento.getKeyCode()==configuraciones.getTeclaBajarLista() && creditos > 0)
-            {
+                SettingsWindow config = new SettingsWindow();
+            } else if (evento.getKeyCode()==mUserSettings.getTeclaBajarLista() && creditos > 0) {
                 if (isFullScreen) {
                     pantallaCompleta();
                 }
@@ -666,8 +652,7 @@ public class Interfaz extends JFrame
 
                 labelPromociones.setVisible(false);
 
-                if (listaDeMusicas.getSelectedIndex() - 20 < 0)
-                {
+                if (listaDeMusicas.getSelectedIndex() - 20 < 0) {
                     if (listaDeMusicas.getSelectedIndex() == 0) {
                         if (listMusic.downGender()) {
                             listaDeMusicas.setListData(listMusic.getGenderSongs(listMusic.getSelectedGender()));
@@ -679,16 +664,11 @@ public class Interfaz extends JFrame
                         listaDeMusicas.setSelectedIndex(0);
                         listaDeMusicas.ensureIndexIsVisible(0);
                     }
-                }
-                else
-                {
+                } else {
                     listaDeMusicas.setSelectedIndex(listaDeMusicas.getSelectedIndex()-20);
                     listaDeMusicas.ensureIndexIsVisible(listaDeMusicas.getSelectedIndex());
                 }
-
-            }
-            else if (evento.getKeyCode()==configuraciones.getTeclaSubirLista() && creditos > 0)
-            {
+            } else if (evento.getKeyCode()==mUserSettings.getTeclaSubirLista() && creditos > 0) {
                 if (isFullScreen) {
                     pantallaCompleta();
                 }
@@ -697,8 +677,7 @@ public class Interfaz extends JFrame
 
                 labelPromociones.setVisible(false);
 
-                if(listaDeMusicas.getSelectedIndex()+20 > listMusic.getGenderSongs(listMusic.getSelectedGender()).length)
-                {
+                if(listaDeMusicas.getSelectedIndex()+20 > listMusic.getGenderSongs(listMusic.getSelectedGender()).length) {
                     if (listaDeMusicas.getSelectedIndex()==listMusic.getGenderSongs(listMusic.getSelectedGender()).length-1) {
                         if (listMusic.upGender()) {
                             listaDeMusicas.setListData(listMusic.getGenderSongs(listMusic.getSelectedGender()));
@@ -710,15 +689,11 @@ public class Interfaz extends JFrame
                         listaDeMusicas.setSelectedIndex(listMusic.getGenderSongs(listMusic.getSelectedGender()).length-1);
                         listaDeMusicas.ensureIndexIsVisible(listaDeMusicas.getSelectedIndex());
                     }
-                }
-                else
-                {
+                } else {
                     listaDeMusicas.setSelectedIndex(listaDeMusicas.getSelectedIndex()+20);
                     listaDeMusicas.ensureIndexIsVisible(listaDeMusicas.getSelectedIndex());
                 }
-            }
-            else if (evento.getKeyCode() == configuraciones.getTeclaSubirGenero() && creditos > 0)
-            {
+            } else if (evento.getKeyCode() == mUserSettings.getTeclaSubirGenero() && creditos > 0) {
                 if (isFullScreen) {
                     pantallaCompleta();
                 }
@@ -731,9 +706,7 @@ public class Interfaz extends JFrame
                     listaDeMusicas.ensureIndexIsVisible(0);
                     labelGeneroMusical.setText("Genero Musical: " + listMusic.getNameOfGender());
                 }
-            }
-            else if (evento.getKeyCode() == configuraciones.getTeclaBajarGenero() && creditos > 0)
-            {
+            } else if (evento.getKeyCode() == mUserSettings.getTeclaBajarGenero() && creditos > 0) {
                 if (isFullScreen) {
                     pantallaCompleta();
                 }
@@ -747,16 +720,15 @@ public class Interfaz extends JFrame
                     listaDeMusicas.ensureIndexIsVisible(0);
                     labelGeneroMusical.setText("Genero Musical: " + listMusic.getNameOfGender());
                 }
-            }
-            else if (evento.getKeyCode()==configuraciones.getTeclaSaltarCancion() && listaReproduccion.obtenerCancionAReproducir()!=null) {
+            } else if (evento.getKeyCode()==mUserSettings.getTeclaSaltarCancion() && listaReproduccion.obtenerCancionAReproducir()!=null) {
                 if (repro.embeddedMediaPlayerMp3.isPlaying()) {
                     repro.embeddedMediaPlayerMp3.stop();
                 } else {
                     repro.embeddedMediaPlayer.stop();
                 }
             }
-            else if (evento.getKeyCode()==configuraciones.getTeclaAgregarCredito()) {
-                creditos = creditos + configuraciones.getCantidadCreditos();
+            else if (evento.getKeyCode()==mUserSettings.getTeclaAgregarCredito()) {
+                creditos = creditos + mUserSettings.getCantidadCreditos();
                 labelcreditos.setText(String.format("Creditos: %d", creditos));
                 agregarMonedasYCreditos();
                 labelcreditos.setForeground(Color.WHITE);
@@ -765,9 +737,7 @@ public class Interfaz extends JFrame
                 }
 
                 entregarPremiosYCreditosAdicionales();
-
-            }
-            else if (evento.getKeyCode()==configuraciones.getTeclaBorrarCredito() && creditos > 0) {
+            } else if (evento.getKeyCode()==mUserSettings.getTeclaBorrarCredito() && creditos > 0) {
                 --creditos;
                 abrirRegConfigEscritura();
                 agregarDatosRegConfig();
@@ -800,7 +770,6 @@ public class Interfaz extends JFrame
 
                     int times = 0;
                     while (resultSet.next()) {
-
                         times = resultSet.getInt("times") + 1;
                     }
 
@@ -819,14 +788,13 @@ public class Interfaz extends JFrame
     private class ManejadorDeReproductor extends MediaPlayerEventAdapter
     {
         @Override
-        public void stopped(MediaPlayer mediaPlayer) {
+        public void stopped(uk.co.caprica.vlcj.player.MediaPlayer mediaPlayer) {
             nextMusic();
         }
 
-        public void finished(MediaPlayer mediaPlayer)
-        {
+        public void finished(uk.co.caprica.vlcj.player.MediaPlayer mediaPlayer) {
             if (repro.embeddedMediaPlayerMp3.isPlaying()) {
-                repro.embeddedMediaPlayer.playMedia(configuraciones.getDireccionVideosMp3() + "\\" + listMusic.getPromVideo());
+                repro.embeddedMediaPlayer.playMedia(mUserSettings.getDireccionVideosMp3() + "\\" + listMusic.getPromVideo());
             } else {
                 nextMusic();
             }
@@ -836,33 +804,30 @@ public class Interfaz extends JFrame
             listaReproduccion.quitarMusica();
             listaDeReproduccion.setListData(listaReproduccion.obtenerCancionesEnLista());
 
-            if (listaReproduccion.obtenerCancionAReproducir() == null)
-            {
-                if (configuraciones.isVideoPromocional()) {
-                    repro.embeddedMediaPlayer.playMedia(configuraciones.getDireccionVideoPromocional());
+            if (listaReproduccion.obtenerCancionAReproducir() == null) {
+                if (mUserSettings.isVideoPromocional()) {
+                    repro.embeddedMediaPlayer.playMedia(mUserSettings.getDireccionVideoPromocional());
                     labelMusica.setText("MFRockola");
                     labelCancionEnRepro.setText("MFRockola");
                 } else {
                     labelMusica.setText("MFRockola");
                     labelCancionEnRepro.setText("MFRockola");
                 }
-            }
-            else
-            {
-                int extension = Utils.getExtension(String.format("%s\\%s\\%s\\%s", configuraciones.getDireccionVideos(),listaReproduccion.obtenerGenero(),listaReproduccion.obtenerArtista(), listaReproduccion.obtenerCancionAReproducir()));
+            } else {
+                int extension = Utils.getExtension(String.format("%s\\%s\\%s\\%s", mUserSettings.getDireccionVideos(),listaReproduccion.obtenerGenero(),listaReproduccion.obtenerArtista(), listaReproduccion.obtenerCancionAReproducir()));
 
                 if (extension == EXT_MP4 || extension == EXT_AVI || extension == EXT_MPG) {
-                    repro.reproducirVideo(
+                    repro.playVideo(
                             listaReproduccion.obtenerGenero(),
                             listaReproduccion.obtenerArtista(),
                             listaReproduccion.obtenerCancionAReproducir());
 
                 } else if (extension == EXT_MP3 || extension == EXT_WMA || extension == EXT_WAV || extension == EXT_AAC) {
-                    repro.reproducirMusicaMp3(
+                    repro.playAudio(
                             listaReproduccion.obtenerGenero(),
                             listaReproduccion.obtenerArtista(),
                             listaReproduccion.obtenerCancionAReproducir(),
-                            configuraciones.getDireccionVideosMp3() + "\\" + listMusic.getPromVideo());
+                            mUserSettings.getDireccionVideosMp3() + "\\" + listMusic.getPromVideo());
                 }
 
                 labelMusica.setText(String.format("%04d - %s - %s - %s",
@@ -880,95 +845,84 @@ public class Interfaz extends JFrame
         }
     }
 
-    public void abrirRegConfigEscritura()
-    {
-        try
-        {
+    public void abrirRegConfigEscritura() {
+        try {
             salida = new ObjectOutputStream(new FileOutputStream("config.mfr"));
-        }
-        catch(IOException ioExcepcion)
-        {
+        } catch(IOException ioExcepcion) {
             System.err.println("Error al abrir el archivo.");
         }
     }
 
-    public void agregarDatosRegConfig()
-    {
-        RegConfig configuraciones;
+    public void agregarDatosRegConfig() {
+        UserSettings configuraciones;
 
-        try
-        {
-            configuraciones = new RegConfig(
-                    this.configuraciones.getDireccionVideos(),
-                    this.configuraciones.getDireccionVideosMp3(),
-                    this.configuraciones.getDireccionVlc(),
-                    this.configuraciones.getDireccionVideoPromocional(),
-                    this.configuraciones.getMusicAleatoria(),
-                    this.configuraciones.getReinicioMusicas(),
-                    this.configuraciones.getCantidadCreditos(),
-                    this.configuraciones.isLibre(),
-                    this.configuraciones.isVideoPromocional(),
-                    this.configuraciones.getClickCreditos(),
-                    this.configuraciones.getTeclaSubirLista(),
-                    this.configuraciones.getTeclaBajarLista(),
-                    this.configuraciones.getTeclaSubirGenero(),
-                    this.configuraciones.getTeclaBajarGenero(),
-                    this.configuraciones.getTeclaPantallaCompleta(),
-                    this.configuraciones.getTeclaBorrar(),
-                    this.configuraciones.getTeclaSaltarCancion(),
-                    this.configuraciones.getTeclaAgregarCredito(),
-                    this.configuraciones.getTeclaBorrarCredito(),
-                    this.configuraciones.isCancelMusic(),
-                    this.configuraciones.getPassword(),
+        try {
+            configuraciones = new UserSettings(
+                    this.mUserSettings.getDireccionVideos(),
+                    this.mUserSettings.getDireccionVideosMp3(),
+                    this.mUserSettings.getDireccionVlc(),
+                    this.mUserSettings.getDireccionVideoPromocional(),
+                    this.mUserSettings.getMusicAleatoria(),
+                    this.mUserSettings.getReinicioMusicas(),
+                    this.mUserSettings.getCantidadCreditos(),
+                    this.mUserSettings.isLibre(),
+                    this.mUserSettings.isVideoPromocional(),
+                    this.mUserSettings.getClickCreditos(),
+                    this.mUserSettings.getTeclaSubirLista(),
+                    this.mUserSettings.getTeclaBajarLista(),
+                    this.mUserSettings.getTeclaSubirGenero(),
+                    this.mUserSettings.getTeclaBajarGenero(),
+                    this.mUserSettings.getTeclaPantallaCompleta(),
+                    this.mUserSettings.getTeclaBorrar(),
+                    this.mUserSettings.getTeclaSaltarCancion(),
+                    this.mUserSettings.getTeclaAgregarCredito(),
+                    this.mUserSettings.getTeclaBorrarCredito(),
+                    this.mUserSettings.isCancelMusic(),
+                    this.mUserSettings.getPassword(),
                     creditosASubir,
                     monedasASubir,
-                    this.configuraciones.isDefaultBackground(),
-                    this.configuraciones.getDireccionFondo(),
-                    this.configuraciones.getColor1(),
-                    this.configuraciones.getColor2(),
-                    this.configuraciones.getFontCeldasName(),
-                    this.configuraciones.getFontCeldasSize(),
-                    this.configuraciones.getFontSelectorSize(),
-                    this.configuraciones.getFontCeldasColor(),
-                    this.configuraciones.getFontCeldasNegrita(),
-                    this.configuraciones.isAgregarAdicional(),
-                    this.configuraciones.getNumeroDeCreditosAdicionales(),
-                    this.configuraciones.getCadaCantidadDeCreditos(),
-                    this.configuraciones.isCreditosContinuos(),
-                    this.configuraciones.isEntregarPremio(),
-                    this.configuraciones.getCantidadDePremios(),
-                    this.configuraciones.getCantidadDeCreditosPorPremio(),
-                    this.configuraciones.getTipoDePremio(),
+                    this.mUserSettings.isDefaultBackground(),
+                    this.mUserSettings.getDireccionFondo(),
+                    this.mUserSettings.getColor1(),
+                    this.mUserSettings.getColor2(),
+                    this.mUserSettings.getFontCeldasName(),
+                    this.mUserSettings.getFontCeldasSize(),
+                    this.mUserSettings.getFontSelectorSize(),
+                    this.mUserSettings.getFontCeldasColor(),
+                    this.mUserSettings.getFontCeldasNegrita(),
+                    this.mUserSettings.isAgregarAdicional(),
+                    this.mUserSettings.getNumeroDeCreditosAdicionales(),
+                    this.mUserSettings.getCadaCantidadDeCreditos(),
+                    this.mUserSettings.isCreditosContinuos(),
+                    this.mUserSettings.isEntregarPremio(),
+                    this.mUserSettings.getCantidadDePremios(),
+                    this.mUserSettings.getCantidadDeCreditosPorPremio(),
+                    this.mUserSettings.getTipoDePremio(),
                     creditos
             );
 
             salida.writeObject(configuraciones);
-        } catch (IOException excepcion)
-        {
+        } catch (IOException excepcion) {
             System.err.println("Error al escribir el archivo");
         }
     }
 
-    public void cerrarRegConfig()
-    {
-        try
-        {
+    public void cerrarRegConfig() {
+        try {
             if (salida != null)
                 salida.close();
 
             salida = null;
         }
-        catch (IOException ioExcepcion)
-        {
+        catch (IOException ioExcepcion) {
             System.err.println("Error al cerrar el archivo");
             System.exit(1);
         }
     }
 
-    public void agregarMonedasYCreditos()
-    {
+    public void agregarMonedasYCreditos() {
         timerFullScreen.stop();
-        creditosASubir = creditosASubir + configuraciones.getCantidadCreditos();
+        creditosASubir = creditosASubir + mUserSettings.getCantidadCreditos();
         monedasASubir++;
         abrirRegConfigEscritura();
         agregarDatosRegConfig();
@@ -988,7 +942,6 @@ public class Interfaz extends JFrame
     }
 
     public void addSongToPlayList(ArrayList numbers) {
-
         if (numbers.size()>0) {
             for (int i = 0; i < numbers.size(); i++) {
                 Cancion cancionAReproducir = listMusic.getSong((int) numbers.get(i));

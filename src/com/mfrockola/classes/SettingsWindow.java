@@ -15,11 +15,11 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import static com.mfrockola.classes.Utils.SELECT_VIDEO;
 
 @SuppressWarnings("serial")
-public class Configuracion extends JFrame {
+public class SettingsWindow extends JFrame {
 
 	private ObjectOutputStream salida;
-	private OperacionesRegConfig registroDatos = new OperacionesRegConfig();
-	private RegConfig configuraciones;
+	private UserSettingsManagement mUserSettingsManagement = new UserSettingsManagement();
+	private UserSettings mUserSettings;
 
 	private JTextField textFieldVideos;
 	private JTextField textFieldVideosParaMp3;
@@ -87,7 +87,7 @@ public class Configuracion extends JFrame {
 	private JComboBox<String> comboBoxTamanioDeFuenteSelector; // comboBox de tamaño de fuente de selector de musicas
 	private JCheckBox checkBoxFuenteCeldasNegrita; // checkbox para la fuente de las celdas negritsa
 
-	public Configuracion()
+	public SettingsWindow()
 	{
 		setTitle("Configuración");
 
@@ -111,8 +111,8 @@ public class Configuracion extends JFrame {
 
 		try
 		{
-			registroDatos.abrirRegConfigLectura();
-			configuraciones = registroDatos.leerRegConfigLectura();
+			mUserSettingsManagement.openUserSettings();
+			mUserSettings = mUserSettingsManagement.readUserSettings();
 		}
 		catch (NullPointerException excepcion)
 		{
@@ -479,7 +479,7 @@ public class Configuracion extends JFrame {
 		lblSubirbajrLista.setBounds(262, 119, 103, 14);
 		panel5.add(lblSubirbajrLista);
 
-		textFieldSubirL = new TextFieldKey(this,configuraciones.getTeclaSubirLista());
+		textFieldSubirL = new TextFieldKey(this,mUserSettings.getTeclaSubirLista());
 		textFieldSubirL.setBounds(375, 119, 50, 20);
 		panel5.add(textFieldSubirL);
 
@@ -487,7 +487,7 @@ public class Configuracion extends JFrame {
 		label_2.setBounds(435, 119, 4, 14);
 		panel5.add(label_2);
 
-		textFieldBajarL = new TextFieldKey(this,configuraciones.getTeclaBajarLista());
+		textFieldBajarL = new TextFieldKey(this,mUserSettings.getTeclaBajarLista());
 		textFieldBajarL.setBounds(451, 119, 50, 20);
 		panel5.add(textFieldBajarL);
 
@@ -496,7 +496,7 @@ public class Configuracion extends JFrame {
 		lblSubirBajarGenero.setBounds(262, 144, 103, 14);
 		panel5.add(lblSubirBajarGenero);
 
-		textFieldSubirGenero = new TextFieldKey(this,configuraciones.getTeclaSubirGenero());
+		textFieldSubirGenero = new TextFieldKey(this,mUserSettings.getTeclaSubirGenero());
 		textFieldSubirGenero.setBounds(375, 144, 50, 20);
 		panel5.add(textFieldSubirGenero);
 
@@ -504,7 +504,7 @@ public class Configuracion extends JFrame {
 		label_4.setBounds(435, 144, 4, 14);
 		panel5.add(label_4);
 
-		textFieldBajarGenero = new TextFieldKey(this,configuraciones.getTeclaBajarGenero());
+		textFieldBajarGenero = new TextFieldKey(this,mUserSettings.getTeclaBajarGenero());
 		textFieldBajarGenero.setBounds(451, 144, 50, 20);
 		panel5.add(textFieldBajarGenero);
 
@@ -513,7 +513,7 @@ public class Configuracion extends JFrame {
 		lblPantallaCompleta.setBounds(262, 169, 103, 14);
 		panel5.add(lblPantallaCompleta);
 
-		textFieldPantallaCompleta = new TextFieldKey(this,configuraciones.getTeclaPantallaCompleta());
+		textFieldPantallaCompleta = new TextFieldKey(this,mUserSettings.getTeclaPantallaCompleta());
 		textFieldPantallaCompleta.setBounds(375, 169, 50, 20);
 		panel5.add(textFieldPantallaCompleta);
 
@@ -522,7 +522,7 @@ public class Configuracion extends JFrame {
 		lblBorrar.setBounds(262, 194, 103, 14);
 		panel5.add(lblBorrar);
 
-		textFieldBorrar = new TextFieldKey(this,configuraciones.getTeclaBorrar());
+		textFieldBorrar = new TextFieldKey(this,mUserSettings.getTeclaBorrar());
 		textFieldBorrar.setColumns(10);
 		textFieldBorrar.setBounds(375, 194, 50, 20);
 		panel5.add(textFieldBorrar);
@@ -532,7 +532,7 @@ public class Configuracion extends JFrame {
 		labelSaltarCancion.setHorizontalAlignment(SwingConstants.RIGHT);
 		panel5.add(labelSaltarCancion);
 
-		textFieldSaltarCancion = new TextFieldKey(this,configuraciones.getTeclaSaltarCancion()); // tecla 83 S
+		textFieldSaltarCancion = new TextFieldKey(this,mUserSettings.getTeclaSaltarCancion()); // tecla 83 S
 		textFieldSaltarCancion.setBounds(375, 219, 50, 20);
 		textFieldSaltarCancion.setColumns(10);
 		panel5.add(textFieldSaltarCancion);
@@ -542,7 +542,7 @@ public class Configuracion extends JFrame {
 		labelTeclaAgregarCredito.setHorizontalAlignment(SwingConstants.RIGHT);
 		panel5.add(labelTeclaAgregarCredito);
 
-		textFieldAgregarCreditos = new TextFieldKey(this,configuraciones.getTeclaAgregarCredito()); // tecla 65 A
+		textFieldAgregarCreditos = new TextFieldKey(this,mUserSettings.getTeclaAgregarCredito()); // tecla 65 A
 		textFieldAgregarCreditos.setColumns(10);
 		textFieldAgregarCreditos.setBounds(375, 244, 50, 20);
 		panel5.add(textFieldAgregarCreditos);
@@ -552,7 +552,7 @@ public class Configuracion extends JFrame {
 		labelTeclaParaBorrarCredito.setHorizontalAlignment(SwingConstants.RIGHT);
 		panel5.add(labelTeclaParaBorrarCredito);
 
-		textFieldBorrarCredito = new TextFieldKey(this,configuraciones.getTeclaBorrarCredito());
+		textFieldBorrarCredito = new TextFieldKey(this,mUserSettings.getTeclaBorrarCredito());
 		textFieldBorrarCredito.setColumns(10);
 		textFieldBorrarCredito.setBounds(375, 269, 50, 20);
 		panel5.add(textFieldBorrarCredito);
@@ -626,7 +626,7 @@ public class Configuracion extends JFrame {
 
 		JPanel panel6 = new JPanel();
 		panel6.setBackground(Color.WHITE);
-		fichas.addTab("Apariencia",null,panel6, "Configuracion de la apariencia general de MFRockola");
+		fichas.addTab("Apariencia",null,panel6, "SettingsWindow de la apariencia general de MFRockola");
 		panel6.setLayout(null);
 
 		Icon apariencia = new ImageIcon(this.getClass().getResource("/com/mfrockola/imagenes/apariencia.png"));
@@ -822,7 +822,7 @@ public class Configuracion extends JFrame {
 
 		JPanel panel7 = new JPanel();
 		panel7.setBackground(Color.WHITE);
-		fichas.addTab("Estadisticas",null,panel7, "Configuracion y Visualizacion de las estadisticas de uso");
+		fichas.addTab("Estadisticas",null,panel7, "SettingsWindow y Visualizacion de las estadisticas de uso");
 		panel7.setLayout(null);
 
 		Icon estadisticas = new ImageIcon(this.getClass().getResource("/com/mfrockola/imagenes/estadistica.png"));
@@ -1069,44 +1069,44 @@ public class Configuracion extends JFrame {
 		setResizable(false);
 		setVisible(true);
 
-		textFieldMusicaAleatoria.setText(String.format("%s",configuraciones.getMusicAleatoria()));
-		textFieldReinicioMusicas.setText(String.format("%s",configuraciones.getReinicioMusicas()));
+		textFieldMusicaAleatoria.setText(String.format("%s",mUserSettings.getMusicAleatoria()));
+		textFieldReinicioMusicas.setText(String.format("%s",mUserSettings.getReinicioMusicas()));
 
-		textFieldCantCreditos.setText(String.format("%s", configuraciones.getCantidadCreditos()));
-		textFieldVideoPromocional.setEnabled(configuraciones.isVideoPromocional());
-		textFieldVideoPromocional.setEditable(configuraciones.isVideoPromocional());
-		buttonPathPromotionalVideo.setEnabled(configuraciones.isVideoPromocional());
-		chckbxNewCheckBox.setSelected(configuraciones.isVideoPromocional());
-		textFieldVideos.setText(String.format("%s", configuraciones.getDireccionVideos()));
-		textFieldVlc.setText(String.format("%s", configuraciones.getDireccionVlc()));
-		textFieldVideosParaMp3.setText(String.format("%s", configuraciones.getDireccionVideosMp3()));
-		textFieldVideoPromocional.setText(String.format("%s", configuraciones.getDireccionVideoPromocional()));
-		textFieldSubirL.setText(Utils.printKeyCharCode(configuraciones.getTeclaSubirLista()));
-		textFieldBajarL.setText(Utils.printKeyCharCode(configuraciones.getTeclaBajarLista()));
-		textFieldSubirGenero.setText(Utils.printKeyCharCode(configuraciones.getTeclaSubirGenero()));
-		textFieldBajarGenero.setText(Utils.printKeyCharCode(configuraciones.getTeclaBajarGenero()));
-		textFieldPantallaCompleta.setText(Utils.printKeyCharCode(configuraciones.getTeclaPantallaCompleta()));
-		textFieldBorrar.setText(Utils.printKeyCharCode(configuraciones.getTeclaBorrar()));
-		textFieldSaltarCancion.setText(Utils.printKeyCharCode(configuraciones.getTeclaSaltarCancion()));
-		textFieldAgregarCreditos.setText(Utils.printKeyCharCode(configuraciones.getTeclaAgregarCredito()));
-		textFieldBorrarCredito.setText(Utils.printKeyCharCode(configuraciones.getTeclaBorrarCredito()));
-		labelCreditosUsados.setText(String.format("%s", configuraciones.getCantidadCreditosUsados()));
-		labelMonedasInsertadas.setText(String.format("%s", configuraciones.getCantidadMonedasInsertadas()));
-		checkBoxFoundDefaultBackground.setSelected(configuraciones.isDefaultBackground());
-		checkBoxCancelMusic.setSelected(configuraciones.isCancelMusic());
-		passwordField.setText(configuraciones.getPassword());
-		if (configuraciones.isCancelMusic() == true) {
+		textFieldCantCreditos.setText(String.format("%s", mUserSettings.getCantidadCreditos()));
+		textFieldVideoPromocional.setEnabled(mUserSettings.isVideoPromocional());
+		textFieldVideoPromocional.setEditable(mUserSettings.isVideoPromocional());
+		buttonPathPromotionalVideo.setEnabled(mUserSettings.isVideoPromocional());
+		chckbxNewCheckBox.setSelected(mUserSettings.isVideoPromocional());
+		textFieldVideos.setText(String.format("%s", mUserSettings.getDireccionVideos()));
+		textFieldVlc.setText(String.format("%s", mUserSettings.getDireccionVlc()));
+		textFieldVideosParaMp3.setText(String.format("%s", mUserSettings.getDireccionVideosMp3()));
+		textFieldVideoPromocional.setText(String.format("%s", mUserSettings.getDireccionVideoPromocional()));
+		textFieldSubirL.setText(Utils.printKeyCharCode(mUserSettings.getTeclaSubirLista()));
+		textFieldBajarL.setText(Utils.printKeyCharCode(mUserSettings.getTeclaBajarLista()));
+		textFieldSubirGenero.setText(Utils.printKeyCharCode(mUserSettings.getTeclaSubirGenero()));
+		textFieldBajarGenero.setText(Utils.printKeyCharCode(mUserSettings.getTeclaBajarGenero()));
+		textFieldPantallaCompleta.setText(Utils.printKeyCharCode(mUserSettings.getTeclaPantallaCompleta()));
+		textFieldBorrar.setText(Utils.printKeyCharCode(mUserSettings.getTeclaBorrar()));
+		textFieldSaltarCancion.setText(Utils.printKeyCharCode(mUserSettings.getTeclaSaltarCancion()));
+		textFieldAgregarCreditos.setText(Utils.printKeyCharCode(mUserSettings.getTeclaAgregarCredito()));
+		textFieldBorrarCredito.setText(Utils.printKeyCharCode(mUserSettings.getTeclaBorrarCredito()));
+		labelCreditosUsados.setText(String.format("%s", mUserSettings.getCantidadCreditosUsados()));
+		labelMonedasInsertadas.setText(String.format("%s", mUserSettings.getCantidadMonedasInsertadas()));
+		checkBoxFoundDefaultBackground.setSelected(mUserSettings.isDefaultBackground());
+		checkBoxCancelMusic.setSelected(mUserSettings.isCancelMusic());
+		passwordField.setText(mUserSettings.getPassword());
+		if (mUserSettings.isCancelMusic() == true) {
 			passwordField.setEnabled(true);
 		} else {
 			passwordField.setEnabled(false);
 		}
 
-		if(configuraciones.isLibre() == true)
+		if(mUserSettings.isLibre() == true)
 			rdbtnSi.setSelected(true);
 		else
 			rdbtnNo.setSelected(true);
 
-		if (configuraciones.getClickCreditos() == 0)
+		if (mUserSettings.getClickCreditos() == 0)
 		{
 			rdbtnClickIzquierdo.setSelected(true);
 			clickCreditos = 0;
@@ -1117,28 +1117,28 @@ public class Configuracion extends JFrame {
 			clickCreditos = 1;
 		}
 
-		labelColor1.setBackground(configuraciones.getColor1());
-		labelColor2.setBackground(configuraciones.getColor2());
+		labelColor1.setBackground(mUserSettings.getColor1());
+		labelColor2.setBackground(mUserSettings.getColor2());
 
-		color1 = configuraciones.getColor1();
-		color2 = configuraciones.getColor2();
+		color1 = mUserSettings.getColor1();
+		color2 = mUserSettings.getColor2();
 
-		textFieldDirFondos.setText(configuraciones.getDireccionFondo().getFile());
+		textFieldDirFondos.setText(mUserSettings.getDireccionFondo().getFile());
 
-		labelFuente.setBackground(configuraciones.getColor1());
-		labelFuente.setForeground(configuraciones.getFontCeldasColor());
+		labelFuente.setBackground(mUserSettings.getColor1());
+		labelFuente.setForeground(mUserSettings.getFontCeldasColor());
 
-		labelSelector.setFont(new Font("Console",Font.BOLD,configuraciones.getFontSelectorSize()));
+		labelSelector.setFont(new Font("Console",Font.BOLD,mUserSettings.getFontSelectorSize()));
 
-		comboBoxSelectorDeFuente.setSelectedItem(configuraciones.getFontCeldasName());
+		comboBoxSelectorDeFuente.setSelectedItem(mUserSettings.getFontCeldasName());
 
-		comboBoxTamanioDeFuente.setSelectedItem(String.valueOf(configuraciones.getFontCeldasSize()));
+		comboBoxTamanioDeFuente.setSelectedItem(String.valueOf(mUserSettings.getFontCeldasSize()));
 
-		comboBoxTamanioDeFuenteSelector.setSelectedItem(String.valueOf(configuraciones.getFontSelectorSize()));
+		comboBoxTamanioDeFuenteSelector.setSelectedItem(String.valueOf(mUserSettings.getFontSelectorSize()));
 
-		colorDeFuente = configuraciones.getFontCeldasColor();
+		colorDeFuente = mUserSettings.getFontCeldasColor();
 
-		typeFont = configuraciones.getFontCeldasNegrita();
+		typeFont = mUserSettings.getFontCeldasNegrita();
 
 		if (typeFont == Font.BOLD) {
 			checkBoxFuenteCeldasNegrita.setSelected(true);
@@ -1146,37 +1146,37 @@ public class Configuracion extends JFrame {
 			checkBoxFuenteCeldasNegrita.setSelected(false);
 		}
 
-		if (configuraciones.isAgregarAdicional()) {
+		if (mUserSettings.isAgregarAdicional()) {
 			checkBoxCreditosAdicionales.setSelected(true);
 		} else {
 			checkBoxCreditosAdicionales.setSelected(false);
 		}
 
-		textFieldNumeroDeCreditosAdicionales.setText(String.format("%s",configuraciones.getNumeroDeCreditosAdicionales()));
+		textFieldNumeroDeCreditosAdicionales.setText(String.format("%s",mUserSettings.getNumeroDeCreditosAdicionales()));
 
-		textFieldCadaCantidadDeCreditos.setText(String.format("%s", configuraciones.getCadaCantidadDeCreditos()));
+		textFieldCadaCantidadDeCreditos.setText(String.format("%s", mUserSettings.getCadaCantidadDeCreditos()));
 
-		checkBoxCreditosContinuos.setSelected(configuraciones.isCreditosContinuos());
+		checkBoxCreditosContinuos.setSelected(mUserSettings.isCreditosContinuos());
 
-		if (configuraciones.isEntregarPremio()) {
+		if (mUserSettings.isEntregarPremio()) {
 			checkBoxPremio.setSelected(true);
 		} else {
 			checkBoxPremio.setSelected(false);
 		}
 
-		textFieldNumeroDePremios.setText(String.valueOf(configuraciones.getCantidadDePremios()));
+		textFieldNumeroDePremios.setText(String.valueOf(mUserSettings.getCantidadDePremios()));
 
-		textFieldPremioCadaCreditos.setText(String.valueOf(configuraciones.getCantidadDeCreditosPorPremio()));
+		textFieldPremioCadaCreditos.setText(String.valueOf(mUserSettings.getCantidadDeCreditosPorPremio()));
 
-		textFieldTipoDePremio.setText(String.valueOf(configuraciones.getTipoDePremio()));
+		textFieldTipoDePremio.setText(String.valueOf(mUserSettings.getTipoDePremio()));
 
-		if (configuraciones.getTipoDePremio().equals("")) {
+		if (mUserSettings.getTipoDePremio().equals("")) {
 			labelTextoDelPremio.setText("No se entregarán premios");
 		} else {
-			labelTextoDelPremio.setText("Ganaste " + configuraciones.getCantidadDePremios() +" "+ configuraciones.getTipoDePremio());
+			labelTextoDelPremio.setText("Ganaste " + mUserSettings.getCantidadDePremios() +" "+ mUserSettings.getTipoDePremio());
 		}
 
-		creditosGuardados = configuraciones.getCreditosGuardados();
+		creditosGuardados = mUserSettings.getCreditosGuardados();
 	}
 
 	private class manejadorRadioButtons implements ItemListener
@@ -1223,7 +1223,7 @@ public class Configuracion extends JFrame {
 
 	public void agregarDatosRegConfig(boolean firstOpen)
 	{
-		RegConfig configuraciones;
+		UserSettings sUserSettings;
 
 		if (firstOpen) {
 			try
@@ -1242,7 +1242,7 @@ public class Configuracion extends JFrame {
 				// A 65
 				// B 66
 
-				configuraciones = new RegConfig(
+				sUserSettings = new UserSettings(
 						"C:\\videos", // path of videos
 						"C:\\MFRockola\\Videos para MP3",
 						"C:\\Program Files\\VideoLAN\\VLC", // path of VLC
@@ -1286,7 +1286,7 @@ public class Configuracion extends JFrame {
 						0
 				);
 
-				salida.writeObject(configuraciones);
+				salida.writeObject(sUserSettings);
 			} catch (Exception excepcion)
 			{
 				System.err.println("Error al escribir el archivo");
@@ -1301,7 +1301,7 @@ public class Configuracion extends JFrame {
 					url = new URL("file:"+textFieldDirFondos.getText());
 				}
 
-				configuraciones = new RegConfig(
+				sUserSettings = new UserSettings(
 						textFieldVideos.getText(),
 						textFieldVideosParaMp3.getText(),
 						textFieldVlc.getText(),
@@ -1345,7 +1345,7 @@ public class Configuracion extends JFrame {
 						creditosGuardados
 				);
 
-				salida.writeObject(configuraciones);
+				salida.writeObject(sUserSettings);
 			} catch (IOException excepcion)
 			{
 				excepcion.printStackTrace();

@@ -5,7 +5,7 @@ import java.io.Serializable;
 import java.net.URL;
 
 @SuppressWarnings("serial")
-public class RegConfig implements Serializable
+public class UserSettings implements Serializable
 {
 	private String direccionVideos;
 	private String direccionVideosMp3;
@@ -56,7 +56,7 @@ public class RegConfig implements Serializable
 
 	private int creditosGuardados;
 	
-	public RegConfig(String direccionVideos, String direccionVideosMp3, String direccionVlc,
+	public UserSettings(String direccionVideos, String direccionVideosMp3, String direccionVlc,
 			String direccionVideoPromocional, int musicAleatoria,int reinicioMusicas,int cantidadCreditos, boolean libre,
 			boolean videoPromocional, int clickCreditos, int teclaSubirLista, int teclaBajarLista,
 			int teclaSubirGenero, int teclaBajarGenero, int teclaPantallaCompleta, int teclaBorrar,
