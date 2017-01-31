@@ -6,9 +6,9 @@ package com.mfrockola.classes;
 public class Gender {
 
     private String name;
-    private Cancion[] songs;
+    private Song[] songs;
 
-    public Gender(String name, Cancion[] songs) {
+    public Gender(String name, Song[] songs) {
         setName(name);
         setSongs(songs);
     }
@@ -21,11 +21,11 @@ public class Gender {
         this.name = nombre;
     }
 
-    public Cancion[] getSongs() {
+    public Song[] getSongs() {
         return songs;
     }
 
-    public void setSongs(Cancion[] songs) {
+    public void setSongs(Song[] songs) {
         this.songs = songs;
     }
 }

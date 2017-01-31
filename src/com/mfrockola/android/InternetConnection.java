@@ -1,6 +1,5 @@
 package com.mfrockola.android;
 
-import com.mfrockola.classes.Cancion;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;

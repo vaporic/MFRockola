@@ -2,16 +2,16 @@ package com.mfrockola.classes;
 
 public class ListaDeReproduccion 
 {
-	private Cancion [] cancionesEnLista;
+	private Song[] cancionesEnLista;
 	
 	public ListaDeReproduccion()
 	{
-		cancionesEnLista = new Cancion[1];
+		cancionesEnLista = new Song[1];
 	}
 		
-	public void agregarCanciones(Cancion musicaAgregar)
+	public void agregarCanciones(Song musicaAgregar)
 	{
-		Cancion[] provisional = new Cancion[cancionesEnLista.length + 1];
+		Song[] provisional = new Song[cancionesEnLista.length + 1];
 		
 		if (cancionesEnLista [0] == null)
 		{
@@ -36,20 +36,20 @@ public class ListaDeReproduccion
 		if (cancionesEnLista[0]==null)
 			return null;
 		else
-			return cancionesEnLista[0].obtenerNombreCancion();
+			return cancionesEnLista[0].getSongName();
 	}
 	
 	public int obtenerNumero()
 	{
-		return cancionesEnLista[0].obtenerNumero();
+		return cancionesEnLista[0].getSongNumber();
 	}
 	
 	public String obtenerGenero()
 	{
-		return cancionesEnLista[0].getGenero();
+		return cancionesEnLista[0].getSongGenre();
 	}
 
-	public String obtenerArtista() { return cancionesEnLista[0].getArtista(); }
+	public String obtenerArtista() { return cancionesEnLista[0].getSinger(); }
 	
 	public void quitarMusica()
 	{	
@@ -59,7 +59,7 @@ public class ListaDeReproduccion
 		}
 		else
 		{
-			Cancion[] provisional = new Cancion [cancionesEnLista.length - 1];
+			Song[] provisional = new Song[cancionesEnLista.length - 1];
 			for (int contador = 1; contador < cancionesEnLista.length; ++contador)
 			{
 				provisional[contador-1] = cancionesEnLista[contador];
@@ -73,7 +73,7 @@ public class ListaDeReproduccion
 		return cancionesEnLista.length;
 	}
 	
-	public Cancion[] obtenerCancionesEnLista()
+	public Song[] obtenerCancionesEnLista()
 	{
 		return cancionesEnLista;
 	}

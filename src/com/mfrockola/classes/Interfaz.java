@@ -59,7 +59,7 @@ public class Interfaz extends JFrame
 
     private MediaPlayer repro;
 
-    private SelectMusica objeto;
+    private SongSelector objeto;
 
     private int monedasASubir;
     private int creditosASubir;
@@ -89,7 +89,7 @@ public class Interfaz extends JFrame
             mUserSettingsManagement.openUserSettings();
             mUserSettings = mUserSettingsManagement.readUserSettings();
             prohibir = new MusicasProhibidas(mUserSettings.getReinicioMusicas());
-            objeto = new SelectMusica(mUserSettings.getTeclaBorrar(), mUserSettings.getTeclaSubirLista(),
+            objeto = new SongSelector(mUserSettings.getTeclaBorrar(), mUserSettings.getTeclaSubirLista(),
                     mUserSettings.getTeclaBajarLista(), mUserSettings.getTeclaSubirGenero(),
                     mUserSettings.getTeclaBajarGenero(),mUserSettings.getFontSelectorSize());
             monedasASubir = mUserSettings.getCantidadMonedasInsertadas();
@@ -384,7 +384,7 @@ public class Interfaz extends JFrame
         labelMusica.setFont(new Font("Calibri", Font.BOLD, 23));
         panel_1.add(labelMusica);
 
-        panel_1.add(objeto.selectorMusica);
+        panel_1.add(objeto.labelSelector);
 
         contenedorPrincipal.add(listaDeReproduccion);
     }
@@ -462,63 +462,63 @@ public class Interfaz extends JFrame
                 }
             }
 
-            if(evento.getKeyCode()== mUserSettings.getTeclaBorrar() && objeto.contador > 0)
+            if(evento.getKeyCode()== mUserSettings.getTeclaBorrar() && objeto.counterValue > 0)
             {
-                objeto.selectorMusica.setText(objeto.manejadorDeEvento(evento));
+                objeto.labelSelector.setText(objeto.keyEventHandler(evento));
             }
 
             if ((evento.getKeyCode()==48 || evento.getKeyCode()==96) && creditos > 0)
             {
-                objeto.selectorMusica.setText(objeto.manejadorDeEvento(evento));
+                objeto.labelSelector.setText(objeto.keyEventHandler(evento));
             }
             else if ((evento.getKeyCode()==49 || evento.getKeyCode()==97) && creditos > 0)
             {
-                objeto.selectorMusica.setText(objeto.manejadorDeEvento(evento));
+                objeto.labelSelector.setText(objeto.keyEventHandler(evento));
             }
             else if ((evento.getKeyCode()==50 || evento.getKeyCode()==98) && creditos > 0)
             {
-                objeto.selectorMusica.setText(objeto.manejadorDeEvento(evento));
+                objeto.labelSelector.setText(objeto.keyEventHandler(evento));
             }
             else if ((evento.getKeyCode()==51 || evento.getKeyCode()==99) && creditos > 0)
             {
-                objeto.selectorMusica.setText(objeto.manejadorDeEvento(evento));
+                objeto.labelSelector.setText(objeto.keyEventHandler(evento));
             }
             else if ((evento.getKeyCode()==52 || evento.getKeyCode()==100) && creditos > 0)
             {
-                objeto.selectorMusica.setText(objeto.manejadorDeEvento(evento));
+                objeto.labelSelector.setText(objeto.keyEventHandler(evento));
             }
             else if ((evento.getKeyCode()==53 || evento.getKeyCode()==101) && creditos > 0)
             {
-                objeto.selectorMusica.setText(objeto.manejadorDeEvento(evento));
+                objeto.labelSelector.setText(objeto.keyEventHandler(evento));
             }
             else if ((evento.getKeyCode()==54 || evento.getKeyCode()==102) && creditos > 0)
             {
-                objeto.selectorMusica.setText(objeto.manejadorDeEvento(evento));
+                objeto.labelSelector.setText(objeto.keyEventHandler(evento));
             }
             else if ((evento.getKeyCode()==55 || evento.getKeyCode()==103) && creditos > 0)
             {
-                objeto.selectorMusica.setText(objeto.manejadorDeEvento(evento));
+                objeto.labelSelector.setText(objeto.keyEventHandler(evento));
             }
             else if ((evento.getKeyCode()==56 || evento.getKeyCode()==104) && creditos > 0)
             {
-                objeto.selectorMusica.setText(objeto.manejadorDeEvento(evento));
+                objeto.labelSelector.setText(objeto.keyEventHandler(evento));
             }
             else if ((evento.getKeyCode()==57 || evento.getKeyCode()==105) && creditos > 0)
             {
-                objeto.selectorMusica.setText(objeto.manejadorDeEvento(evento));
+                objeto.labelSelector.setText(objeto.keyEventHandler(evento));
             }
             else if (evento.getKeyCode()==77) {
                 Thread ic = new Thread(new InternetConnection());
 //                addSongToPlayList(ic.start());
             }
 
-            if (objeto.reproducir)
+            if (objeto.play)
             {
                 int numero;
                 boolean condicion = false;
 
-                numero = Integer.parseInt(String.format("%s%s%s%s", objeto.valores[0],objeto.valores[1],
-                        objeto.valores[2],objeto.valores[3]));
+                numero = Integer.parseInt(String.format("%s%s%s%s", objeto.values[0],objeto.values[1],
+                        objeto.values[2],objeto.values[3]));
 
                 if (prohibir.revisarProhibido(numero))
                     condicion = true;
@@ -527,9 +527,9 @@ public class Interfaz extends JFrame
 
                 if (numero >= listMusic.getSizeListOfSongs()) {
                     labelcreditos.setText("Musica no encontrada");
-                    objeto.reproducir = false;
-                    objeto.reiniciarValores();
-                    objeto.selectorMusica.setText("- - - -");
+                    objeto.play = false;
+                    objeto.resetValues();
+                    objeto.labelSelector.setText("- - - -");
                     timerChangerLblCredits.start();
                 }
                 else
@@ -538,7 +538,7 @@ public class Interfaz extends JFrame
                     {
                         if (listaReproduccion.obtenerCancionAReproducir()==null)
                         {
-                            Cancion cancionAReproducir =  listMusic.getSong(numero);
+                            Song cancionAReproducir =  listMusic.getSong(numero);
 
                             listaReproduccion.agregarCanciones(cancionAReproducir);
 
@@ -563,9 +563,9 @@ public class Interfaz extends JFrame
                                 cerrarRegConfig();
                                 labelcreditos.setText(String.format("%s: %d","Creditos",creditos));
                             }
-                            objeto.reproducir = false;
-                            objeto.reiniciarValores();
-                            objeto.selectorMusica.setText("- - - -");
+                            objeto.play = false;
+                            objeto.resetValues();
+                            objeto.labelSelector.setText("- - - -");
                             prohibir.agregarProhibido(numero);
                             labelMusica.setText(String.format("%04d - %s - %s - %s",listaReproduccion.obtenerNumero(),
                                     listaReproduccion.obtenerGenero(),
@@ -586,8 +586,8 @@ public class Interfaz extends JFrame
                         }
                         else
                         {
-                            Cancion cancionAReproducir = listMusic.getSong(numero);
-                            //Cancion cancion = new Cancion(numero, cancionAReproducir);
+                            Song cancionAReproducir = listMusic.getSong(numero);
+                            //Song cancion = new Song(numero, cancionAReproducir);
                             listaReproduccion.agregarCanciones(cancionAReproducir);
                             listaDeReproduccion.setListData(listaReproduccion.obtenerCancionesEnLista());
                             if (!creditosLibres)
@@ -599,9 +599,9 @@ public class Interfaz extends JFrame
                                 labelcreditos.setForeground(Color.WHITE);
                                 labelcreditos.setText(String.format("%s: %d","Creditos",creditos));
                             }
-                            objeto.reproducir = false;
-                            objeto.reiniciarValores();
-                            objeto.selectorMusica.setText("- - - -");
+                            objeto.play = false;
+                            objeto.resetValues();
+                            objeto.labelSelector.setText("- - - -");
                             prohibir.agregarProhibido(numero);
                             if (creditos == 0 && !creditosLibres) {
                                 timerFullScreen.restart();
@@ -619,9 +619,9 @@ public class Interfaz extends JFrame
                         labelcreditos.setForeground(Color.RED);
                         labelcreditos.setText("La canción que ha seleccionado no se puede reproducir antes de " + mUserSettings.getReinicioMusicas() +" mins");
                         timerChangerLblCredits.start();
-                        objeto.reproducir = false;
-                        objeto.reiniciarValores();
-                        objeto.selectorMusica.setText("- - - -");
+                        objeto.play = false;
+                        objeto.resetValues();
+                        objeto.labelSelector.setText("- - - -");
                     }
 
 
@@ -648,7 +648,7 @@ public class Interfaz extends JFrame
                     pantallaCompleta();
                 }
 
-                objeto.selectorMusica.setText(objeto.manejadorDeEvento(evento));
+                objeto.labelSelector.setText(objeto.keyEventHandler(evento));
 
                 labelPromociones.setVisible(false);
 
@@ -673,7 +673,7 @@ public class Interfaz extends JFrame
                     pantallaCompleta();
                 }
 
-                objeto.selectorMusica.setText(objeto.manejadorDeEvento(evento));
+                objeto.labelSelector.setText(objeto.keyEventHandler(evento));
 
                 labelPromociones.setVisible(false);
 
@@ -698,7 +698,7 @@ public class Interfaz extends JFrame
                     pantallaCompleta();
                 }
 
-                objeto.selectorMusica.setText(objeto.manejadorDeEvento(evento));
+                objeto.labelSelector.setText(objeto.keyEventHandler(evento));
                 if (listMusic.upGender()) {
                     labelPromociones.setVisible(false);
                     listaDeMusicas.setListData(listMusic.getGenderSongs(listMusic.getSelectedGender()));
@@ -711,7 +711,7 @@ public class Interfaz extends JFrame
                     pantallaCompleta();
                 }
 
-                objeto.selectorMusica.setText(objeto.manejadorDeEvento(evento));
+                objeto.labelSelector.setText(objeto.keyEventHandler(evento));
 
                 if (listMusic.downGender()) {
                     labelPromociones.setVisible(false);
@@ -749,9 +749,9 @@ public class Interfaz extends JFrame
             }
         }
 
-        private void updateDB(Cancion cancionAReproducir) {
+        private void updateDB(Song cancionAReproducir) {
             try {
-                String consulta = "SELECT * FROM most_popular WHERE number = " + cancionAReproducir.obtenerNumero();
+                String consulta = "SELECT * FROM most_popular WHERE number = " + cancionAReproducir.getSongNumber();
 
                 ResultSet resultSet = consultor.query(consulta);
 
@@ -759,10 +759,10 @@ public class Interfaz extends JFrame
                     resultSet.close();
 
                     String insertar = "INSERT INTO most_popular(number, name, artist, genre, times, last_date)" +
-                            " VALUES ("+cancionAReproducir.obtenerNumero()+",'" +
-                            cancionAReproducir.obtenerNombreCancion()+ "','" +
-                            cancionAReproducir.getArtista() + "','" +
-                            cancionAReproducir.getGenero() + "'," +
+                            " VALUES ("+cancionAReproducir.getSongNumber()+",'" +
+                            cancionAReproducir.getSongName()+ "','" +
+                            cancionAReproducir.getSinger() + "','" +
+                            cancionAReproducir.getSongGenre() + "'," +
                             1 + ", "+ new Date().getTime() +");";
 
                     consultor.insert(insertar);
@@ -775,7 +775,7 @@ public class Interfaz extends JFrame
 
                     resultSet.close();
 
-                    consultor.update("UPDATE most_popular SET times = " + times + ", last_date = " + new Date().getTime() + " WHERE number = " + cancionAReproducir.obtenerNumero());
+                    consultor.update("UPDATE most_popular SET times = " + times + ", last_date = " + new Date().getTime() + " WHERE number = " + cancionAReproducir.getSongNumber());
 
                     consultor.closeConnection();
                 }
@@ -789,18 +789,18 @@ public class Interfaz extends JFrame
     {
         @Override
         public void stopped(uk.co.caprica.vlcj.player.MediaPlayer mediaPlayer) {
-            nextMusic();
+            nextSong();
         }
 
         public void finished(uk.co.caprica.vlcj.player.MediaPlayer mediaPlayer) {
             if (repro.embeddedMediaPlayerMp3.isPlaying()) {
                 repro.embeddedMediaPlayer.playMedia(mUserSettings.getDireccionVideosMp3() + "\\" + listMusic.getPromVideo());
             } else {
-                nextMusic();
+                nextSong();
             }
         }
 
-        public void nextMusic() {
+        public void nextSong() {
             listaReproduccion.quitarMusica();
             listaDeReproduccion.setListData(listaReproduccion.obtenerCancionesEnLista());
 
@@ -944,8 +944,8 @@ public class Interfaz extends JFrame
     public void addSongToPlayList(ArrayList numbers) {
         if (numbers.size()>0) {
             for (int i = 0; i < numbers.size(); i++) {
-                Cancion cancionAReproducir = listMusic.getSong((int) numbers.get(i));
-                //Cancion cancion = new Cancion(numero, cancionAReproducir);
+                Song cancionAReproducir = listMusic.getSong((int) numbers.get(i));
+                //Song cancion = new Song(numero, cancionAReproducir);
                 listaReproduccion.agregarCanciones(cancionAReproducir);
 
             }

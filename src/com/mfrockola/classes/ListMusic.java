@@ -1,7 +1,6 @@
 package com.mfrockola.classes;
 
 import java.io.File;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -10,7 +9,7 @@ import java.util.Random;
  */
 public class ListMusic {
 
-    private ArrayList <Cancion> listOfSongs;
+    private ArrayList <Song> listOfSongs;
     private ArrayList<Gender> gender;
     private String path;
     private String pathPromVideos;
@@ -41,7 +40,7 @@ public class ListMusic {
         return selectedGender;
     }
 
-    public void setListOfSongs(ArrayList<Cancion> listOfSongs) {
+    public void setListOfSongs(ArrayList<Song> listOfSongs) {
         this.listOfSongs = listOfSongs;
     }
 
@@ -49,7 +48,7 @@ public class ListMusic {
         return listOfSongs.size();
     }
 
-    public Cancion getSong(int number) {
+    public Song getSong(int number) {
         return listOfSongs.get(number);
     }
 
@@ -100,13 +99,13 @@ public class ListMusic {
         return gender.get(selectedGender).getName();
     }
 
-    public Cancion[] countSongs(File file) {
+    public Song[] countSongs(File file) {
 
         String [] artistas = file.list();
 
-        ArrayList<Cancion> provisionalGender = new ArrayList<>();
+        ArrayList<Song> provisionalGender = new ArrayList<>();
 
-        Cancion[] gender = new Cancion[0];
+        Song[] gender = new Song[0];
 
         for (int i = 0; i < artistas.length; i++) {
 
@@ -116,13 +115,13 @@ public class ListMusic {
                 String [] canciones = artista.list();
 
                 for (int j = 0; j < canciones.length; j++) {
-                    provisionalGender.add(new Cancion(songNumber,file.getName(),artista.getName(),canciones[j]));
-                    listOfSongs.add(new Cancion(songNumber,file.getName(),artista.getName(),canciones[j]));
+                    provisionalGender.add(new Song(songNumber,file.getName(),artista.getName(),canciones[j]));
+                    listOfSongs.add(new Song(songNumber,file.getName(),artista.getName(),canciones[j]));
                     songNumber++;
                 }
             }
 
-            gender = new Cancion[provisionalGender.size()];
+            gender = new Song[provisionalGender.size()];
 
             for (int k = 0; k < provisionalGender.size(); k++) {
                 gender[k] = provisionalGender.get(k);
@@ -139,7 +138,7 @@ public class ListMusic {
         this.gender = gender;
     }
 
-    public Cancion[] getGenderSongs(int i) {
+    public Song[] getGenderSongs(int i) {
         return gender.get(i).getSongs();
     }
 
