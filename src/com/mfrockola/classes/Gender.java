@@ -22,8 +22,8 @@ class Gender {
         return name;
     }
 
-    private void setName(String nombre) {
-        this.name = nombre;
+    private void setName(String name) {
+        this.name = name;
     }
 
     Song[] getSongs() {

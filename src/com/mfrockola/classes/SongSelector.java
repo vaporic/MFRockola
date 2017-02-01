@@ -5,14 +5,13 @@ import java.awt.Font;
 import java.awt.event.KeyEvent;
 
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
-public class SongSelector
+class SongSelector
 {
 	JLabel labelSelector = new JLabel("- - - -");
 	String values [] = {"-","-","-","-"};
-	String stringNumber = String.format("%s %s %s %s", values[0],values[1],values[2],values[3]);
+	private String stringNumber = String.format("%s %s %s %s", values[0],values[1],values[2],values[3]);
 	int counterValue = 0;
 	boolean play = false;
 	private int keyDelete;
@@ -21,7 +20,7 @@ public class SongSelector
 	private int keyUpGender;
 	private int keyDownGender;
 	
-	public SongSelector(int keyDelete, int keyUpList, int keyDownList, int keyUpGender, int keyDownGender, int sizeSelector)
+	SongSelector(int keyDelete, int keyUpList, int keyDownList, int keyUpGender, int keyDownGender, int sizeSelector)
 	{
 		labelSelector.setFont(new Font("Consolas", Font.BOLD, sizeSelector));
 		labelSelector.setOpaque(false);
@@ -34,7 +33,7 @@ public class SongSelector
 		this.keyDownGender = keyDownGender;
 	}
 	
-	public void resetValues()
+	void resetValues()
 	{
 		values [0] = "-";
 		values [1] = "-";
@@ -42,7 +41,7 @@ public class SongSelector
 		values [3] = "-";
 	}
 	
-	public String keyEventHandler(KeyEvent e)
+	String keyEventHandler(KeyEvent e)
     {
         if (e.getKeyCode()== 48 || e.getKeyCode()==96)
         {
@@ -106,7 +105,7 @@ public class SongSelector
 		return stringNumber;
 	}
 
-    public void updateStringNumber(String key) {
+    private void updateStringNumber(String key) {
         values[counterValue] = key;
         stringNumber = String.format("%s %s %s %s",values[0],values[1],values[2],values[3]);
     }

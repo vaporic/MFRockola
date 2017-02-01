@@ -7,13 +7,13 @@ import java.awt.event.KeyEvent;
 /**
  * This class is used in the configuration window to have TextField with only centered and limited values
  */
-public class CustomTextField extends JTextField {
+class CustomTextField extends JTextField {
 
     // Private variable that will determine how many values ​​the TextField allows
     private int columns;
 
     // To the constructor we pass as argument the amount of values ​​that will accept the TextField
-    public CustomTextField(int columns) {
+    CustomTextField(int columns) {
         setColumns(columns);
         // Adds the listener that will determine if the character limit has been reached
         addKeyListener(new ColumnsKeyAdapter());

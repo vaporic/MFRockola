@@ -2,14 +2,14 @@ package com.mfrockola.classes;
 
 // This class contains the basic data of a song, such as its number, name, singer and genre.
 
-public class Song {
+class Song {
 	private int songNumber;
 	private String songGenre;
 	private String singer;
 	private String songName;
 
 	// Constructor to start variables
-	public Song(int songNumber, String songGenre, String singer, String songName) {
+	Song(int songNumber, String songGenre, String singer, String songName) {
 		setSongNumber(songNumber);
 		setSongGenre(songGenre);
 		setSinger(singer);
@@ -18,35 +18,35 @@ public class Song {
 
 	// Public methods to obtain the values ​​of the variables of the Song object
 	
-	public String getSongName() {
+	String getSongName() {
 		return songName;
 	}
 	
-	public int getSongNumber() {
+	int getSongNumber() {
 		return songNumber;
 	}
 	
-	public void setSongNumber(int songNumber) {
+	private void setSongNumber(int songNumber) {
 		this.songNumber = songNumber;
 	}
 	
-	public void setSongName(String songName) {
+	private void setSongName(String songName) {
 		this.songName = songName;
 	}
 
-	public String getSongGenre() {
+	String getSongGenre() {
 		return songGenre;
 	}
 
-	public void setSongGenre(String songGenre) {
+	private void setSongGenre(String songGenre) {
 		this.songGenre = songGenre;
 	}
 
-	public String getSinger() {
+	String getSinger() {
 		return singer;
 	}
 
-	public void setSinger(String singer) {
+	private void setSinger(String singer) {
 		this.singer = singer;
 	}
 

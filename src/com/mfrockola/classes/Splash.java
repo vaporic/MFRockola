@@ -1,38 +1,29 @@
 package com.mfrockola.classes;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.File;
 
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.SwingConstants;
-import javax.swing.Timer;
-import javax.swing.UIManager;
+import javax.swing.*;
 
-/*
+/**
 	This class will be used to execute MFRockola. Since the configuration must be external, a splash is made so that the
 	user can press a key that opens the configuration window. It also has additional controls that determine if some
  	MFRockola requirements are well configured
 */
 
-
-@SuppressWarnings("serial")
 public class Splash extends JFrame implements Runnable {
 	// Determines whether the mouse can be moved or locked in the lower right corner of the screen
-	public static boolean moveMouse = true;
+	static boolean moveMouse = true;
 
 	// constructor without attributes
-	public Splash() {
+	Splash() {
         initComponents();
 	}
 
 	// Generate the splash window and init components
-	public void initComponents() {
+	private void initComponents() {
 		// Will load JPanel external class that has the ability to have a background image
 		JEImagePanel panel = new JEImagePanel(
 				this.getClass().getResource("/com/mfrockola/imagenes/fondoSmall.jpg"));
@@ -45,7 +36,7 @@ public class Splash extends JFrame implements Runnable {
 		labelText.setHorizontalAlignment(SwingConstants.RIGHT);
 		panel.add(labelText,BorderLayout.SOUTH);
 		getContentPane().add(panel);
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		setSize(480,300);
 		setLocationRelativeTo(null);
 		setUndecorated(true);
@@ -70,21 +61,19 @@ public class Splash extends JFrame implements Runnable {
     // thread for the time we have to press Q and hold the mouse in the lower right corner
 	public void run() {
 
-		final Timer timer = new Timer(1000*2, new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				File file = new File("config.mfr");
-				if (file.exists()) {
-					file = null;
-					new Interfaz();
-					dispose();
-				} else {
-					file = null;
-					moveMouse = false;
-					new SettingsWindow();
-					dispose();
-				}
-			}
-		});
+		final Timer timer = new Timer(1000*2, e -> {
+            File file = new File("config.mfr");
+            if (file.exists()) {
+                file = null;
+                new Interfaz();
+                dispose();
+            } else {
+                file = null;
+                moveMouse = false;
+                new SettingsWindow();
+                dispose();
+            }
+        });
 		
 		timer.setRepeats(false);
 		timer.start();
@@ -113,8 +102,10 @@ public class Splash extends JFrame implements Runnable {
 			e.printStackTrace();
 		}
 		while (moveMouse) {
-			robot.mouseMove((int) Toolkit.getDefaultToolkit().getScreenSize().getWidth(),
-					(int) Toolkit.getDefaultToolkit().getScreenSize().getHeight());
+			if (robot != null) {
+				robot.mouseMove((int) Toolkit.getDefaultToolkit().getScreenSize().getWidth(),
+                        (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight());
+			}
 		}
 	}
 }

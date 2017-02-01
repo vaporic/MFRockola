@@ -13,13 +13,13 @@ import javax.swing.ListCellRenderer;
  */
 
 // Extend JLabel and implement ListCellRenderer
-public class RowRenderer extends JLabel implements ListCellRenderer {
+class RowRenderer extends JLabel implements ListCellRenderer {
 	// We put the two background colors as private variables
 	private Color mColor1;
 	private Color mColor2;
 
 	// Public constructor with a font, a foreground color, and two background colors as attributes
-	public RowRenderer(Font font, Color foreground, Color color1, Color color2) {
+	RowRenderer(Font font, Color foreground, Color color1, Color color2) {
 		// As we extend from JLabel we can call your methods
 		setOpaque(true);
 		setFont(font);

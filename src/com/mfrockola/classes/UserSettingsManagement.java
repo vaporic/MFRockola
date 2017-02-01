@@ -5,16 +5,14 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 
-public class UserSettingsManagement
+class UserSettingsManagement
 {
-	// We create a private instance of UserSettings
-	UserSettings data;
 
 	// We create an object input stream to read the file on the hard disk
 	private ObjectInputStream mInputStream;
 
 	// We open the user configuration file to extract the data and verify if it is available
-	public void openUserSettings() {
+	void openUserSettings() {
 		try {
 			mInputStream = new ObjectInputStream(new FileInputStream("config.mfr"));
 		} catch (IOException ioException) {
@@ -23,16 +21,14 @@ public class UserSettingsManagement
 	}
 
 	// We convert the file into a UserSettings object readable by MFRockola
-	public UserSettings readUserSettings() {
-		data = null;
+	UserSettings readUserSettings() {
+		UserSettings data = null;
 		
 		try {
 			data = (UserSettings) mInputStream.readObject();
-		} catch (EOFException endOfFileExcepcion) {
-			return data;
-		} catch (ClassNotFoundException classNotFoundExcepcion) {
-			System.err.println("Error al leer el archivo.");
-		} catch (IOException ioExcepcion) {
+		} catch (EOFException endOfFileException) {
+			return null;
+		} catch (ClassNotFoundException | IOException classNotFoundExcepcion) {
 			System.err.println("Error al leer el archivo.");
 		}
 		return data;
