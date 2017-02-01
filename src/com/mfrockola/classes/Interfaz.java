@@ -310,7 +310,7 @@ public class Interfaz extends JFrame
         listMusic = new ListMusic(mUserSettings.getDireccionVideos(),mUserSettings.getDireccionVideosMp3()); //Aqui falta la direccion de los videos promocionales
 
         listaDeMusicas = new JList();
-        listaDeMusicas.setCellRenderer(new ModificadorDeCeldas(new Font(mUserSettings.getFontCeldasName(),
+        listaDeMusicas.setCellRenderer(new RowRenderer(new Font(mUserSettings.getFontCeldasName(),
                 mUserSettings.getFontCeldasNegrita(), mUserSettings.getFontCeldasSize()),mUserSettings.getFontCeldasColor(),
                 mUserSettings.getColor1(), mUserSettings.getColor2()));
         listaDeMusicas.setListData(listMusic.getGenderSongs(0));
@@ -326,7 +326,7 @@ public class Interfaz extends JFrame
 
         listaDeReproduccion = new JList();
         listaDeReproduccion.setListData(listaReproduccion.obtenerCancionesEnLista());
-        listaDeReproduccion.setCellRenderer(new ModificadorDeCeldas(new Font(mUserSettings.getFontCeldasName(),
+        listaDeReproduccion.setCellRenderer(new RowRenderer(new Font(mUserSettings.getFontCeldasName(),
                 mUserSettings.getFontCeldasNegrita(), mUserSettings.getFontCeldasSize()),mUserSettings.getFontCeldasColor(),
                 mUserSettings.getColor1(), mUserSettings.getColor2()));
         listaDeReproduccion.setBounds((int)(ancho/1.633), (int)(alto/1.52), (int)(ancho/2.732), (int)(alto/3.051));

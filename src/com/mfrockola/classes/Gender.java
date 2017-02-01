@@ -1,18 +1,23 @@
 package com.mfrockola.classes;
 
 /**
- * Created by Angel C on 03/05/2016.
+ * This class is the definition of a musical genre. Contains its name and the list of songs in a Song arrangement
  */
 public class Gender {
 
+    // private variable to store the gender name.
     private String name;
+
+    // private variable to store the list of music that contains the gender.
     private Song[] songs;
 
+    // in the constructor we establish the private variables
     public Gender(String name, Song[] songs) {
         setName(name);
         setSongs(songs);
     }
 
+    // Public methods to obtain the values ​​of the private variables of the Gender class
     public String getName() {
         return name;
     }

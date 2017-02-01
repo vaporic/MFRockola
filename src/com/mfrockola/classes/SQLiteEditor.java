@@ -8,7 +8,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -25,7 +24,7 @@ public class SQLiteEditor extends JFrame {
 
     SQLiteConsultor sQLiteConsultor;
 
-    ArrayList<CancionDB> cancionesDB;
+    ArrayList<SongDataBase> cancionesDB;
 
     Object[] data;
 
@@ -111,14 +110,14 @@ public class SQLiteEditor extends JFrame {
                 int index = list.getSelectedIndex();
 
                 if (index != -1) {
-                    CancionDB cancionSeleccionada = cancionesDB.get(index);
+                    SongDataBase cancionSeleccionada = cancionesDB.get(index);
 
                     date.setTime(cancionSeleccionada.getDate());
 
                     labelNumero.setText(String.format("Numero: %04d", cancionSeleccionada.getNumber()));
                     labelFecha.setText("Fecha: " + dateFormat.format(date));
                     labelVecesReproducida.setText("Nº Reproducciones: " + cancionSeleccionada.getTimes());
-                    labelArtista.setText("Artista: " + cancionSeleccionada.getArtist());
+                    labelArtista.setText("Artista: " + cancionSeleccionada.getSinger());
                     labelGenero.setText("Genero: " + cancionSeleccionada.getGenre());
                 } else {
                     labelNumero.setText("Numero: ");
@@ -147,11 +146,11 @@ public class SQLiteEditor extends JFrame {
     }
 
     private void refreshList() {
-        cancionesDB = new ArrayList<CancionDB>();
+        cancionesDB = new ArrayList<SongDataBase>();
         try {
             ResultSet resultSet = sQLiteConsultor.query("SELECT * FROM most_popular ORDER BY times DESC, number ASC");
             while (resultSet.next()) {
-                cancionesDB.add(new CancionDB(
+                cancionesDB.add(new SongDataBase(
                         resultSet.getInt("_ID"),
                         resultSet.getInt("number"),
                         resultSet.getString("name"),

@@ -1,26 +1,45 @@
 package com.mfrockola.classes;
 
 /**
- * Created by Angel C on 18/07/2016.
+ * This class contains the basic data of a song that will be stored in the database of the most listened
  */
-public class CancionDB {
+public class SongDataBase {
+
+    // Private variables that we can call in the database
+
+    // ID of song
     private int _ID;
+
+    // Number of the song in the list
     private int number;
+
+    // Name of dong
     private String name;
+
+    // Times the song has been played
     private int times;
+
+    // Date of last reproduction
     private long date;
-    private String artist;
+
+    // Singer of song
+    private String singer;
+
+    // Genre of song
     private String genre;
 
-    public CancionDB(int _ID, int number, String name, int times, long date, String artist, String genre) {
+    // We set values ​​of the private variables in the constructor when we create the SongDataBase object
+    public SongDataBase(int _ID, int number, String name, int times, long date, String singer, String genre) {
         set_ID(_ID);
         setNumber(number);
         setName(name);
         setTimes(times);
         setDate(date);
-        setArtist(artist);
+        setSinger(singer);
         setGenre(genre);
     }
+
+    // Public methods for calling private variables from external classes
 
     public int get_ID() {
         return _ID;
@@ -62,12 +81,12 @@ public class CancionDB {
         this.date = date;
     }
 
-    public String getArtist() {
-        return this.artist;
+    public String getSinger() {
+        return this.singer;
     }
 
-    public void setArtist(String artist) {
-        this.artist = artist;
+    public void setSinger(String singer) {
+        this.singer = singer;
     }
 
     public String getGenre() {

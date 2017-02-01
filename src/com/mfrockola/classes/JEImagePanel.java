@@ -9,55 +9,43 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
-public class JEImagePanel extends JPanel{
+public class JEImagePanel extends JPanel {
 
-	private Image image=null;
+    // Variable that stores the panel background
+    private Image mImage;
 
-	private Icon icon;
-
-	/** Creates a new instance of JEImagePanel */
-
-	public JEImagePanel(String nombreImagen) {
-		this.setIcon(new ImageIcon(nombreImagen));
-	}
+    // Store the image in an object Icon that is then passed as an argument to the Image object
+    private Icon mIcon;
 
 	public JEImagePanel(URL resource) {
-		setIcon(new ImageIcon(resource));
+		mImage = null;
+        // Set the value of the icon object according to the path that is passed in the constructor
+        setIcon(new ImageIcon(resource));
 	}
 
-	protected void paintComponent(Graphics g) {
-
+    // We override the paintComponent method to draw the image we have stored in the Image object
+    protected void paintComponent(Graphics g) {
 		Graphics2D g2 =(Graphics2D) g;
-
 		if(getImage()!=null)
-
 			g2.drawImage(getImage(), 0, 0, getWidth(), getHeight(), null);
-
 	}
 
-	public Image getImage() {
-
-		return image;
-
+    // Public methods to use the private variables of the JEImagePanel class
+    public Image getImage() {
+		return mImage;
 	}
 
 	public void setImage(Image image) {
-
-		this.image = image;
-
+		this.mImage = image;
 	}
 
 	public Icon getIcon() {
-
-		return icon;
-
+		return mIcon;
 	}
 
-	public void setIcon(Icon icon){
-
-		this.icon=icon;
-
-		setImage(((ImageIcon)icon).getImage());
-
+    // In this method after setting the object Icon, we call the method setImage and we pass as argument the object Icon
+    public void setIcon(Icon icon) {
+		this.mIcon=icon;
+		setImage(((ImageIcon)getIcon()).getImage());
 	}
 }
