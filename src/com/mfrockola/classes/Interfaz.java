@@ -30,7 +30,7 @@ public class Interfaz extends JFrame
     private int ancho;
     private int alto;
 
-    private MusicasProhibidas prohibir; // Objeto de musicas que no se pueden repetir.
+    private BlockedSongs prohibir; // Objeto de musicas que no se pueden repetir.
     private ListaDeReproduccion listaReproduccion = new ListaDeReproduccion(); // Objeto de las musicas en reproduccion.
 
     private boolean isFullScreen = false; // Objeto que determina si se entra o no en pantalla completa.
@@ -88,7 +88,7 @@ public class Interfaz extends JFrame
         {
             mUserSettingsManagement.openUserSettings();
             mUserSettings = mUserSettingsManagement.readUserSettings();
-            prohibir = new MusicasProhibidas(mUserSettings.getReinicioMusicas());
+            prohibir = new BlockedSongs(mUserSettings.getReinicioMusicas());
             objeto = new SongSelector(mUserSettings.getTeclaBorrar(), mUserSettings.getTeclaSubirLista(),
                     mUserSettings.getTeclaBajarLista(), mUserSettings.getTeclaSubirGenero(),
                     mUserSettings.getTeclaBajarGenero(),mUserSettings.getFontSelectorSize());
@@ -520,7 +520,7 @@ public class Interfaz extends JFrame
                 numero = Integer.parseInt(String.format("%s%s%s%s", objeto.values[0],objeto.values[1],
                         objeto.values[2],objeto.values[3]));
 
-                if (prohibir.revisarProhibido(numero))
+                if (prohibir.checkBlockedSongs(numero))
                     condicion = true;
                 else
                     condicion = false;
@@ -566,7 +566,7 @@ public class Interfaz extends JFrame
                             objeto.play = false;
                             objeto.resetValues();
                             objeto.labelSelector.setText("- - - -");
-                            prohibir.agregarProhibido(numero);
+                            prohibir.blockSong(numero);
                             labelMusica.setText(String.format("%04d - %s - %s - %s",listaReproduccion.obtenerNumero(),
                                     listaReproduccion.obtenerGenero(),
                                     listaReproduccion.obtenerArtista(),
@@ -602,7 +602,7 @@ public class Interfaz extends JFrame
                             objeto.play = false;
                             objeto.resetValues();
                             objeto.labelSelector.setText("- - - -");
-                            prohibir.agregarProhibido(numero);
+                            prohibir.blockSong(numero);
                             if (creditos == 0 && !creditosLibres) {
                                 timerFullScreen.restart();
                             }
