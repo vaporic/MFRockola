@@ -1,5 +1,6 @@
 package com.mfrockola.classes;
 
+import java.net.URL;
 import java.util.Random;
 
 /**
@@ -10,6 +11,7 @@ public class Utils {
     public static final int SELECT_VIDEO = 0;
     public static final int SELECT_IMAGE = 1;
 
+    public static int EXT_UNKNOW = -1;
     public static int EXT_MP4 = 0;
     public static int EXT_MP3 = 1;
     public static int EXT_AVI = 2;
@@ -18,12 +20,17 @@ public class Utils {
     public static int EXT_WAV = 5;
     public static int EXT_AAC = 6;
     public static int EXT_FLV = 7;
+    public static int EXT_MKV = 8;
 
     public static int getExtension(String path) {
 
         int index = path.lastIndexOf(".");
 
         String extension = path.substring(index+1);
+
+        if (extension.equals("jpg") || extension.equals("JPG")) {
+            return EXT_UNKNOW;
+        }
 
         if (extension.equals("mp4") || extension.equals("MP4")) {
             return EXT_MP4;
@@ -55,6 +62,10 @@ public class Utils {
 
         if (extension.equals("flv") || extension.equals("FLV")) {
             return EXT_FLV;
+        }
+
+        if (extension.equals("mkv") || extension.equals("MKV")) {
+            return EXT_MKV;
         }
 
         return EXT_MP4;

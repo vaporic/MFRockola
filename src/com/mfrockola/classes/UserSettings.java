@@ -5,17 +5,22 @@ import java.io.Serializable;
 import java.net.URL;
 
 @SuppressWarnings("serial")
-public class UserSettings implements Serializable
-{
-	private String direccionVideos;
-	private String direccionVideosMp3;
-	private String direccionVlc;
+public class UserSettings implements Serializable {
+
+    // This string saves the path of the videos folder
+    private String pathSongs;
+
+    // In case you try to play an mp3, will play a video that is in this
+    private String pathVideosMp3;
+
+	private String pathVlc;
 	private String direccionVideoPromocional;
 	private int musicAleatoria;
 	private int reinicioMusicas;
 	private int cantidadCreditos;
 	private boolean libre;
 	private boolean videoPromocional;
+    private boolean defaultPromotionalVideo;
 	private int clickCreditos;
 	private int teclaSubirLista;
 	private int teclaBajarLista;
@@ -55,27 +60,28 @@ public class UserSettings implements Serializable
 	private String tipoDePremio;
 
 	private int creditosGuardados;
-	
-	public UserSettings(String direccionVideos, String direccionVideosMp3, String direccionVlc,
-			String direccionVideoPromocional, int musicAleatoria,int reinicioMusicas,int cantidadCreditos, boolean libre,
-			boolean videoPromocional, int clickCreditos, int teclaSubirLista, int teclaBajarLista,
-			int teclaSubirGenero, int teclaBajarGenero, int teclaPantallaCompleta, int teclaBorrar,
-			int teclaSaltarCancion, int teclaAgregarCredito, int teclaBorrarCredito,
-			boolean cancelMusic,String password, int cantidadCreditosUsados, int CantidadMonedasInsertadas, boolean defaultBackground,
-			URL direccionFondo, Color color1, Color color2, String fontCeldasName, int fontCeldasSize, int fontSelectorSize,
-			Color fontCeldasColor, int fontCeldasNegrita, boolean agregarAdicional, int numeroDeCreditosAdicionales,
-			int cadaCantidadDeCreditos, boolean creditosContinuos, boolean entregarPremio, int cantidadDePremios,
-			int cantidadDeCreditosPorPremio, String tipoDePremio, int creditosGuardados)
+
+	public UserSettings(String pathSongs, String pathVideosMp3, String pathVlc,
+						String direccionVideoPromocional, int musicAleatoria,int reinicioMusicas,int cantidadCreditos, boolean libre,
+						boolean videoPromocional, boolean defaultPromotionalVideo, int clickCreditos, int teclaSubirLista, int teclaBajarLista,
+						int teclaSubirGenero, int teclaBajarGenero, int teclaPantallaCompleta, int teclaBorrar,
+						int teclaSaltarCancion, int teclaAgregarCredito, int teclaBorrarCredito,
+						boolean cancelMusic,String password, int cantidadCreditosUsados, int CantidadMonedasInsertadas, boolean defaultBackground,
+						URL direccionFondo, Color color1, Color color2, String fontCeldasName, int fontCeldasSize, int fontSelectorSize,
+						Color fontCeldasColor, int fontCeldasNegrita, boolean agregarAdicional, int numeroDeCreditosAdicionales,
+						int cadaCantidadDeCreditos, boolean creditosContinuos, boolean entregarPremio, int cantidadDePremios,
+						int cantidadDeCreditosPorPremio, String tipoDePremio, int creditosGuardados)
 	{
-		setDireccionVideos(direccionVideos);
-		setDireccionVideosMp3(direccionVideosMp3);
-		setDireccionVlc(direccionVlc);
+		setPathSongs(pathSongs);
+		setPathVideosMp3(pathVideosMp3);
+		setPathVlc(pathVlc);
 		setMusicAleatoria(musicAleatoria);
 		setReinicioMusicas(reinicioMusicas);
 		setDireccionVideoPromocional(direccionVideoPromocional);
 		setCantidadCreditos(cantidadCreditos);
 		setLibre(libre);
 		setVideoPromocional(videoPromocional);
+        setDefaultPromotionalVideo(defaultPromotionalVideo);
 		setClickCreditos(clickCreditos);
 		setTeclaSubirLista(teclaSubirLista);
 		setTeclaBajarLista(teclaBajarLista);
@@ -110,22 +116,22 @@ public class UserSettings implements Serializable
 		setCreditosGuardados(creditosGuardados);
 	}
 
-	public String getDireccionVideos() 
+	public String getPathSongs()
 	{
-		return direccionVideos;
+		return pathSongs;
 	}
 
-	public void setDireccionVideos(String direccionVideos) 
+	public void setPathSongs(String pathSongs)
 	{
-		this.direccionVideos = direccionVideos;
+		this.pathSongs = pathSongs;
 	}
 
-	public String getDireccionVlc() {
-		return direccionVlc;
+	public String getPathVlc() {
+		return pathVlc;
 	}
 
-	public void setDireccionVlc(String direccionVlc) {
-		this.direccionVlc = direccionVlc;
+	public void setPathVlc(String pathVlc) {
+		this.pathVlc = pathVlc;
 	}
 
 	public int getMusicAleatoria() {
@@ -416,12 +422,12 @@ public class UserSettings implements Serializable
 		this.teclaBorrarCredito = teclaBorrarCredito;
 	}
 
-	public String getDireccionVideosMp3() {
-		return direccionVideosMp3;
+	public String getPathVideosMp3() {
+		return pathVideosMp3;
 	}
 
-	public void setDireccionVideosMp3(String direccionVideosMp3) {
-		this.direccionVideosMp3 = direccionVideosMp3;
+	public void setPathVideosMp3(String pathVideosMp3) {
+		this.pathVideosMp3 = pathVideosMp3;
 	}
 
 	public int getCreditosGuardados() {
@@ -439,4 +445,12 @@ public class UserSettings implements Serializable
 	public void setFontSelectorSize(int fontSelectorSize) {
 		this.fontSelectorSize = fontSelectorSize;
 	}
+
+    public boolean isDefaultPromotionalVideo() {
+        return defaultPromotionalVideo;
+    }
+
+    public void setDefaultPromotionalVideo(boolean defaultPromotionalVideo) {
+        this.defaultPromotionalVideo = defaultPromotionalVideo;
+    }
 }

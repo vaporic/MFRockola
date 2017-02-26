@@ -39,7 +39,7 @@ class MediaPlayer {
 
         // We call the native libraries of VLC, passing them as parameters the path where VLC is installed
         try {
-            NativeLibrary.addSearchPath(RuntimeUtil.getLibVlcLibraryName(),mUserSettings.getDireccionVlc());
+            NativeLibrary.addSearchPath(RuntimeUtil.getLibVlcLibraryName(),mUserSettings.getPathVlc());
             Native.loadLibrary(RuntimeUtil.getLibVlcLibraryName(),LibVlc.class);
 
             // A Canvas is created
@@ -70,12 +70,12 @@ class MediaPlayer {
 
     // Method to play audio
     void playAudio(String gender, String singer, String songName, String pathPromotionalVideo) {
-        embeddedMediaPlayerMp3.playMedia(String.format("%s\\%s\\%s\\%s", mUserSettings.getDireccionVideos(),gender,singer,songName));
+        embeddedMediaPlayerMp3.playMedia(String.format("%s\\%s\\%s\\%s", mUserSettings.getPathSongs(),gender,singer,songName));
         embeddedMediaPlayer.playMedia(pathPromotionalVideo);
     }
 
     // Method to play video
     void playVideo(String gender, String singer, String songName) {
-        embeddedMediaPlayer.playMedia(String.format("%s\\%s\\%s\\%s", mUserSettings.getDireccionVideos(),gender,singer,songName));
+        embeddedMediaPlayer.playMedia(String.format("%s\\%s\\%s\\%s", mUserSettings.getPathSongs(),gender,singer,songName));
     }
 }

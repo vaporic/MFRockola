@@ -20,10 +20,6 @@ public class ListMusic {
 
     private Random random;
 
-    public static void main (String [] args) {
-        new ListMusic("C:\\videos","");
-    }
-
     public ListMusic (String path, String pathPromVideos) {
         setPath(path);
         setPathPromVideos(pathPromVideos);
@@ -115,9 +111,11 @@ public class ListMusic {
                 String [] canciones = artista.list();
 
                 for (int j = 0; j < canciones.length; j++) {
-                    provisionalGender.add(new Song(songNumber,file.getName(),artista.getName(),canciones[j]));
-                    listOfSongs.add(new Song(songNumber,file.getName(),artista.getName(),canciones[j]));
-                    songNumber++;
+                    if (Utils.getExtension(String.format("%s\\%s\\%s\\%s",path,file.getName(),artista.getName(),canciones[j]))!= Utils.EXT_UNKNOW) {
+                        provisionalGender.add(new Song(songNumber,file.getName(),artista.getName(),canciones[j]));
+                        listOfSongs.add(new Song(songNumber,file.getName(),artista.getName(),canciones[j]));
+                        songNumber++;
+                    }
                 }
             }
 

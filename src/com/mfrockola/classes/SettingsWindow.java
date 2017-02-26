@@ -56,11 +56,13 @@ public class SettingsWindow extends JFrame {
 	private JLabel labelTipoDePremio;
 	private JTextField textFieldTipoDePremio;
 	private JCheckBox chckbxNewCheckBox;
+    private JCheckBox checkBoxDefualtPromotionalVideo;
 	private JCheckBox checkBoxFoundDefaultBackground;
 	private JRadioButton rdbtnSi;
 	private JRadioButton rdbtnNo;
 	private boolean libre;
 	private boolean videoPromocional;
+    private boolean defaultVideoPromotional;
 	private boolean defaultBackground;
 	private boolean cancelMusic;
 	private boolean selectVideoProm;
@@ -86,6 +88,8 @@ public class SettingsWindow extends JFrame {
 	private JComboBox<String> comboBoxTamanioDeFuente; // comboBox de tamaño de fuente de celdas
 	private JComboBox<String> comboBoxTamanioDeFuenteSelector; // comboBox de tamaño de fuente de selector de musicas
 	private JCheckBox checkBoxFuenteCeldasNegrita; // checkbox para la fuente de las celdas negritsa
+
+    URL urlBackground = this.getClass().getResource("/com/mfrockola/imagenes/fondo.jpg");
 
 	public SettingsWindow()
 	{
@@ -191,8 +195,7 @@ public class SettingsWindow extends JFrame {
 		panel2.add(lblConfiguracinDeLos);
 
 		JTextPane textPane = new JTextPane();
-		textPane.setText("Este es el panel de configuración de los tiempos internos de la Rockola, como el tiempo que debe pasar para" +
-				"reproducir una cancion aleatoria y el tiempo necesario para poner la pantalla completa");
+            textPane.setText("Este es el panel de configuración de los tiempos internos de MFRockola. Por ejemplo, el tiempo que debe pasar para reproducir una canción aleatoria y el tiempo necesario para poner la pantalla completa.");
 		textPane.setEditable(false);
 		textPane.setFocusable(false);
 		textPane.setBounds(220, 50, 367, 48);
@@ -251,23 +254,46 @@ public class SettingsWindow extends JFrame {
 				if(chckbxNewCheckBox.isSelected())
 				{
 					videoPromocional = true;
-					textFieldVideoPromocional.setEditable(true);
-					textFieldVideoPromocional.setEnabled(true);
-					buttonPathPromotionalVideo.setEnabled(true);
+                    checkBoxDefualtPromotionalVideo.setEnabled(true);
 				}
 				else
 				{
 					videoPromocional = false;
-					textFieldVideoPromocional.setEditable(false);
-					textFieldVideoPromocional.setEnabled(false);
-					buttonPathPromotionalVideo.setEnabled(false);
+                    checkBoxDefualtPromotionalVideo.setEnabled(false);
+                    textFieldVideoPromocional.setEditable(false);
+                    textFieldVideoPromocional.setEnabled(false);
+                    buttonPathPromotionalVideo.setEnabled(false);
 				}
 			}
 		});
 		chckbxNewCheckBox.setBackground(Color.WHITE);
 		chckbxNewCheckBox.setHorizontalAlignment(SwingConstants.RIGHT);
-		chckbxNewCheckBox.setBounds(207, 245, 154, 23);
+		chckbxNewCheckBox.setBounds(100, 245, 154, 23);
 		panel2.add(chckbxNewCheckBox);
+
+        checkBoxDefualtPromotionalVideo = new JCheckBox("Predeterminado");
+        checkBoxDefualtPromotionalVideo.addItemListener(new ItemListener() {
+            public void itemStateChanged(ItemEvent e) {
+                if(checkBoxDefualtPromotionalVideo.isSelected()) {
+                    defaultVideoPromotional = true;
+                    textFieldVideoPromocional.setEditable(false);
+                    textFieldVideoPromocional.setEnabled(false);
+                    textFieldVideoPromocional.setText("C:\\MFRockola\\Videos para MP3\\promotional.mpg");
+                    buttonPathPromotionalVideo.setEnabled(false);
+
+                } else {
+                    defaultVideoPromotional = false;
+                    textFieldVideoPromocional.setEditable(true);
+                    textFieldVideoPromocional.setEnabled(true);
+                    textFieldVideoPromocional.setText("");
+                    buttonPathPromotionalVideo.setEnabled(true);
+                }
+            }
+        });
+        checkBoxDefualtPromotionalVideo.setBackground(Color.WHITE);
+        checkBoxDefualtPromotionalVideo.setHorizontalAlignment(SwingConstants.RIGHT);
+        checkBoxDefualtPromotionalVideo.setBounds(251, 245, 110, 23);
+        panel2.add(checkBoxDefualtPromotionalVideo);
 
 		JPanel panel3 = new JPanel();
 		panel3.setBackground(Color.WHITE);
@@ -325,7 +351,7 @@ public class SettingsWindow extends JFrame {
 		panel3.add(txtpnModoACreditos);
 
 		JTextPane txtpnEnEstePanel = new JTextPane();
-		txtpnEnEstePanel.setText("En este panel podras configurar lo referente a los creditos, como su precio, si se permiten libres o no.");
+		txtpnEnEstePanel.setText("En este panel podrás configurar lo referente a los créditos, como su precio, si se permiten libres o no.");
 		txtpnEnEstePanel.setEditable(false);
 		txtpnEnEstePanel.setFocusable(false);
 		txtpnEnEstePanel.setBounds(220, 50, 367, 48);
@@ -333,7 +359,7 @@ public class SettingsWindow extends JFrame {
 
 		Border border = BorderFactory.createLineBorder(Color.BLACK);
 
-		JLabel labelTamanioDeLetraSelector = new JLabel("Tamaño del Selector de musicas");
+		JLabel labelTamanioDeLetraSelector = new JLabel("Tamaño de letra de la selección musical");
 		labelTamanioDeLetraSelector.setBounds(291,171,200,14);
 		labelTamanioDeLetraSelector.setHorizontalAlignment(SwingConstants.RIGHT);
 		panel3.add(labelTamanioDeLetraSelector);
@@ -412,9 +438,9 @@ public class SettingsWindow extends JFrame {
 		textFieldVlc.setBounds(328, 196, 225, 20);
 		panel4.add(textFieldVlc);
 
-		JLabel lblVideos = new JLabel("Directorio de Videos");
+		JLabel lblVideos = new JLabel("Directorio de Música y Videos");
 		lblVideos.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblVideos.setBounds(217, 131, 101, 14);
+		lblVideos.setBounds(167, 131, 151, 14);
 		panel4.add(lblVideos);
 
 		JLabel lblVideosParaMp3 = new JLabel("Directorio de Videos para MP3");
@@ -429,7 +455,7 @@ public class SettingsWindow extends JFrame {
 
 		Icon carpeta = new ImageIcon(this.getClass().getResource("/com/mfrockola/imagenes/carpeta.png"));
 		JLabel label_1 = new JLabel(carpeta);
-		label_1.setBounds(10, 11, 200, 203);
+		label_1.setBounds(10, 11, 180, 183);
 		panel4.add(label_1);
 
 		JLabel lblConfiguracinDeLos_1 = new JLabel("Configuración de los Directorios");
@@ -438,7 +464,7 @@ public class SettingsWindow extends JFrame {
 		panel4.add(lblConfiguracinDeLos_1);
 
 		JTextPane txtpnEsteEsEl = new JTextPane();
-		txtpnEsteEsEl.setText("Este es el panel de configuracion de los directorios para un buen funcionamiento del sistema. Es importante saber que es necesario manejar esta zona con cuidado porque puede provocar que el programa se vuelva inestable.");
+		txtpnEsteEsEl.setText("Este es el panel de configuración de los directorios para un buen funcionamiento de MFRockola. Es importante tener en cuenta que debe manejar esta configuración con cuidado porque puede provocar que el programa se vuelva inestable.");
 		txtpnEsteEsEl.setEditable(false);
 		txtpnEsteEsEl.setFocusable(false);
 		txtpnEsteEsEl.setBounds(220, 50, 367, 62);
@@ -468,7 +494,7 @@ public class SettingsWindow extends JFrame {
 		panel5.add(lblConfiguracinDelTeclado);
 
 		JTextPane txtpnEsteEsEl_1 = new JTextPane();
-		txtpnEsteEsEl_1.setText("Este es el panel para configurar el teclado y el mouse si la configuracion por defecto no le conviene. Recuerde tener presente que el bloque numerico puede tener doble funcion o simplemente dejan de funcionar si oprime NUM LOCK.");
+		txtpnEsteEsEl_1.setText("Este es el panel para configurar el teclado y el mouse. Si la configuración por defecto no le conviene puede cambiarla por cualquier tecla. Por comodidad del usuario, el bloque numérico siempre estará activado cuando inicie MFRockola.");
 		txtpnEsteEsEl_1.setEditable(false);
 		txtpnEsteEsEl_1.setFocusable(false);
 		txtpnEsteEsEl_1.setBounds(220, 50, 367, 62);
@@ -626,7 +652,7 @@ public class SettingsWindow extends JFrame {
 
 		JPanel panel6 = new JPanel();
 		panel6.setBackground(Color.WHITE);
-		fichas.addTab("Apariencia",null,panel6, "SettingsWindow de la apariencia general de MFRockola");
+		fichas.addTab("Apariencia",null,panel6, "Apariencia general de MFRockola");
 		panel6.setLayout(null);
 
 		Icon apariencia = new ImageIcon(this.getClass().getResource("/com/mfrockola/imagenes/apariencia.png"));
@@ -641,7 +667,7 @@ public class SettingsWindow extends JFrame {
 		panel6.add(lblConfiguracinDeLa);
 
 		JTextPane txtpnEsteEsEl_2 = new JTextPane();
-		txtpnEsteEsEl_2.setText("Este es el panel para configurar la apariencia de MFRockola como mas le guste entre lo que cabe la modificacion. Para el tamaño de la imagen de fondo se recomienda el mismo de la resolución de la pantalla que se usar.");
+		txtpnEsteEsEl_2.setText("Este es el panel para configurar la apariencia de MFRockola. Se recomienda que el tamaño de la imagen de fondo, sea el mismo de la resolución de pantalla que vaya a usar.");
 		txtpnEsteEsEl_2.setEditable(false);
 		txtpnEsteEsEl_2.setFocusable(false);
 		txtpnEsteEsEl_2.setBounds(220, 50, 367, 48);
@@ -662,15 +688,12 @@ public class SettingsWindow extends JFrame {
 		checkBoxFoundDefaultBackground.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e)
 			{
-				if(checkBoxFoundDefaultBackground.isSelected())
-				{
+				if(checkBoxFoundDefaultBackground.isSelected()) {
 					defaultBackground = true;
 					textFieldDirFondos.setEditable(false);
 					buttonPathFunds.setEnabled(false);
 					textFieldDirFondos.setText("");
-				}
-				else
-				{
+				} else {
 					defaultBackground = false;
 					textFieldDirFondos.setEditable(true);
 					buttonPathFunds.setEnabled(true);
@@ -694,7 +717,7 @@ public class SettingsWindow extends JFrame {
 		textFieldDirFondos.setColumns(10);
 
 		JPanel panelCeldas = new JPanel();
-		panelCeldas.setBorder(BorderFactory.createTitledBorder("Celdas de Musicas"));
+		panelCeldas.setBorder(BorderFactory.createTitledBorder("Celdas de Canciones"));
 		panelCeldas.setBounds(230,177,393,133);
 		panelCeldas.setBackground(Color.WHITE);
 		panelCeldas.setLayout(null);
@@ -822,7 +845,7 @@ public class SettingsWindow extends JFrame {
 
 		JPanel panel7 = new JPanel();
 		panel7.setBackground(Color.WHITE);
-		fichas.addTab("Estadisticas",null,panel7, "SettingsWindow y Visualizacion de las estadisticas de uso");
+		fichas.addTab("Estadísticas",null,panel7, "Visualización de las estadísticas de uso");
 		panel7.setLayout(null);
 
 		Icon estadisticas = new ImageIcon(this.getClass().getResource("/com/mfrockola/imagenes/estadistica.png"));
@@ -831,15 +854,15 @@ public class SettingsWindow extends JFrame {
 		labelEstadisticas.setBounds(10, 11, 200, 152);
 		panel7.add(labelEstadisticas);
 
-		JLabel lblConfiguracinEstadisticas = new JLabel("Configuración de Estadisticas");
+		JLabel lblConfiguracinEstadisticas = new JLabel("Configuración de Estadísticas");
 		lblConfiguracinEstadisticas.setFont(new Font("Calibri", Font.BOLD, 21));
 		lblConfiguracinEstadisticas.setBounds(220, 11, 302, 27);
 		panel7.add(lblConfiguracinEstadisticas);
 
 		JTextPane txtPaneEstadis = new JTextPane();
-		txtPaneEstadis.setText("Este es el panel para configurar y visualizar las estadisticas de uso de MFRockola. " +
-				"Encontraras las monedas intruducidas, asi como un monto aproximado de las ganancias generadas. Asi como cuantas canciones " +
-				"aleatorias fueron reproducidas.");
+		txtPaneEstadis.setText("Este es el panel para configurar y visualizar las estadísticas de uso de MFRockola. " +
+				"Encontrarás las monedas introducidas, un monto aproximado de las ganancias generadas y también cuantas " +
+				"canciones aleatorias fueron reproducidas.");
 		txtPaneEstadis.setEditable(false);
 		txtPaneEstadis.setFocusable(false);
 		txtPaneEstadis.setBounds(220, 50, 367, 62);
@@ -863,7 +886,7 @@ public class SettingsWindow extends JFrame {
 		labelMonedasInsertadas.setBounds(475, 149, 47, 14);
 		panel7.add(labelMonedasInsertadas);
 
-		JButton buttonMasPopulares = new JButton("Canciones mas populares");
+		JButton buttonMasPopulares = new JButton("Canciones más populares");
 		buttonMasPopulares.setBounds(308,174,181,25);
 		panel7.add(buttonMasPopulares);
 
@@ -1077,9 +1100,9 @@ public class SettingsWindow extends JFrame {
 		textFieldVideoPromocional.setEditable(mUserSettings.isVideoPromocional());
 		buttonPathPromotionalVideo.setEnabled(mUserSettings.isVideoPromocional());
 		chckbxNewCheckBox.setSelected(mUserSettings.isVideoPromocional());
-		textFieldVideos.setText(String.format("%s", mUserSettings.getDireccionVideos()));
-		textFieldVlc.setText(String.format("%s", mUserSettings.getDireccionVlc()));
-		textFieldVideosParaMp3.setText(String.format("%s", mUserSettings.getDireccionVideosMp3()));
+		textFieldVideos.setText(String.format("%s", mUserSettings.getPathSongs()));
+		textFieldVlc.setText(String.format("%s", mUserSettings.getPathVlc()));
+		textFieldVideosParaMp3.setText(String.format("%s", mUserSettings.getPathVideosMp3()));
 		textFieldVideoPromocional.setText(String.format("%s", mUserSettings.getDireccionVideoPromocional()));
 		textFieldSubirL.setText(Utils.printKeyCharCode(mUserSettings.getTeclaSubirLista()));
 		textFieldBajarL.setText(Utils.printKeyCharCode(mUserSettings.getTeclaBajarLista()));
@@ -1093,6 +1116,7 @@ public class SettingsWindow extends JFrame {
 		labelCreditosUsados.setText(String.format("%s", mUserSettings.getCantidadCreditosUsados()));
 		labelMonedasInsertadas.setText(String.format("%s", mUserSettings.getCantidadMonedasInsertadas()));
 		checkBoxFoundDefaultBackground.setSelected(mUserSettings.isDefaultBackground());
+        checkBoxDefualtPromotionalVideo.setSelected(mUserSettings.isDefaultPromotionalVideo());
 		checkBoxCancelMusic.setSelected(mUserSettings.isCancelMusic());
 		passwordField.setText(mUserSettings.getPassword());
 		if (mUserSettings.isCancelMusic() == true) {
@@ -1228,9 +1252,7 @@ public class SettingsWindow extends JFrame {
 		if (firstOpen) {
 			try
 			{
-				URL url = this.getClass().getResource("/com/mfrockola/imagenes/fondo.jpg");
-
-				System.out.println(url);
+				System.out.println(urlBackground);
 
 				// + 107
 				// - 109
@@ -1246,12 +1268,13 @@ public class SettingsWindow extends JFrame {
 						"C:\\videos", // path of videos
 						"C:\\MFRockola\\Videos para MP3",
 						"C:\\Program Files\\VideoLAN\\VLC", // path of VLC
-						"Seleccione un video", // path promotional video
+						"C:\\MFRockola\\Videos para MP3\\promotional.mpg", // path promotional video
 						1, // time in minutes of random music
 						15, // time in minutes of reset music
 						1, // credits per click
 						false, // is credit free?
-						false, // is promotional video?
+						true, // is promotional video?
+						true, // is default promotional video?
 						0, // click credits 1 = rigth click
 						111, // key up list
 						106, // key down list
@@ -1267,7 +1290,7 @@ public class SettingsWindow extends JFrame {
 						0, // cantidad de creditos usados
 						0, // cantidad de monedas insertadas
 						true, // is default background?
-						url, // path background
+						urlBackground, // path background
 						new Color(102,204,255), // color 1 of list
 						new Color(255,255,255), // color 2 of list
 						"Consolas", // tipo de fuente
@@ -1311,6 +1334,7 @@ public class SettingsWindow extends JFrame {
 						Integer.parseInt(textFieldCantCreditos.getText()),
 						libre,
 						videoPromocional,
+                        defaultVideoPromotional,
 						clickCreditos,
 						textFieldSubirL.getKeyCode(),
 						textFieldBajarL.getKeyCode(),

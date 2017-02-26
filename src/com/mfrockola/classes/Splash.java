@@ -25,7 +25,7 @@ public class Splash extends JFrame implements Runnable {
 	// Generate the splash window and init components
 	private void initComponents() {
 		// Will load JPanel external class that has the ability to have a background image
-		JEImagePanel panel = new JEImagePanel(
+		BackgroundImagePanel panel = new BackgroundImagePanel(
 				this.getClass().getResource("/com/mfrockola/imagenes/fondoSmall.jpg"));
 
 		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/com/mfrockola/imagenes/icono.png")));
@@ -65,7 +65,7 @@ public class Splash extends JFrame implements Runnable {
             File file = new File("config.mfr");
             if (file.exists()) {
                 file = null;
-                new Interfaz();
+                new Interface();
                 dispose();
             } else {
                 file = null;

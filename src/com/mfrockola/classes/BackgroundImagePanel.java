@@ -9,7 +9,7 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
-class JEImagePanel extends JPanel {
+class BackgroundImagePanel extends JPanel {
 
     // Variable that stores the panel background
     private Image mImage;
@@ -17,7 +17,7 @@ class JEImagePanel extends JPanel {
     // Store the image in an object Icon that is then passed as an argument to the Image object
     private Icon mIcon;
 
-	JEImagePanel(URL resource) {
+	BackgroundImagePanel(URL resource) {
 		mImage = null;
         // Set the value of the icon object according to the path that is passed in the constructor
         setIcon(new ImageIcon(resource));
@@ -30,7 +30,7 @@ class JEImagePanel extends JPanel {
 			g2.drawImage(getImage(), 0, 0, getWidth(), getHeight(), null);
 	}
 
-    // private methods to use the private variables of the JEImagePanel class
+    // private methods to use the private variables of the BackgroundImagePanel class
 	private Image getImage() {
 		return mImage;
 	}
