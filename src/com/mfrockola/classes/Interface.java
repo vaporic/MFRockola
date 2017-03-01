@@ -132,6 +132,32 @@ class Interface extends JFrame {
             freeCredits = mUserSettings.isLibre();
             addAditionalCredit = mUserSettings.isAgregarAdicional();
             givePrizeSetting = mUserSettings.isEntregarPremio();
+
+            File file = new File(mUserSettings.getPathVlc());
+            if (!file.exists()) {
+                JOptionPane.showMessageDialog(null,"VLC no se encuentra instalado o el directorio no se encuentra.","Error de VLC",JOptionPane.CLOSED_OPTION);
+                System.exit(-1);
+            }
+
+            file = new File(mUserSettings.getPathSongs());
+
+            if (!file.exists()) {
+                JOptionPane.showMessageDialog(null,"El directorio de musicas no se encuentra, verifiquelo e intente nuevamente.","Error de Directorios",JOptionPane.CLOSED_OPTION);
+                System.exit(-1);
+            }
+
+            file = new File(mUserSettings.getPathVideosMp3());
+
+            if (!file.exists()) {
+                JOptionPane.showMessageDialog(null,"El directorio de los videos predeterminados no se encuentra, verifiquelo e intente nuevamente.","Error de Directorios",JOptionPane.CLOSED_OPTION);
+                System.exit(-1);
+            }
+
+            file = new File(mUserSettings.getDireccionVideoPromocional());
+
+            if (!file.exists()) {
+                JOptionPane.showMessageDialog(null,"El video promocional no se encuentra, verifique la ruta.");
+            }
         }
         catch (NullPointerException excepcion) {
             new SettingsWindow();

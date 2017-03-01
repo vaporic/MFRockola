@@ -58,7 +58,7 @@ class MediaPlayer {
             embeddedMediaPlayerMp3 = mediaPlayerFactory.newEmbeddedMediaPlayer();
         } catch(UnsatisfiedLinkError error) {
             // If there is an exception is that the VLC directory is not found
-            System.out.println("No se encuentra el directorio del VLC. Presione Q para ir a la configuracion");
+            JOptionPane.showMessageDialog(null,"No se encuentran las librerias de VLC, intente reinstalar VLC y configure el directorio correctamente. Si el problema persiste y su version de Java es de 64Bits pruebe instalando VLC de 64 Bits.");
             System.exit(1);
         }
     }

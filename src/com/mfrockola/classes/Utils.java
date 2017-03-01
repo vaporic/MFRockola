@@ -1,8 +1,5 @@
 package com.mfrockola.classes;
 
-import java.net.URL;
-import java.util.Random;
-
 /**
  * Created by Angel C on 19/07/2016.
  */
