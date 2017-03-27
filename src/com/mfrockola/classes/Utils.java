@@ -1,32 +1,33 @@
 package com.mfrockola.classes;
 
 /**
- * Created by Angel C on 19/07/2016.
+ * Static class
  */
-public class Utils {
+class Utils {
 
-    public static final int SELECT_VIDEO = 0;
-    public static final int SELECT_IMAGE = 1;
+    static final String COLOR_MFROCKOLA = "#000080";
 
-    public static int EXT_UNKNOW = -1;
-    public static int EXT_MP4 = 0;
-    public static int EXT_MP3 = 1;
-    public static int EXT_AVI = 2;
-    public static int EXT_MPG = 3;
-    public static int EXT_WMA = 4;
-    public static int EXT_WAV = 5;
-    public static int EXT_AAC = 6;
-    public static int EXT_FLV = 7;
-    public static int EXT_MKV = 8;
+    static final int SELECT_VIDEO = 0;
+    static final int SELECT_IMAGE = 1;
 
-    public static int getExtension(String path) {
+    static int EXT_UNKNOWN = -1;
+    static int EXT_MP4 = 0;
+    static int EXT_MP3 = 1;
+    static int EXT_AVI = 2;
+    static int EXT_MPG = 3;
+    static int EXT_WMA = 4;
+    static int EXT_WAV = 5;
+    static int EXT_AAC = 6;
+    static int EXT_FLV = 7;
+    static int EXT_MKV = 8;
 
+    static int getExtension(String path) {
         int index = path.lastIndexOf(".");
 
         String extension = path.substring(index+1);
 
         if (extension.equals("jpg") || extension.equals("JPG")) {
-            return EXT_UNKNOW;
+            return EXT_UNKNOWN;
         }
 
         if (extension.equals("mp4") || extension.equals("MP4")) {
@@ -68,7 +69,7 @@ public class Utils {
         return EXT_MP4;
     }
 
-    public static String printKeyCharCode(int extendedKeyCode) {
+    static String printKeyCharCode(int extendedKeyCode) {
         switch (extendedKeyCode) {
             case 16777425:
                 return "Ñ";

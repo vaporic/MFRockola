@@ -111,7 +111,7 @@ public class ListMusic {
                 String [] canciones = artista.list();
 
                 for (int j = 0; j < canciones.length; j++) {
-                    if (Utils.getExtension(String.format("%s\\%s\\%s\\%s",path,file.getName(),artista.getName(),canciones[j]))!= Utils.EXT_UNKNOW) {
+                    if (Utils.getExtension(String.format("%s\\%s\\%s\\%s",path,file.getName(),artista.getName(),canciones[j]))!= Utils.EXT_UNKNOWN) {
                         provisionalGender.add(new Song(songNumber,file.getName(),artista.getName(),canciones[j]));
                         listOfSongs.add(new Song(songNumber,file.getName(),artista.getName(),canciones[j]));
                         songNumber++;
