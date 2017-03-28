@@ -26,7 +26,7 @@ public class Splash extends JFrame implements Runnable {
 	private void initComponents() {
 		// Will load JPanel external class that has the ability to have a background image
 		BackgroundImagePanel panel = new BackgroundImagePanel(
-				this.getClass().getResource("/com/mfrockola/imagenes/fondoSmall.jpg"));
+				this.getClass().getResource("/com/mfrockola/imagenes/fondoSmall.png"));
 
 		setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/com/mfrockola/imagenes/icono.png")));
 		panel.setLayout(new BorderLayout());

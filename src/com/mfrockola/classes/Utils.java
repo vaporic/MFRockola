@@ -6,6 +6,7 @@ package com.mfrockola.classes;
 class Utils {
 
     static final String COLOR_MFROCKOLA = "#000080";
+    static final String COLOR_SHADOW = "#000057ff";
 
     static final int SELECT_VIDEO = 0;
     static final int SELECT_IMAGE = 1;
