@@ -9,9 +9,9 @@ import javax.swing.SwingUtilities;
 
 class SongSelector
 {
-	JLabel labelSelector = new JLabel("- - - -");
-	String values [] = {"-","-","-","-"};
-	private String stringNumber = String.format("%s %s %s %s", values[0],values[1],values[2],values[3]);
+	JLabel labelSelector = new JLabel("- - - - -");
+	String values [] = {"-","-","-","-","-"};
+	private String stringNumber = String.format("%s %s %s %s %s", values[0],values[1],values[2],values[3], values[4]);
 	int counterValue = 0;
 	boolean play = false;
 	private int keyDelete;
@@ -39,6 +39,7 @@ class SongSelector
 		values [1] = "-";
 		values [2] = "-";
 		values [3] = "-";
+		values [4] = "-";
 	}
 	
 	String keyEventHandler(KeyEvent e)
@@ -92,9 +93,9 @@ class SongSelector
 		else if (e.getKeyCode() == keyUpList || e.getKeyCode() == keyDownList || e.getKeyCode() == keyUpGender || e.getKeyCode() == keyDownGender) {
 			counterValue = 0;
 			resetValues();
-			stringNumber = String.format("%s %s %s %s",values[0],values[1],values[2],values[3]);
+			stringNumber = String.format("%s %s %s %s %s",values[0],values[1],values[2],values[3], values[4]);
 		} else {
-			if (counterValue < 3)
+			if (counterValue < 4)
 				++counterValue;
 			else
 			{
@@ -107,6 +108,6 @@ class SongSelector
 
     private void updateStringNumber(String key) {
         values[counterValue] = key;
-        stringNumber = String.format("%s %s %s %s",values[0],values[1],values[2],values[3]);
+        stringNumber = String.format("%s %s %s %s %s",values[0],values[1],values[2],values[3],values[4]);
     }
 }

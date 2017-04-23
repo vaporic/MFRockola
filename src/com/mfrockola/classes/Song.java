@@ -53,6 +53,6 @@ class Song {
 	// Override the toString method in order to print the song name correctly on the interface
 	@Override
 	public String toString() {
-		return String.format("%04d - %s - %s", getSongNumber(),getSinger(), getSongName());
+		return String.format("%05d - %s - %s", getSongNumber(),getSinger(), getSongName());
 	}
 }

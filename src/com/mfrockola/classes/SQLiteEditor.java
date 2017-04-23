@@ -114,7 +114,7 @@ public class SQLiteEditor extends JFrame {
 
                     date.setTime(cancionSeleccionada.getDate());
 
-                    labelNumero.setText(String.format("Numero: %04d", cancionSeleccionada.getNumber()));
+                    labelNumero.setText(String.format("Numero: %05d", cancionSeleccionada.getNumber()));
                     labelFecha.setText("Fecha: " + dateFormat.format(date));
                     labelVecesReproducida.setText("Nº Reproducciones: " + cancionSeleccionada.getTimes());
                     labelArtista.setText("Artista: " + cancionSeleccionada.getSinger());

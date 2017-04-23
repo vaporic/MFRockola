@@ -568,8 +568,8 @@ class Interface extends JFrame {
                 int numero;
                 boolean condicion = false;
 
-                numero = Integer.parseInt(String.format("%s%s%s%s", mSongSelector.values[0],mSongSelector.values[1],
-                        mSongSelector.values[2],mSongSelector.values[3]));
+                numero = Integer.parseInt(String.format("%s%s%s%s%s", mSongSelector.values[0],mSongSelector.values[1],
+                        mSongSelector.values[2],mSongSelector.values[3],mSongSelector.values[4]));
 
                 if (mBlockedSongs.checkBlockedSongs(numero))
                     condicion = true;
@@ -580,7 +580,7 @@ class Interface extends JFrame {
                     labelCredits.setText("Musica no encontrada");
                     mSongSelector.play = false;
                     mSongSelector.resetValues();
-                    mSongSelector.labelSelector.setText("- - - -");
+                    mSongSelector.labelSelector.setText("- - - - -");
                     timerChangerLabelCredits.start();
                 }
                 else
@@ -618,11 +618,12 @@ class Interface extends JFrame {
                             mSongSelector.resetValues();
                             mSongSelector.labelSelector.setText("- - - -");
                             mBlockedSongs.blockSong(numero);
-                            labelSongPlayingBottom.setText(String.format("%04d - %s - %s - %s",mPlayList.getSongNumber(),
+                            labelSongPlayingBottom.setText(String.format("%05d - %s - %s - %s",
                                     mPlayList.getSongNumber(),
+                                    mPlayList.getSongGender(),
                                     mPlayList.getSinger(),
                                     mPlayList.songToPlay()));
-                            labelSongPlayingRight.setText(String.format("%04d - %s - %s - %s",
+                            labelSongPlayingRight.setText(String.format("%05d - %s - %s - %s",
                                     mPlayList.getSongNumber(),mPlayList.getSongGender(),
                                     mPlayList.getSinger(), mPlayList.songToPlay()));
                             if (credits == 0 && !freeCredits) {
@@ -881,13 +882,13 @@ class Interface extends JFrame {
                             mUserSettings.getPathVideosMp3() + "\\" + listMusicData.getPromVideo());
                 }
 
-                labelSongPlayingBottom.setText(String.format("%04d - %s - %s - %s",
+                labelSongPlayingBottom.setText(String.format("%05d - %s - %s - %s",
                         mPlayList.getSongNumber(),
                         mPlayList.getSongGender(),
                         mPlayList.getSinger(),
                         mPlayList.songToPlay()));
 
-                labelSongPlayingRight.setText(String.format("%04d - %s - %s - %s",
+                labelSongPlayingRight.setText(String.format("%05d - %s - %s - %s",
                         mPlayList.getSongNumber(),
                         mPlayList.getSongGender(),
                         mPlayList.getSinger(),
