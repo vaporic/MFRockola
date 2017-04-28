@@ -616,7 +616,7 @@ class Interface extends JFrame {
                             }
                             mSongSelector.play = false;
                             mSongSelector.resetValues();
-                            mSongSelector.labelSelector.setText("- - - -");
+                            mSongSelector.labelSelector.setText("- - - - -");
                             mBlockedSongs.blockSong(numero);
                             labelSongPlayingBottom.setText(String.format("%05d - %s - %s - %s",
                                     mPlayList.getSongNumber(),
@@ -653,7 +653,7 @@ class Interface extends JFrame {
                             }
                             mSongSelector.play = false;
                             mSongSelector.resetValues();
-                            mSongSelector.labelSelector.setText("- - - -");
+                            mSongSelector.labelSelector.setText("- - - - -");
                             mBlockedSongs.blockSong(numero);
                             if (credits == 0 && !freeCredits) {
                                 timerFullScreen.restart();
@@ -673,7 +673,7 @@ class Interface extends JFrame {
                         timerChangerLabelCredits.start();
                         mSongSelector.play = false;
                         mSongSelector.resetValues();
-                        mSongSelector.labelSelector.setText("- - - -");
+                        mSongSelector.labelSelector.setText("- - - - -");
                     }
 
 
