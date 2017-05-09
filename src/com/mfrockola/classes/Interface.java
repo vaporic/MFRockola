@@ -500,7 +500,7 @@ class Interface extends JFrame {
             if (evento.getKeyCode()==KeyEvent.VK_NUM_LOCK) {
                 Toolkit.getDefaultToolkit().setLockingKeyState(KeyEvent.VK_NUM_LOCK,true);
             }
-            if (evento.getKeyCode()==mUserSettings.getTeclaPantallaCompleta() && credits > 0)
+            if (evento.getKeyCode()==mUserSettings.getTeclaPantallaCompleta() && (credits > 0 || !mUserSettings.isLockScreen()))
             {
                 if (labelPromotions.isVisible()) {
                     labelPromotions.setVisible(false);
@@ -518,43 +518,43 @@ class Interface extends JFrame {
                 mSongSelector.labelSelector.setText(mSongSelector.keyEventHandler(evento));
             }
 
-            if ((evento.getKeyCode()==48 || evento.getKeyCode()==96) && credits > 0)
+            if ((evento.getKeyCode()==48 || evento.getKeyCode()==96) && (credits > 0 || !mUserSettings.isLockScreen()))
             {
                 mSongSelector.labelSelector.setText(mSongSelector.keyEventHandler(evento));
             }
-            else if ((evento.getKeyCode()==49 || evento.getKeyCode()==97) && credits > 0)
+            else if ((evento.getKeyCode()==49 || evento.getKeyCode()==97) && (credits > 0 || !mUserSettings.isLockScreen()))
             {
                 mSongSelector.labelSelector.setText(mSongSelector.keyEventHandler(evento));
             }
-            else if ((evento.getKeyCode()==50 || evento.getKeyCode()==98) && credits > 0)
+            else if ((evento.getKeyCode()==50 || evento.getKeyCode()==98) && (credits > 0 || !mUserSettings.isLockScreen()))
             {
                 mSongSelector.labelSelector.setText(mSongSelector.keyEventHandler(evento));
             }
-            else if ((evento.getKeyCode()==51 || evento.getKeyCode()==99) && credits > 0)
+            else if ((evento.getKeyCode()==51 || evento.getKeyCode()==99) && (credits > 0 || !mUserSettings.isLockScreen()))
             {
                 mSongSelector.labelSelector.setText(mSongSelector.keyEventHandler(evento));
             }
-            else if ((evento.getKeyCode()==52 || evento.getKeyCode()==100) && credits > 0)
+            else if ((evento.getKeyCode()==52 || evento.getKeyCode()==100) && (credits > 0 || !mUserSettings.isLockScreen()))
             {
                 mSongSelector.labelSelector.setText(mSongSelector.keyEventHandler(evento));
             }
-            else if ((evento.getKeyCode()==53 || evento.getKeyCode()==101) && credits > 0)
+            else if ((evento.getKeyCode()==53 || evento.getKeyCode()==101) && (credits > 0 || !mUserSettings.isLockScreen()))
             {
                 mSongSelector.labelSelector.setText(mSongSelector.keyEventHandler(evento));
             }
-            else if ((evento.getKeyCode()==54 || evento.getKeyCode()==102) && credits > 0)
+            else if ((evento.getKeyCode()==54 || evento.getKeyCode()==102) && (credits > 0 || !mUserSettings.isLockScreen()))
             {
                 mSongSelector.labelSelector.setText(mSongSelector.keyEventHandler(evento));
             }
-            else if ((evento.getKeyCode()==55 || evento.getKeyCode()==103) && credits > 0)
+            else if ((evento.getKeyCode()==55 || evento.getKeyCode()==103) && (credits > 0 || !mUserSettings.isLockScreen()))
             {
                 mSongSelector.labelSelector.setText(mSongSelector.keyEventHandler(evento));
             }
-            else if ((evento.getKeyCode()==56 || evento.getKeyCode()==104) && credits > 0)
+            else if ((evento.getKeyCode()==56 || evento.getKeyCode()==104) && (credits > 0 || !mUserSettings.isLockScreen()))
             {
                 mSongSelector.labelSelector.setText(mSongSelector.keyEventHandler(evento));
             }
-            else if ((evento.getKeyCode()==57 || evento.getKeyCode()==105) && credits > 0)
+            else if ((evento.getKeyCode()==57 || evento.getKeyCode()==105) && (credits > 0 || !mUserSettings.isLockScreen()))
             {
                 mSongSelector.labelSelector.setText(mSongSelector.keyEventHandler(evento));
             }
@@ -695,7 +695,7 @@ class Interface extends JFrame {
             } else if (evento.getKeyCode()==123) {
                 @SuppressWarnings("unused")
                 SettingsWindow config = new SettingsWindow();
-            } else if (evento.getKeyCode()==mUserSettings.getTeclaBajarLista() && credits > 0) {
+            } else if (evento.getKeyCode()==mUserSettings.getTeclaBajarLista() && (credits > 0 || !mUserSettings.isLockScreen())) {
                 if (isFullScreen) {
                     setFullScreen();
                 }
@@ -720,7 +720,7 @@ class Interface extends JFrame {
                     mSongListInterface.setSelectedIndex(mSongListInterface.getSelectedIndex()-20);
                     mSongListInterface.ensureIndexIsVisible(mSongListInterface.getSelectedIndex());
                 }
-            } else if (evento.getKeyCode()==mUserSettings.getTeclaSubirLista() && credits > 0) {
+            } else if (evento.getKeyCode()==mUserSettings.getTeclaSubirLista() && (credits > 0 || !mUserSettings.isLockScreen())) {
                 if (isFullScreen) {
                     setFullScreen();
                 }
@@ -745,7 +745,7 @@ class Interface extends JFrame {
                     mSongListInterface.setSelectedIndex(mSongListInterface.getSelectedIndex()+20);
                     mSongListInterface.ensureIndexIsVisible(mSongListInterface.getSelectedIndex());
                 }
-            } else if (evento.getKeyCode() == mUserSettings.getTeclaSubirGenero() && credits > 0) {
+            } else if (evento.getKeyCode() == mUserSettings.getTeclaSubirGenero() && (credits > 0 || !mUserSettings.isLockScreen())) {
                 if (isFullScreen) {
                     setFullScreen();
                 }
@@ -758,7 +758,7 @@ class Interface extends JFrame {
                     mSongListInterface.ensureIndexIsVisible(0);
                     labelMusicalGenre.setText("Genero Musical: " + listMusicData.getNameOfGender());
                 }
-            } else if (evento.getKeyCode() == mUserSettings.getTeclaBajarGenero() && credits > 0) {
+            } else if (evento.getKeyCode() == mUserSettings.getTeclaBajarGenero() && (credits > 0 || !mUserSettings.isLockScreen())) {
                 if (isFullScreen) {
                     setFullScreen();
                 }
@@ -918,6 +918,7 @@ class Interface extends JFrame {
                     this.mUserSettings.getReinicioMusicas(),
                     this.mUserSettings.getCantidadCreditos(),
                     this.mUserSettings.isLibre(),
+                    this.mUserSettings.isLockScreen(),
                     this.mUserSettings.isVideoPromocional(),
                     this.mUserSettings.isDefaultPromotionalVideo(),
                     this.mUserSettings.getClickCreditos(),

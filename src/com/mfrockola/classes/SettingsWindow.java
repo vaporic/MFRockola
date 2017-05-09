@@ -56,13 +56,13 @@ public class SettingsWindow extends JFrame {
 	private JLabel labelTipoDePremio;
 	private JTextField textFieldTipoDePremio;
 	private JCheckBox chckbxNewCheckBox;
-    private JCheckBox checkBoxDefualtPromotionalVideo;
+	private JCheckBox checkBoxDefualtPromotionalVideo;
 	private JCheckBox checkBoxFoundDefaultBackground;
 	private JRadioButton rdbtnSi;
 	private JRadioButton rdbtnNo;
 	private boolean libre;
 	private boolean videoPromocional;
-    private boolean defaultVideoPromotional;
+	private boolean defaultVideoPromotional;
 	private boolean defaultBackground;
 	private boolean cancelMusic;
 	private boolean selectVideoProm;
@@ -81,6 +81,7 @@ public class SettingsWindow extends JFrame {
 	private JLabel labelColor2; // label de color de celda 2
 	private JLabel labelFuente; // label de resultado del tipo de fuente seleccionada
 	private JLabel labelSelector; // label del resultado del tamaño del seletor
+	private JCheckBox lockScreen;
 	private JButton botonColor1; // boton selector de color de celda 1
 	private JButton botonColor2; // boton selector de color de celda 2
 	private JButton botonColorDeFuente; // boton selector del color de la fuente
@@ -89,7 +90,7 @@ public class SettingsWindow extends JFrame {
 	private JComboBox<String> comboBoxTamanioDeFuenteSelector; // comboBox de tamaño de fuente de selector de musicas
 	private JCheckBox checkBoxFuenteCeldasNegrita; // checkbox para la fuente de las celdas negritsa
 
-    URL urlBackground = this.getClass().getResource("/com/mfrockola/imagenes/fondo.jpg");
+	URL urlBackground = this.getClass().getResource("/com/mfrockola/imagenes/fondo.jpg");
 
 	public SettingsWindow()
 	{
@@ -195,7 +196,7 @@ public class SettingsWindow extends JFrame {
 		panel2.add(lblConfiguracinDeLos);
 
 		JTextPane textPane = new JTextPane();
-            textPane.setText("Este es el panel de configuración de los tiempos internos de MFRockola. Por ejemplo, el tiempo que debe pasar para reproducir una canción aleatoria y el tiempo necesario para poner la pantalla completa.");
+		textPane.setText("Este es el panel de configuración de los tiempos internos de MFRockola. Por ejemplo, el tiempo que debe pasar para reproducir una canción aleatoria y el tiempo necesario para poner la pantalla completa.");
 		textPane.setEditable(false);
 		textPane.setFocusable(false);
 		textPane.setBounds(220, 50, 367, 48);
@@ -254,15 +255,15 @@ public class SettingsWindow extends JFrame {
 				if(chckbxNewCheckBox.isSelected())
 				{
 					videoPromocional = true;
-                    checkBoxDefualtPromotionalVideo.setEnabled(true);
+					checkBoxDefualtPromotionalVideo.setEnabled(true);
 				}
 				else
 				{
 					videoPromocional = false;
-                    checkBoxDefualtPromotionalVideo.setEnabled(false);
-                    textFieldVideoPromocional.setEditable(false);
-                    textFieldVideoPromocional.setEnabled(false);
-                    buttonPathPromotionalVideo.setEnabled(false);
+					checkBoxDefualtPromotionalVideo.setEnabled(false);
+					textFieldVideoPromocional.setEditable(false);
+					textFieldVideoPromocional.setEnabled(false);
+					buttonPathPromotionalVideo.setEnabled(false);
 				}
 			}
 		});
@@ -271,29 +272,29 @@ public class SettingsWindow extends JFrame {
 		chckbxNewCheckBox.setBounds(100, 245, 154, 23);
 		panel2.add(chckbxNewCheckBox);
 
-        checkBoxDefualtPromotionalVideo = new JCheckBox("Predeterminado");
-        checkBoxDefualtPromotionalVideo.addItemListener(new ItemListener() {
-            public void itemStateChanged(ItemEvent e) {
-                if(checkBoxDefualtPromotionalVideo.isSelected()) {
-                    defaultVideoPromotional = true;
-                    textFieldVideoPromocional.setEditable(false);
-                    textFieldVideoPromocional.setEnabled(false);
-                    textFieldVideoPromocional.setText("C:\\MFRockola\\Videos para MP3\\promotional.mpg");
-                    buttonPathPromotionalVideo.setEnabled(false);
+		checkBoxDefualtPromotionalVideo = new JCheckBox("Predeterminado");
+		checkBoxDefualtPromotionalVideo.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				if(checkBoxDefualtPromotionalVideo.isSelected()) {
+					defaultVideoPromotional = true;
+					textFieldVideoPromocional.setEditable(false);
+					textFieldVideoPromocional.setEnabled(false);
+					textFieldVideoPromocional.setText("C:\\MFRockola\\Videos para MP3\\promotional.mpg");
+					buttonPathPromotionalVideo.setEnabled(false);
 
-                } else {
-                    defaultVideoPromotional = false;
-                    textFieldVideoPromocional.setEditable(true);
-                    textFieldVideoPromocional.setEnabled(true);
-                    textFieldVideoPromocional.setText("");
-                    buttonPathPromotionalVideo.setEnabled(true);
-                }
-            }
-        });
-        checkBoxDefualtPromotionalVideo.setBackground(Color.WHITE);
-        checkBoxDefualtPromotionalVideo.setHorizontalAlignment(SwingConstants.RIGHT);
-        checkBoxDefualtPromotionalVideo.setBounds(251, 245, 110, 23);
-        panel2.add(checkBoxDefualtPromotionalVideo);
+				} else {
+					defaultVideoPromotional = false;
+					textFieldVideoPromocional.setEditable(true);
+					textFieldVideoPromocional.setEnabled(true);
+					textFieldVideoPromocional.setText("");
+					buttonPathPromotionalVideo.setEnabled(true);
+				}
+			}
+		});
+		checkBoxDefualtPromotionalVideo.setBackground(Color.WHITE);
+		checkBoxDefualtPromotionalVideo.setHorizontalAlignment(SwingConstants.RIGHT);
+		checkBoxDefualtPromotionalVideo.setBounds(251, 245, 110, 23);
+		panel2.add(checkBoxDefualtPromotionalVideo);
 
 		JPanel panel3 = new JPanel();
 		panel3.setBackground(Color.WHITE);
@@ -357,17 +358,23 @@ public class SettingsWindow extends JFrame {
 		txtpnEnEstePanel.setBounds(220, 50, 367, 48);
 		panel3.add(txtpnEnEstePanel);
 
+		lockScreen = new JCheckBox("Bloquear pantalla cuando no hay creditos");
+		lockScreen.setBounds(295,171,244,14);
+		lockScreen.setHorizontalAlignment(SwingConstants.RIGHT);
+		lockScreen.setBackground(Color.WHITE);
+		panel3.add(lockScreen);
+
 		Border border = BorderFactory.createLineBorder(Color.BLACK);
 
 		JLabel labelTamanioDeLetraSelector = new JLabel("Tamaño de letra de la selección musical");
-		labelTamanioDeLetraSelector.setBounds(291,171,200,14);
+		labelTamanioDeLetraSelector.setBounds(291,196,200,14);
 		labelTamanioDeLetraSelector.setHorizontalAlignment(SwingConstants.RIGHT);
 		panel3.add(labelTamanioDeLetraSelector);
 
 		String [] tamanios = {"8","9","10","11","12","13","14","16","18","20","24","28","36","48","50","55","60","65","70","72"};
 
 		comboBoxTamanioDeFuenteSelector = new JComboBox(tamanios);
-		comboBoxTamanioDeFuenteSelector.setBounds(498,166,43,23);
+		comboBoxTamanioDeFuenteSelector.setBounds(498,191,43,23);
 		panel3.add(comboBoxTamanioDeFuenteSelector);
 
 		comboBoxTamanioDeFuenteSelector.addActionListener(new ActionListener() {
@@ -377,10 +384,10 @@ public class SettingsWindow extends JFrame {
 			}
 		});
 
-		labelSelector = new JLabel("- - 2 8");
+		labelSelector = new JLabel("- - - 2 8");
 		labelSelector.setHorizontalAlignment(JLabel.CENTER);
 		labelSelector.setBorder(border);
-		labelSelector.setBounds(220,195,321,106);
+		labelSelector.setBounds(220,220,321,106);
 		labelSelector.setOpaque(true);
 		panel3.add(labelSelector);
 
@@ -1116,7 +1123,7 @@ public class SettingsWindow extends JFrame {
 		labelCreditosUsados.setText(String.format("%s", mUserSettings.getCantidadCreditosUsados()));
 		labelMonedasInsertadas.setText(String.format("%s", mUserSettings.getCantidadMonedasInsertadas()));
 		checkBoxFoundDefaultBackground.setSelected(mUserSettings.isDefaultBackground());
-        checkBoxDefualtPromotionalVideo.setSelected(mUserSettings.isDefaultPromotionalVideo());
+		checkBoxDefualtPromotionalVideo.setSelected(mUserSettings.isDefaultPromotionalVideo());
 		checkBoxCancelMusic.setSelected(mUserSettings.isCancelMusic());
 		passwordField.setText(mUserSettings.getPassword());
 		if (mUserSettings.isCancelMusic() == true) {
@@ -1129,6 +1136,12 @@ public class SettingsWindow extends JFrame {
 			rdbtnSi.setSelected(true);
 		else
 			rdbtnNo.setSelected(true);
+
+		if (mUserSettings.isLockScreen()) {
+			lockScreen.setSelected(true);
+		} else {
+			lockScreen.setSelected(false);
+		}
 
 		if (mUserSettings.getClickCreditos() == 0)
 		{
@@ -1228,9 +1241,9 @@ public class SettingsWindow extends JFrame {
 	}
 
 	private void actualizarResultadoDeFuenteSelector() {
-			typeFont = Font.BOLD;
-			labelSelector.setFont(new Font("Consolas",typeFont,
-					Integer.parseInt(comboBoxTamanioDeFuenteSelector.getSelectedItem().toString())));
+		typeFont = Font.BOLD;
+		labelSelector.setFont(new Font("Consolas",typeFont,
+				Integer.parseInt(comboBoxTamanioDeFuenteSelector.getSelectedItem().toString())));
 	}
 
 	public void abrirRegConfigEscritura()
@@ -1273,13 +1286,14 @@ public class SettingsWindow extends JFrame {
 						15, // time in minutes of reset music
 						1, // credits per click
 						false, // is credit free?
+						true,
 						true, // is promotional video?
 						true, // is default promotional video?
 						0, // click credits 1 = rigth click
-						111, // key up list
-						106, // key down list
-						109, // key up gender
-						107, // key down gender
+						106, // key up list
+						111, // key down list
+						107, // key up gender
+						109, // key down gender
 						70, // key fullscreen
 						67, // key delete number selector
 						78, // key end song
@@ -1333,8 +1347,9 @@ public class SettingsWindow extends JFrame {
 						Integer.parseInt(textFieldReinicioMusicas.getText()),
 						Integer.parseInt(textFieldCantCreditos.getText()),
 						libre,
+						lockScreen.isSelected(),
 						videoPromocional,
-                        defaultVideoPromotional,
+						defaultVideoPromotional,
 						clickCreditos,
 						textFieldSubirL.getKeyCode(),
 						textFieldBajarL.getKeyCode(),

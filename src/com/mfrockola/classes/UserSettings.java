@@ -7,11 +7,11 @@ import java.net.URL;
 @SuppressWarnings("serial")
 public class UserSettings implements Serializable {
 
-    // This string saves the path of the videos folder
-    private String pathSongs;
+	// This string saves the path of the videos folder
+	private String pathSongs;
 
-    // In case you try to play an mp3, will play a video that is in this
-    private String pathVideosMp3;
+	// In case you try to play an mp3, will play a video that is in this
+	private String pathVideosMp3;
 
 	private String pathVlc;
 	private String direccionVideoPromocional;
@@ -19,8 +19,9 @@ public class UserSettings implements Serializable {
 	private int reinicioMusicas;
 	private int cantidadCreditos;
 	private boolean libre;
+	private boolean lockScreen;
 	private boolean videoPromocional;
-    private boolean defaultPromotionalVideo;
+	private boolean defaultPromotionalVideo;
 	private int clickCreditos;
 	private int teclaSubirLista;
 	private int teclaBajarLista;
@@ -63,11 +64,12 @@ public class UserSettings implements Serializable {
 
 	public UserSettings(String pathSongs, String pathVideosMp3, String pathVlc,
 						String direccionVideoPromocional, int musicAleatoria,int reinicioMusicas,int cantidadCreditos, boolean libre,
-						boolean videoPromocional, boolean defaultPromotionalVideo, int clickCreditos, int teclaSubirLista, int teclaBajarLista,
-						int teclaSubirGenero, int teclaBajarGenero, int teclaPantallaCompleta, int teclaBorrar,
-						int teclaSaltarCancion, int teclaAgregarCredito, int teclaBorrarCredito,
-						boolean cancelMusic,String password, int cantidadCreditosUsados, int CantidadMonedasInsertadas, boolean defaultBackground,
-						URL direccionFondo, Color color1, Color color2, String fontCeldasName, int fontCeldasSize, int fontSelectorSize,
+						boolean lockScreen,	boolean videoPromocional, boolean defaultPromotionalVideo, int clickCreditos,
+						int teclaSubirLista, int teclaBajarLista, int teclaSubirGenero, int teclaBajarGenero,
+						int teclaPantallaCompleta, int teclaBorrar,	int teclaSaltarCancion, int teclaAgregarCredito,
+						int teclaBorrarCredito,	boolean cancelMusic,String password, int cantidadCreditosUsados,
+						int CantidadMonedasInsertadas, boolean defaultBackground, URL direccionFondo, Color color1,
+						Color color2, String fontCeldasName, int fontCeldasSize, int fontSelectorSize,
 						Color fontCeldasColor, int fontCeldasNegrita, boolean agregarAdicional, int numeroDeCreditosAdicionales,
 						int cadaCantidadDeCreditos, boolean creditosContinuos, boolean entregarPremio, int cantidadDePremios,
 						int cantidadDeCreditosPorPremio, String tipoDePremio, int creditosGuardados)
@@ -80,8 +82,9 @@ public class UserSettings implements Serializable {
 		setDireccionVideoPromocional(direccionVideoPromocional);
 		setCantidadCreditos(cantidadCreditos);
 		setLibre(libre);
+		setLockScreen(lockScreen);
 		setVideoPromocional(videoPromocional);
-        setDefaultPromotionalVideo(defaultPromotionalVideo);
+		setDefaultPromotionalVideo(defaultPromotionalVideo);
 		setClickCreditos(clickCreditos);
 		setTeclaSubirLista(teclaSubirLista);
 		setTeclaBajarLista(teclaBajarLista);
@@ -446,11 +449,19 @@ public class UserSettings implements Serializable {
 		this.fontSelectorSize = fontSelectorSize;
 	}
 
-    public boolean isDefaultPromotionalVideo() {
-        return defaultPromotionalVideo;
-    }
+	public boolean isDefaultPromotionalVideo() {
+		return defaultPromotionalVideo;
+	}
 
-    public void setDefaultPromotionalVideo(boolean defaultPromotionalVideo) {
-        this.defaultPromotionalVideo = defaultPromotionalVideo;
-    }
+	public void setDefaultPromotionalVideo(boolean defaultPromotionalVideo) {
+		this.defaultPromotionalVideo = defaultPromotionalVideo;
+	}
+
+	public boolean isLockScreen() {
+		return lockScreen;
+	}
+
+	public void setLockScreen(boolean lockScreen) {
+		this.lockScreen = lockScreen;
+	}
 }
