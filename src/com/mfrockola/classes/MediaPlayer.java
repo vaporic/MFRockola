@@ -69,9 +69,20 @@ class MediaPlayer {
     }
 
     // Method to play audio
+    void playAudio(String path, String pathPromotionalVideo) {
+        embeddedMediaPlayerMp3.playMedia(path);
+        embeddedMediaPlayer.playMedia(pathPromotionalVideo);
+    }
+
+    // Method to play audio
     void playAudio(String gender, String singer, String songName, String pathPromotionalVideo) {
         embeddedMediaPlayerMp3.playMedia(String.format("%s\\%s\\%s\\%s", mUserSettings.getPathSongs(),gender,singer,songName));
         embeddedMediaPlayer.playMedia(pathPromotionalVideo);
+    }
+
+    // Method to play video
+    void playVideo(String path) {
+        embeddedMediaPlayer.playMedia(path);
     }
 
     // Method to play video

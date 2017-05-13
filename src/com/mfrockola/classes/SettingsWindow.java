@@ -428,6 +428,19 @@ public class SettingsWindow extends JFrame {
 		buttonPathVLC.setBounds(563, 195, 32, 23);
 		panel4.add(buttonPathVLC);
 
+		JButton buttonRenameFiles = new JButton("Renombrar archivos del directorio musical");
+		buttonRenameFiles.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				RenameSongs sRenameSongs = new RenameSongs(textFieldVideos.getText());
+				if (sRenameSongs.renameFiles()){
+					JOptionPane.showMessageDialog(null,"Archivos renombrados correctamente.");
+				}
+			}
+		});
+		buttonRenameFiles.setBounds(345,227,250,23);
+		panel4.add(buttonRenameFiles);
+
 		textFieldVideos = new JTextField();
 		textFieldVideos.setText("");
 		textFieldVideos.setColumns(10);

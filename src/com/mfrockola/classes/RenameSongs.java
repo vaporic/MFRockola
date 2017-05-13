@@ -1,5 +1,6 @@
 package com.mfrockola.classes;
 
+import javax.swing.*;
 import java.io.File;
 
 /**
@@ -11,10 +12,9 @@ public class RenameSongs {
 
     public RenameSongs(String path){
         this.path = path;
-        getListOfFiles();
     }
 
-    private void getListOfFiles(){
+    public boolean renameFiles(){
         // obtenemos un File con la ruta de los videos
         File file = new File(path);
 
@@ -40,7 +40,11 @@ public class RenameSongs {
                 }
             }
             rename(genres);
+        } else {
+            JOptionPane.showMessageDialog(null,"El directorio no existe.");
+            return false;
         }
+        return true;
     }
 
     private void rename(File [] files){
@@ -66,15 +70,21 @@ public class RenameSongs {
         name = name.replace('I','I');
         name = name.replace('Ó','O');
         name = name.replace('Ú','U');
+        name = name.replace('à','a');
+        name = name.replace('è','e');
+        name = name.replace('ì','i');
+        name = name.replace('ò','o');
+        name = name.replace('ù','u');
+        name = name.replace('À','A');
+        name = name.replace('È','E');
+        name = name.replace('Ì','I');
+        name = name.replace('Ò','O');
+        name = name.replace('Ù','U');
         name = name.replace('\'',' ');
 
         String newPath = file.getPath();
         newPath = newPath.substring(0,newPath.length()-name.length())+name;
         File newPathFile = new File(newPath);
         file.renameTo(newPathFile);
-    }
-
-    public static void main(String[] args) {
-        new RenameSongs("C:\\videos2");
     }
 }

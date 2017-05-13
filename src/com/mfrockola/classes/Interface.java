@@ -112,6 +112,9 @@ class Interface extends JFrame {
     // This timer controls the error that sometimes occurs when the video screen is complete
     private Timer timer;
 
+    // This timer controls the playback of a random song when there are no credits
+    private Timer timerRandomSong;
+
     private KeyboardManager mKeyboardManager;
 
     // keep the promotional sound
@@ -186,6 +189,34 @@ class Interface extends JFrame {
             }
         };
 
+        ActionListener playRandomSong = e -> {
+            Random random = new Random();
+            File path = new File(mUserSettings.getPathSongs());
+            if (path.exists()) {
+                File [] genres = path.listFiles();
+                File selectedGenre = genres[random.nextInt(genres.length)];
+                if (selectedGenre.exists()) {
+                    File [] singers = selectedGenre.listFiles();
+                    File selectedSinger = singers[random.nextInt(singers.length)];
+                    if (selectedSinger.exists()) {
+                        File [] songs = selectedSinger.listFiles();
+
+                        String randomSong = songs[random.nextInt(songs.length)].getAbsolutePath();
+
+                        int extension = Utils.getExtension(randomSong);
+
+                        if (extension == EXT_MP4 || extension == EXT_AVI || extension == EXT_MPG || extension == EXT_FLV || extension == EXT_MKV) {
+                            mMediaPlayer.playVideo(randomSong);
+                        } else if (extension == EXT_MP3 || extension == EXT_WMA || extension == EXT_WAV || extension == EXT_AAC) {
+                            mMediaPlayer.playAudio(
+                                    randomSong,
+                                    mUserSettings.getPathVideosMp3() + "\\" + listMusicData.getPromVideo());
+                        }
+                    }
+                }
+            }
+        };
+
         ActionListener pressKey = e -> {
             try {
                 Robot robot = new Robot();
@@ -201,6 +232,13 @@ class Interface extends JFrame {
 
         timerFullScreen = new Timer(10000, changeFullScreen);
         timerFullScreen.setRepeats(false);
+
+        timerRandomSong = new Timer(mUserSettings.getMusicAleatoria()*1000*60,playRandomSong);
+        timerRandomSong.setRepeats(false);
+
+        if (mPlayList.songToPlay()==null) {
+            timerRandomSong.start();
+        }
 
         getContentPane().add(mBackgroundImagePanel);
 
@@ -589,6 +627,10 @@ class Interface extends JFrame {
                     {
                         if (mPlayList.songToPlay()==null)
                         {
+                            if (timerRandomSong.isRunning()) {
+                                timerRandomSong.stop();
+                            }
+
                             Song cancionAReproducir =  listMusicData.getSong(numero);
 
                             mPlayList.addSong(cancionAReproducir);
@@ -857,6 +899,7 @@ class Interface extends JFrame {
             playListInterface.setListData(mPlayList.getPlayList());
 
             if (mPlayList.songToPlay() == null) {
+                timerRandomSong.start();
                 if (mUserSettings.isVideoPromocional()) {
                     mMediaPlayer.embeddedMediaPlayer.playMedia(mUserSettings.getDireccionVideoPromocional());
                     labelSongPlayingBottom.setText("MFRockola");
