@@ -1,20 +1,26 @@
 package com.mfrockola.classes;
 
-import javax.swing.*;
 import java.io.File;
 
 /**
  * Created by Angel C on 12/05/2017.
  */
-public class RenameSongs {
+public class RenameSongs extends Thread {
 
     private String path;
+
+    private FinishListener finishListener;
 
     public RenameSongs(String path){
         this.path = path;
     }
 
-    public boolean renameFiles(){
+    @Override
+    public void run() {
+        renameFiles();
+    }
+
+    public void renameFiles(){
         // obtenemos un File con la ruta de los videos
         File file = new File(path);
 
@@ -41,10 +47,10 @@ public class RenameSongs {
             }
             rename(genres);
         } else {
-            JOptionPane.showMessageDialog(null,"El directorio no existe.");
-            return false;
+            finishListener.onRenameFinish(false);
+            return;
         }
-        return true;
+        finishListener.onRenameFinish(true);
     }
 
     private void rename(File [] files){
@@ -86,5 +92,13 @@ public class RenameSongs {
         newPath = newPath.substring(0,newPath.length()-name.length())+name;
         File newPathFile = new File(newPath);
         file.renameTo(newPathFile);
+    }
+
+    public void setFinishListener(FinishListener finishListener){
+        this.finishListener = finishListener;
+    }
+
+    public interface FinishListener {
+        void onRenameFinish(boolean result);
     }
 }

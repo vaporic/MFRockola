@@ -15,7 +15,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import static com.mfrockola.classes.Utils.SELECT_VIDEO;
 
 @SuppressWarnings("serial")
-public class SettingsWindow extends JFrame {
+public class SettingsWindow extends JFrame implements RenameSongs.FinishListener {
 
 	private ObjectOutputStream salida;
 	private UserSettingsManagement mUserSettingsManagement = new UserSettingsManagement();
@@ -90,7 +90,12 @@ public class SettingsWindow extends JFrame {
 	private JComboBox<String> comboBoxTamanioDeFuenteSelector; // comboBox de tamaño de fuente de selector de musicas
 	private JCheckBox checkBoxFuenteCeldasNegrita; // checkbox para la fuente de las celdas negritsa
 
+	private JProgressBar renameFilesProgressBar;
+	private JButton buttonRenameFiles;
+
 	URL urlBackground = this.getClass().getResource("/com/mfrockola/imagenes/fondo.jpg");
+
+	private RenameSongs mRenameSongs;
 
 	public SettingsWindow()
 	{
@@ -203,7 +208,7 @@ public class SettingsWindow extends JFrame {
 		panel2.add(textPane);
 
 		JTextPane txtpnTiempoNecesarioPara = new JTextPane();
-		txtpnTiempoNecesarioPara.setText("Tiempo necesario para reproducir una canción Aleatoria (Minutos)");
+		txtpnTiempoNecesarioPara.setText("Tiempo necesario para reproducir una canción de cortesía aleatoria (Minutos)");
 		txtpnTiempoNecesarioPara.setBounds(220, 107, 225, 48);
 		txtpnTiempoNecesarioPara.setFocusable(false);
 		txtpnTiempoNecesarioPara.setEditable(false);
@@ -428,18 +433,26 @@ public class SettingsWindow extends JFrame {
 		buttonPathVLC.setBounds(563, 195, 32, 23);
 		panel4.add(buttonPathVLC);
 
-		JButton buttonRenameFiles = new JButton("Renombrar archivos del directorio musical");
+		buttonRenameFiles = new JButton("Renombrar archivos del directorio musical");
+
+		buttonRenameFiles.setBounds(345,227,250,23);
+		panel4.add(buttonRenameFiles);
+
+		renameFilesProgressBar = new JProgressBar();
+		renameFilesProgressBar.setIndeterminate(true);
+		renameFilesProgressBar.setBounds(345,227,250,23);
+		renameFilesProgressBar.setVisible(false);
+		panel4.add(renameFilesProgressBar);
+
 		buttonRenameFiles.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				RenameSongs sRenameSongs = new RenameSongs(textFieldVideos.getText());
-				if (sRenameSongs.renameFiles()){
-					JOptionPane.showMessageDialog(null,"Archivos renombrados correctamente.");
-				}
+				buttonRenameFiles.setVisible(false);
+				renameFilesProgressBar.setVisible(true);
+				setFinishListener(true);
+				mRenameSongs.start();
 			}
 		});
-		buttonRenameFiles.setBounds(345,227,250,23);
-		panel4.add(buttonRenameFiles);
 
 		textFieldVideos = new JTextField();
 		textFieldVideos.setText("");
@@ -1227,6 +1240,29 @@ public class SettingsWindow extends JFrame {
 		}
 
 		creditosGuardados = mUserSettings.getCreditosGuardados();
+
+		setFinishListener(false);
+	}
+
+	private void setFinishListener(boolean flag){
+		setEnabled(!flag);
+		mRenameSongs = new RenameSongs(textFieldVideos.getText());
+		mRenameSongs.setFinishListener(this);
+	}
+
+	@Override
+	public void onRenameFinish(boolean result) {
+		if (result) {
+			setEnabled(true);
+			buttonRenameFiles.setVisible(true);
+			renameFilesProgressBar.setVisible(false);
+			JOptionPane.showMessageDialog(null,"Archivos Renombrados");
+		} else {
+			setEnabled(true);
+			buttonRenameFiles.setVisible(true);
+			renameFilesProgressBar.setVisible(false);
+			JOptionPane.showMessageDialog(null,"Hay un error en el directorio");
+		}
 	}
 
 	private class manejadorRadioButtons implements ItemListener
