@@ -62,7 +62,7 @@ public class Splash extends JFrame implements Runnable {
 	public void run() {
 
 		final Timer timer = new Timer(1000*2, e -> {
-            File file = new File("config.mfr");
+            File file = new File("config.json");
             if (file.exists()) {
                 file = null;
                 new Interface();

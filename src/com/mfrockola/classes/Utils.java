@@ -1,5 +1,8 @@
 package com.mfrockola.classes;
 
+import java.awt.*;
+import java.net.URL;
+
 /**
  * Static class
  */
@@ -205,5 +208,12 @@ class Utils {
             default:
                 return String.format("%s", extendedKeyCode);
         }
+    }
+
+    public static Color getColor(String color){
+        int r = Integer.parseInt(color.substring(0,3));
+        int g = Integer.parseInt(color.substring(4,7));
+        int b = Integer.parseInt(color.substring(8,11));
+        return new Color(r,g,b);
     }
 }

@@ -20,26 +20,19 @@ class MediaPlayer {
     EmbeddedMediaPlayer embeddedMediaPlayer;
     EmbeddedMediaPlayer embeddedMediaPlayerMp3;
 
+    String pathSongs;
+
     // We created a JPanel container for our player
     private JPanel mediaPlayerContainer;
 
-    // We create a UserSettings object to get the routes of the videos and VLC
-    private UserSettings mUserSettings;
-
     // In the constructor we start our variables
-    MediaPlayer() {
-        try {
-            // Read the user settings. If they do not exist we open a configuration window
-            UserSettingsManagement mUserSettingsManagement = new UserSettingsManagement();
-            mUserSettingsManagement.openUserSettings();
-            mUserSettings = mUserSettingsManagement.readUserSettings();
-        } catch (NullPointerException e) {
-            new SettingsWindow();
-        }
+    MediaPlayer(String pathVLC, String pathSongs) {
+
+        this.pathSongs = pathSongs;
 
         // We call the native libraries of VLC, passing them as parameters the path where VLC is installed
         try {
-            NativeLibrary.addSearchPath(RuntimeUtil.getLibVlcLibraryName(),mUserSettings.getPathVlc());
+            NativeLibrary.addSearchPath(RuntimeUtil.getLibVlcLibraryName(),pathVLC);
             Native.loadLibrary(RuntimeUtil.getLibVlcLibraryName(),LibVlc.class);
 
             // A Canvas is created
@@ -76,7 +69,7 @@ class MediaPlayer {
 
     // Method to play audio
     void playAudio(String gender, String singer, String songName, String pathPromotionalVideo) {
-        embeddedMediaPlayerMp3.playMedia(String.format("%s\\%s\\%s\\%s", mUserSettings.getPathSongs(),gender,singer,songName));
+        embeddedMediaPlayerMp3.playMedia(String.format("%s\\%s\\%s\\%s", pathSongs,gender,singer,songName));
         embeddedMediaPlayer.playMedia(pathPromotionalVideo);
     }
 
@@ -87,6 +80,6 @@ class MediaPlayer {
 
     // Method to play video
     void playVideo(String gender, String singer, String songName) {
-        embeddedMediaPlayer.playMedia(String.format("%s\\%s\\%s\\%s", mUserSettings.getPathSongs(),gender,singer,songName));
+        embeddedMediaPlayer.playMedia(String.format("%s\\%s\\%s\\%s", pathSongs,gender,singer,songName));
     }
 }

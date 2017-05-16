@@ -1,5 +1,7 @@
 package com.mfrockola.classes;
 
+import org.json.JSONObject;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.font.TextAttribute;
@@ -12,14 +14,14 @@ import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import static com.mfrockola.classes.JsonManager.*;
 import static com.mfrockola.classes.Utils.SELECT_VIDEO;
+import static com.mfrockola.classes.Utils.getColor;
 
 @SuppressWarnings("serial")
 public class SettingsWindow extends JFrame implements RenameSongs.FinishListener {
 
-	private ObjectOutputStream salida;
-	private UserSettingsManagement mUserSettingsManagement = new UserSettingsManagement();
-	private UserSettings mUserSettings;
+	private JsonManager mJsonManager;
 
 	private JTextField textFieldVideos;
 	private JTextField textFieldVideosParaMp3;
@@ -90,10 +92,10 @@ public class SettingsWindow extends JFrame implements RenameSongs.FinishListener
 	private JComboBox<String> comboBoxTamanioDeFuenteSelector; // comboBox de tamaño de fuente de selector de musicas
 	private JCheckBox checkBoxFuenteCeldasNegrita; // checkbox para la fuente de las celdas negritsa
 
+	private JTextPane txtpnNotaAcentos;
+
 	private JProgressBar renameFilesProgressBar;
 	private JButton buttonRenameFiles;
-
-	URL urlBackground = this.getClass().getResource("/com/mfrockola/imagenes/fondo.jpg");
 
 	private RenameSongs mRenameSongs;
 
@@ -105,29 +107,7 @@ public class SettingsWindow extends JFrame implements RenameSongs.FinishListener
 		JPanel panelPrincipal = new JPanel();
 		panelPrincipal.setLayout(new BorderLayout(0, 0));
 
-		try {
-			File file = new File("config.mfr");
-
-			if (!file.exists())
-			{
-				salida = new ObjectOutputStream(new FileOutputStream("config.mfr"));
-				abrirRegConfigEscritura();
-				agregarDatosRegConfig(true);
-				cerrarRegConfig();
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		try
-		{
-			mUserSettingsManagement.openUserSettings();
-			mUserSettings = mUserSettingsManagement.readUserSettings();
-		}
-		catch (NullPointerException excepcion)
-		{
-			abrirRegConfigEscritura();
-		}
+		mJsonManager = new JsonManager();
 
 		JLabel bienvenido = new JLabel("Bienvenido a la configuración de MFRockola");
 		panelPrincipal.add(bienvenido,BorderLayout.NORTH);
@@ -172,9 +152,7 @@ public class SettingsWindow extends JFrame implements RenameSongs.FinishListener
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				abrirRegConfigEscritura();
-				agregarDatosRegConfig(false);
-				cerrarRegConfig();
+				updateSettings();
 				JOptionPane.showMessageDialog(null,"Configuración guardada correctamente");
 				new Thread(new Splash()).start();
 				Splash.moveMouse = true;
@@ -503,6 +481,14 @@ public class SettingsWindow extends JFrame implements RenameSongs.FinishListener
 		txtpnEsteEsEl.setBounds(220, 50, 367, 62);
 		panel4.add(txtpnEsteEsEl);
 
+		txtpnNotaAcentos = new JTextPane();
+		txtpnNotaAcentos.setForeground(Color.RED);
+		txtpnNotaAcentos.setText("NOTA: los nombres de las canciones que tienen letra Ñ o tildes, deben ser renombrados, retirando las tildes y cambiando la Ñ por la N. así el programa trabajará adecuadamente.");
+		txtpnNotaAcentos.setEditable(false);
+		txtpnNotaAcentos.setFocusable(false);
+		txtpnNotaAcentos.setBounds(10, 250, 595, 62);
+		panel4.add(txtpnNotaAcentos);
+
 		JTextPane txtpnAdvertenciaTengaCuidado = new JTextPane();
 		txtpnAdvertenciaTengaCuidado.setForeground(Color.RED);
 		txtpnAdvertenciaTengaCuidado.setText("Advertencia: Tenga cuidado al modificar el directorio del VLC. Consulte la documentación antes de realizar modificaciones");
@@ -538,7 +524,7 @@ public class SettingsWindow extends JFrame implements RenameSongs.FinishListener
 		lblSubirbajrLista.setBounds(262, 119, 103, 14);
 		panel5.add(lblSubirbajrLista);
 
-		textFieldSubirL = new TextFieldKey(this,mUserSettings.getTeclaSubirLista());
+		textFieldSubirL = new TextFieldKey(this,(int)mJsonManager.getSetting(KEY_UP_LIST));
 		textFieldSubirL.setBounds(375, 119, 50, 20);
 		panel5.add(textFieldSubirL);
 
@@ -546,7 +532,7 @@ public class SettingsWindow extends JFrame implements RenameSongs.FinishListener
 		label_2.setBounds(435, 119, 4, 14);
 		panel5.add(label_2);
 
-		textFieldBajarL = new TextFieldKey(this,mUserSettings.getTeclaBajarLista());
+		textFieldBajarL = new TextFieldKey(this,(int)mJsonManager.getSetting(KEY_DOWN_LIST));
 		textFieldBajarL.setBounds(451, 119, 50, 20);
 		panel5.add(textFieldBajarL);
 
@@ -555,7 +541,7 @@ public class SettingsWindow extends JFrame implements RenameSongs.FinishListener
 		lblSubirBajarGenero.setBounds(262, 144, 103, 14);
 		panel5.add(lblSubirBajarGenero);
 
-		textFieldSubirGenero = new TextFieldKey(this,mUserSettings.getTeclaSubirGenero());
+		textFieldSubirGenero = new TextFieldKey(this,(int)mJsonManager.getSetting(KEY_UP_GENRE));
 		textFieldSubirGenero.setBounds(375, 144, 50, 20);
 		panel5.add(textFieldSubirGenero);
 
@@ -563,7 +549,7 @@ public class SettingsWindow extends JFrame implements RenameSongs.FinishListener
 		label_4.setBounds(435, 144, 4, 14);
 		panel5.add(label_4);
 
-		textFieldBajarGenero = new TextFieldKey(this,mUserSettings.getTeclaBajarGenero());
+		textFieldBajarGenero = new TextFieldKey(this,(int)mJsonManager.getSetting(KEY_DOWN_GENRE));
 		textFieldBajarGenero.setBounds(451, 144, 50, 20);
 		panel5.add(textFieldBajarGenero);
 
@@ -572,7 +558,7 @@ public class SettingsWindow extends JFrame implements RenameSongs.FinishListener
 		lblPantallaCompleta.setBounds(262, 169, 103, 14);
 		panel5.add(lblPantallaCompleta);
 
-		textFieldPantallaCompleta = new TextFieldKey(this,mUserSettings.getTeclaPantallaCompleta());
+		textFieldPantallaCompleta = new TextFieldKey(this,(int)mJsonManager.getSetting(KEY_FULL_SCREEN));
 		textFieldPantallaCompleta.setBounds(375, 169, 50, 20);
 		panel5.add(textFieldPantallaCompleta);
 
@@ -581,7 +567,7 @@ public class SettingsWindow extends JFrame implements RenameSongs.FinishListener
 		lblBorrar.setBounds(262, 194, 103, 14);
 		panel5.add(lblBorrar);
 
-		textFieldBorrar = new TextFieldKey(this,mUserSettings.getTeclaBorrar());
+		textFieldBorrar = new TextFieldKey(this,(int)mJsonManager.getSetting(KEY_DELETE_NUMBER));
 		textFieldBorrar.setColumns(10);
 		textFieldBorrar.setBounds(375, 194, 50, 20);
 		panel5.add(textFieldBorrar);
@@ -591,7 +577,7 @@ public class SettingsWindow extends JFrame implements RenameSongs.FinishListener
 		labelSaltarCancion.setHorizontalAlignment(SwingConstants.RIGHT);
 		panel5.add(labelSaltarCancion);
 
-		textFieldSaltarCancion = new TextFieldKey(this,mUserSettings.getTeclaSaltarCancion()); // tecla 83 S
+		textFieldSaltarCancion = new TextFieldKey(this,(int)mJsonManager.getSetting(KEY_NEXT_SONG)); // tecla 83 S
 		textFieldSaltarCancion.setBounds(375, 219, 50, 20);
 		textFieldSaltarCancion.setColumns(10);
 		panel5.add(textFieldSaltarCancion);
@@ -601,7 +587,7 @@ public class SettingsWindow extends JFrame implements RenameSongs.FinishListener
 		labelTeclaAgregarCredito.setHorizontalAlignment(SwingConstants.RIGHT);
 		panel5.add(labelTeclaAgregarCredito);
 
-		textFieldAgregarCreditos = new TextFieldKey(this,mUserSettings.getTeclaAgregarCredito()); // tecla 65 A
+		textFieldAgregarCreditos = new TextFieldKey(this,(int)mJsonManager.getSetting(KEY_ADD_CREDIT)); // tecla 65 A
 		textFieldAgregarCreditos.setColumns(10);
 		textFieldAgregarCreditos.setBounds(375, 244, 50, 20);
 		panel5.add(textFieldAgregarCreditos);
@@ -611,7 +597,7 @@ public class SettingsWindow extends JFrame implements RenameSongs.FinishListener
 		labelTeclaParaBorrarCredito.setHorizontalAlignment(SwingConstants.RIGHT);
 		panel5.add(labelTeclaParaBorrarCredito);
 
-		textFieldBorrarCredito = new TextFieldKey(this,mUserSettings.getTeclaBorrarCredito());
+		textFieldBorrarCredito = new TextFieldKey(this,(int)mJsonManager.getSetting(KEY_DELETE_CREDIT));
 		textFieldBorrarCredito.setColumns(10);
 		textFieldBorrarCredito.setBounds(375, 269, 50, 20);
 		panel5.add(textFieldBorrarCredito);
@@ -1125,83 +1111,81 @@ public class SettingsWindow extends JFrame implements RenameSongs.FinishListener
 		setResizable(false);
 		setVisible(true);
 
-		textFieldMusicaAleatoria.setText(String.format("%s",mUserSettings.getMusicAleatoria()));
-		textFieldReinicioMusicas.setText(String.format("%s",mUserSettings.getReinicioMusicas()));
+		textFieldMusicaAleatoria.setText(String.format("%s",(int)mJsonManager.getSetting(KEY_RANDOM_SONG)));
+		textFieldReinicioMusicas.setText(String.format("%s",(int)mJsonManager.getSetting(KEY_RESET_SONGS)));
 
-		textFieldCantCreditos.setText(String.format("%s", mUserSettings.getCantidadCreditos()));
-		textFieldVideoPromocional.setEnabled(mUserSettings.isVideoPromocional());
-		textFieldVideoPromocional.setEditable(mUserSettings.isVideoPromocional());
-		buttonPathPromotionalVideo.setEnabled(mUserSettings.isVideoPromocional());
-		chckbxNewCheckBox.setSelected(mUserSettings.isVideoPromocional());
-		textFieldVideos.setText(String.format("%s", mUserSettings.getPathSongs()));
-		textFieldVlc.setText(String.format("%s", mUserSettings.getPathVlc()));
-		textFieldVideosParaMp3.setText(String.format("%s", mUserSettings.getPathVideosMp3()));
-		textFieldVideoPromocional.setText(String.format("%s", mUserSettings.getDireccionVideoPromocional()));
-		textFieldSubirL.setText(Utils.printKeyCharCode(mUserSettings.getTeclaSubirLista()));
-		textFieldBajarL.setText(Utils.printKeyCharCode(mUserSettings.getTeclaBajarLista()));
-		textFieldSubirGenero.setText(Utils.printKeyCharCode(mUserSettings.getTeclaSubirGenero()));
-		textFieldBajarGenero.setText(Utils.printKeyCharCode(mUserSettings.getTeclaBajarGenero()));
-		textFieldPantallaCompleta.setText(Utils.printKeyCharCode(mUserSettings.getTeclaPantallaCompleta()));
-		textFieldBorrar.setText(Utils.printKeyCharCode(mUserSettings.getTeclaBorrar()));
-		textFieldSaltarCancion.setText(Utils.printKeyCharCode(mUserSettings.getTeclaSaltarCancion()));
-		textFieldAgregarCreditos.setText(Utils.printKeyCharCode(mUserSettings.getTeclaAgregarCredito()));
-		textFieldBorrarCredito.setText(Utils.printKeyCharCode(mUserSettings.getTeclaBorrarCredito()));
-		labelCreditosUsados.setText(String.format("%s", mUserSettings.getCantidadCreditosUsados()));
-		labelMonedasInsertadas.setText(String.format("%s", mUserSettings.getCantidadMonedasInsertadas()));
-		checkBoxFoundDefaultBackground.setSelected(mUserSettings.isDefaultBackground());
-		checkBoxDefualtPromotionalVideo.setSelected(mUserSettings.isDefaultPromotionalVideo());
-		checkBoxCancelMusic.setSelected(mUserSettings.isCancelMusic());
-		passwordField.setText(mUserSettings.getPassword());
-		if (mUserSettings.isCancelMusic() == true) {
+		textFieldCantCreditos.setText(String.valueOf((int) mJsonManager.getSetting(KEY_AMOUNT_OF_CREDITS)));
+		textFieldVideoPromocional.setEnabled((boolean)mJsonManager.getSetting(KEY_PROMOTIONAL_VIDEO));
+		textFieldVideoPromocional.setEditable((boolean)mJsonManager.getSetting(KEY_PROMOTIONAL_VIDEO));
+		buttonPathPromotionalVideo.setEnabled((boolean)mJsonManager.getSetting(KEY_PROMOTIONAL_VIDEO));
+		chckbxNewCheckBox.setSelected((boolean)mJsonManager.getSetting(KEY_PROMOTIONAL_VIDEO));
+		textFieldVideos.setText((String)mJsonManager.getSetting(KEY_PATH_SONGS));
+		textFieldVlc.setText((String)mJsonManager.getSetting(KEY_PATH_VLC));
+		textFieldVideosParaMp3.setText((String)mJsonManager.getSetting(KEY_PATH_VIDEOS_MP3));
+		textFieldVideoPromocional.setText((String)mJsonManager.getSetting(KEY_PATH_PROMOTIONAL_VIDEO));
+		textFieldSubirL.setText(Utils.printKeyCharCode((int)mJsonManager.getSetting(KEY_UP_LIST)));
+		textFieldBajarL.setText(Utils.printKeyCharCode((int)mJsonManager.getSetting(KEY_DOWN_LIST)));
+		textFieldSubirGenero.setText(Utils.printKeyCharCode((int)mJsonManager.getSetting(KEY_UP_GENRE)));
+		textFieldBajarGenero.setText(Utils.printKeyCharCode((int)mJsonManager.getSetting(KEY_DOWN_GENRE)));
+		textFieldPantallaCompleta.setText(Utils.printKeyCharCode((int)mJsonManager.getSetting(KEY_FULL_SCREEN)));
+		textFieldBorrar.setText(Utils.printKeyCharCode((int)mJsonManager.getSetting(KEY_DELETE_NUMBER)));
+		textFieldSaltarCancion.setText(Utils.printKeyCharCode((int)mJsonManager.getSetting(KEY_NEXT_SONG)));
+		textFieldAgregarCreditos.setText(Utils.printKeyCharCode((int)mJsonManager.getSetting(KEY_ADD_CREDIT)));
+		textFieldBorrarCredito.setText(Utils.printKeyCharCode((int)mJsonManager.getSetting(KEY_DELETE_CREDIT)));
+		labelCreditosUsados.setText(String.valueOf((int)mJsonManager.getSetting(KEY_USED_CREDITS)));
+		labelMonedasInsertadas.setText(String.valueOf((int)mJsonManager.getSetting(KEY_INSERTED_CREDITS)));
+		checkBoxFoundDefaultBackground.setSelected((boolean)mJsonManager.getSetting(KEY_DEFAULT_BACKGROUND));
+		checkBoxDefualtPromotionalVideo.setSelected((boolean)mJsonManager.getSetting(KEY_DEFAULT_PROMOTIONAL_VIDEO));
+		checkBoxCancelMusic.setSelected((boolean) mJsonManager.getSetting(KEY_RIGHT_CLICK_CANCEL_MUSIC));
+		passwordField.setText((String)mJsonManager.getSetting(KEY_PASSWORD));
+		if ((boolean) mJsonManager.getSetting(KEY_RIGHT_CLICK_CANCEL_MUSIC) == true) {
 			passwordField.setEnabled(true);
 		} else {
 			passwordField.setEnabled(false);
 		}
 
-		if(mUserSettings.isLibre() == true)
+		if((boolean) mJsonManager.getSetting(KEY_FREE) == true)
 			rdbtnSi.setSelected(true);
 		else
 			rdbtnNo.setSelected(true);
 
-		if (mUserSettings.isLockScreen()) {
+		if ((boolean) mJsonManager.getSetting(KEY_LOCK_SCREEN)) {
 			lockScreen.setSelected(true);
 		} else {
 			lockScreen.setSelected(false);
 		}
 
-		if (mUserSettings.getClickCreditos() == 0)
-		{
+		if ((int) mJsonManager.getSetting(KEY_CLICK_OF_CREDITS) == 0) {
 			rdbtnClickIzquierdo.setSelected(true);
 			clickCreditos = 0;
-		}
-		else
-		{
+		} else {
 			rdbtnClickDerecho.setSelected(true);
 			clickCreditos = 1;
 		}
 
-		labelColor1.setBackground(mUserSettings.getColor1());
-		labelColor2.setBackground(mUserSettings.getColor2());
+		color1 = getColor((String) mJsonManager.getSetting(KEY_COLOR_1));
+		color2 = getColor((String) mJsonManager.getSetting(KEY_COLOR_2));
+		colorDeFuente = getColor((String) mJsonManager.getSetting(KEY_FONTS_CELLS_COLOR));
 
-		color1 = mUserSettings.getColor1();
-		color2 = mUserSettings.getColor2();
+		labelColor1.setBackground(color1);
+		labelColor2.setBackground(color2);
 
-		textFieldDirFondos.setText(mUserSettings.getDireccionFondo().getFile());
+		textFieldDirFondos.setText((String) mJsonManager.getSetting(KEY_PATH_BACKGRONUD));
 
-		labelFuente.setBackground(mUserSettings.getColor1());
-		labelFuente.setForeground(mUserSettings.getFontCeldasColor());
+		textFieldDirFondos.setText((String)mJsonManager.getSetting(KEY_PATH_BACKGRONUD));
 
-		labelSelector.setFont(new Font("Console",Font.BOLD,mUserSettings.getFontSelectorSize()));
+		labelFuente.setBackground(color1);
+		labelFuente.setForeground(colorDeFuente);
 
-		comboBoxSelectorDeFuente.setSelectedItem(mUserSettings.getFontCeldasName());
+		labelSelector.setFont(new Font("Console",Font.BOLD,(int)mJsonManager.getSetting(KEY_FONT_SELECTOR_SIZE)));
 
-		comboBoxTamanioDeFuente.setSelectedItem(String.valueOf(mUserSettings.getFontCeldasSize()));
+		comboBoxSelectorDeFuente.setSelectedItem((String)mJsonManager.getSetting(KEY_FONT_CELLS));
 
-		comboBoxTamanioDeFuenteSelector.setSelectedItem(String.valueOf(mUserSettings.getFontSelectorSize()));
+		comboBoxTamanioDeFuente.setSelectedItem(String.valueOf((int)mJsonManager.getSetting(KEY_FONT_CELLS_SIZE)));
 
-		colorDeFuente = mUserSettings.getFontCeldasColor();
+		comboBoxTamanioDeFuenteSelector.setSelectedItem(String.valueOf((int) mJsonManager.getSetting(KEY_FONT_SELECTOR_SIZE)));
 
-		typeFont = mUserSettings.getFontCeldasNegrita();
+		typeFont = (int) mJsonManager.getSetting(KEY_FONT_CELL_BOLD);
 
 		if (typeFont == Font.BOLD) {
 			checkBoxFuenteCeldasNegrita.setSelected(true);
@@ -1209,37 +1193,39 @@ public class SettingsWindow extends JFrame implements RenameSongs.FinishListener
 			checkBoxFuenteCeldasNegrita.setSelected(false);
 		}
 
-		if (mUserSettings.isAgregarAdicional()) {
+		if ((boolean) mJsonManager.getSetting(KEY_ADD_ADITIONAL_CREDIT)) {
 			checkBoxCreditosAdicionales.setSelected(true);
 		} else {
 			checkBoxCreditosAdicionales.setSelected(false);
 		}
 
-		textFieldNumeroDeCreditosAdicionales.setText(String.format("%s",mUserSettings.getNumeroDeCreditosAdicionales()));
+		textFieldNumeroDeCreditosAdicionales.setText(String.valueOf((int)mJsonManager.getSetting(KEY_NUMBER_ADITIONAL_CREDITS)));
 
-		textFieldCadaCantidadDeCreditos.setText(String.format("%s", mUserSettings.getCadaCantidadDeCreditos()));
+		textFieldCadaCantidadDeCreditos.setText(String.valueOf((int)mJsonManager.getSetting(KEY_EVERY_AMOUNT_OF_CREDITS)));
 
-		checkBoxCreditosContinuos.setSelected(mUserSettings.isCreditosContinuos());
+		checkBoxCreditosContinuos.setSelected((boolean) mJsonManager.getSetting(KEY_CONTINUOUS_CREDITS));
 
-		if (mUserSettings.isEntregarPremio()) {
+		if ((boolean) mJsonManager.getSetting(KEY_AWARD_PRIZE)) {
 			checkBoxPremio.setSelected(true);
 		} else {
 			checkBoxPremio.setSelected(false);
 		}
 
-		textFieldNumeroDePremios.setText(String.valueOf(mUserSettings.getCantidadDePremios()));
+		textFieldNumeroDePremios.setText(String.valueOf((int) mJsonManager.getSetting(KEY_PRIZE_AMOUNT)));
 
-		textFieldPremioCadaCreditos.setText(String.valueOf(mUserSettings.getCantidadDeCreditosPorPremio()));
+		textFieldPremioCadaCreditos.setText(String.valueOf((int) mJsonManager.getSetting(KEY_CREDITS_FOR_PRICE)));
 
-		textFieldTipoDePremio.setText(String.valueOf(mUserSettings.getTipoDePremio()));
+		textFieldTipoDePremio.setText((String) mJsonManager.getSetting(KEY_TYPE_OF_PRIZE));
 
-		if (mUserSettings.getTipoDePremio().equals("")) {
+		if (((String) mJsonManager.getSetting(KEY_TYPE_OF_PRIZE)).equals("")) {
 			labelTextoDelPremio.setText("No se entregarán premios");
 		} else {
-			labelTextoDelPremio.setText("Ganaste " + mUserSettings.getCantidadDePremios() +" "+ mUserSettings.getTipoDePremio());
+			labelTextoDelPremio.setText("Ganaste " +
+					(int) mJsonManager.getSetting(KEY_AMOUNT_OF_CREDITS) +" "+
+					(String) mJsonManager.getSetting(KEY_TYPE_OF_PRIZE));
 		}
 
-		creditosGuardados = mUserSettings.getCreditosGuardados();
+		creditosGuardados = (int) mJsonManager.getSetting(KEY_SAVED_CREDITS);
 
 		setFinishListener(false);
 	}
@@ -1251,18 +1237,24 @@ public class SettingsWindow extends JFrame implements RenameSongs.FinishListener
 	}
 
 	@Override
-	public void onRenameFinish(boolean result) {
+	public void onRenameFinish(boolean result, int count) {
 		if (result) {
 			setEnabled(true);
 			buttonRenameFiles.setVisible(true);
 			renameFilesProgressBar.setVisible(false);
-			JOptionPane.showMessageDialog(null,"Archivos Renombrados");
+			JOptionPane.showMessageDialog(null,count + " Archivos Renombrados","Operacion Finalizada",JOptionPane.INFORMATION_MESSAGE);
+			txtpnNotaAcentos.setText("NOTA: los nombres de las canciones que tienen letra Ñ o tildes, deben ser renombrados, retirando las tildes y cambiando la Ñ por la N. así el programa trabajará adecuadamente.");
 		} else {
 			setEnabled(true);
 			buttonRenameFiles.setVisible(true);
 			renameFilesProgressBar.setVisible(false);
-			JOptionPane.showMessageDialog(null,"Hay un error en el directorio");
+			JOptionPane.showMessageDialog(null,"Hay un error en el directorio","Error",JOptionPane.ERROR_MESSAGE);
 		}
+	}
+
+	@Override
+	public void onNewMessage(int count) {
+		txtpnNotaAcentos.setText("Archivos renombrados: " + count);
 	}
 
 	private class manejadorRadioButtons implements ItemListener
@@ -1293,166 +1285,6 @@ public class SettingsWindow extends JFrame implements RenameSongs.FinishListener
 		typeFont = Font.BOLD;
 		labelSelector.setFont(new Font("Consolas",typeFont,
 				Integer.parseInt(comboBoxTamanioDeFuenteSelector.getSelectedItem().toString())));
-	}
-
-	public void abrirRegConfigEscritura()
-	{
-		try
-		{
-			salida = new ObjectOutputStream(new FileOutputStream("config.mfr"));
-		}
-		catch(IOException ioExcepcion)
-		{
-			System.err.println("Error al abrir el archivo.");
-		}
-	}
-
-	public void agregarDatosRegConfig(boolean firstOpen)
-	{
-		UserSettings sUserSettings;
-
-		if (firstOpen) {
-			try
-			{
-				System.out.println(urlBackground);
-
-				// + 107
-				// - 109
-				// / 106
-				// * 111
-				// F 70
-				// C 67
-				// N 78
-				// A 65
-				// B 66
-
-				sUserSettings = new UserSettings(
-						"C:\\videos", // path of videos
-						"C:\\MFRockola\\Videos para MP3",
-						"C:\\Program Files\\VideoLAN\\VLC", // path of VLC
-						"C:\\MFRockola\\Videos para MP3\\promotional.mpg", // path promotional video
-						1, // time in minutes of random music
-						15, // time in minutes of reset music
-						1, // credits per click
-						false, // is credit free?
-						true,
-						true, // is promotional video?
-						true, // is default promotional video?
-						0, // click credits 1 = rigth click
-						106, // key up list
-						111, // key down list
-						107, // key up gender
-						109, // key down gender
-						70, // key fullscreen
-						67, // key delete number selector
-						78, // key end song
-						65, // key add credit
-						66, // key delete credit
-						false, // cancel music
-						"",
-						0, // cantidad de creditos usados
-						0, // cantidad de monedas insertadas
-						true, // is default background?
-						urlBackground, // path background
-						new Color(102,204,255), // color 1 of list
-						new Color(255,255,255), // color 2 of list
-						"Consolas", // tipo de fuente
-						20, // tamaño de fuente
-						50, // tamaño fuente selector
-						Color.BLACK, // color de fuente
-						Font.BOLD, // Fuente negrita
-						false, // is agregarAdicional?
-						0, // numero de creditos adicionales
-						0, // cada cantidad de creditos
-						false, // is creditos continuos
-						false, // is entregarPremio?
-						0,
-						0,
-						"",
-						0
-				);
-
-				salida.writeObject(sUserSettings);
-			} catch (Exception excepcion)
-			{
-				System.err.println("Error al escribir el archivo");
-			}
-		} else {
-			try
-			{
-				URL url;
-				if (defaultBackground) {
-					url = this.getClass().getResource("/com/mfrockola/imagenes/fondo.jpg");
-				} else {
-					url = new URL("file:"+textFieldDirFondos.getText());
-				}
-
-				sUserSettings = new UserSettings(
-						textFieldVideos.getText(),
-						textFieldVideosParaMp3.getText(),
-						textFieldVlc.getText(),
-						textFieldVideoPromocional.getText(),
-						Integer.parseInt(textFieldMusicaAleatoria.getText()),
-						Integer.parseInt(textFieldReinicioMusicas.getText()),
-						Integer.parseInt(textFieldCantCreditos.getText()),
-						libre,
-						lockScreen.isSelected(),
-						videoPromocional,
-						defaultVideoPromotional,
-						clickCreditos,
-						textFieldSubirL.getKeyCode(),
-						textFieldBajarL.getKeyCode(),
-						textFieldSubirGenero.getKeyCode(),
-						textFieldBajarGenero.getKeyCode(),
-						textFieldPantallaCompleta.getKeyCode(),
-						textFieldBorrar.getKeyCode(),
-						textFieldSaltarCancion.getKeyCode(),
-						textFieldAgregarCreditos.getKeyCode(),
-						textFieldBorrarCredito.getKeyCode(),
-						cancelMusic,
-						new String(passwordField.getPassword()),
-						Integer.parseInt(labelCreditosUsados.getText()),
-						Integer.parseInt(labelMonedasInsertadas.getText()),
-						defaultBackground,
-						url,
-						color1,
-						color2,
-						comboBoxSelectorDeFuente.getSelectedItem().toString(),
-						Integer.parseInt(comboBoxTamanioDeFuente.getSelectedItem().toString()),
-						Integer.parseInt(comboBoxTamanioDeFuenteSelector.getSelectedItem().toString()),
-						colorDeFuente,
-						typeFont,
-						checkBoxCreditosAdicionales.isSelected(),
-						Integer.parseInt(textFieldNumeroDeCreditosAdicionales.getText()),
-						Integer.parseInt(textFieldCadaCantidadDeCreditos.getText()),
-						checkBoxCreditosContinuos.isSelected(),
-						checkBoxPremio.isSelected(),
-						Integer.parseInt(textFieldNumeroDePremios.getText()),
-						Integer.parseInt(textFieldPremioCadaCreditos.getText()),
-						textFieldTipoDePremio.getText(),
-						creditosGuardados
-				);
-
-				salida.writeObject(sUserSettings);
-			} catch (IOException excepcion)
-			{
-				excepcion.printStackTrace();
-			}
-		}
-	}
-
-	public void cerrarRegConfig()
-	{
-		try
-		{
-			if (salida != null)
-				salida.close();
-		}
-		catch (IOException ioExcepcion)
-		{
-			System.err.println("Error al cerrar el archivo");
-			System.exit(1);
-		}
 	}
 
 	public String seleccionarDirectorio ()
@@ -1520,5 +1352,52 @@ public class SettingsWindow extends JFrame implements RenameSongs.FinishListener
 			colorDeFuente = JColorChooser.showDialog(null, "Seleccionar el Color", Color.BLACK);
 			labelFuente.setForeground(colorDeFuente);
 		}
+	}
+
+	public boolean updateSettings() {
+		mJsonManager.writeSetting(false,new KeyPairValue(KEY_PATH_SONGS,textFieldVideos.getText()));
+		mJsonManager.writeSetting(false,new KeyPairValue(KEY_PATH_VIDEOS_MP3,textFieldVideosParaMp3.getText()));
+		mJsonManager.writeSetting(false,new KeyPairValue(KEY_PATH_VLC,textFieldVlc.getText()));
+		mJsonManager.writeSetting(false,new KeyPairValue(KEY_PATH_PROMOTIONAL_VIDEO,textFieldVideoPromocional.getText()));
+		mJsonManager.writeSetting(false,new KeyPairValue(KEY_RANDOM_SONG,Integer.parseInt(textFieldMusicaAleatoria.getText())));
+		mJsonManager.writeSetting(false,new KeyPairValue(KEY_RESET_SONGS,Integer.parseInt(textFieldReinicioMusicas.getText())));
+		mJsonManager.writeSetting(false,new KeyPairValue(KEY_AMOUNT_OF_CREDITS,Integer.parseInt(textFieldCantCreditos.getText())));
+		mJsonManager.writeSetting(false,new KeyPairValue(KEY_FREE,libre));
+		mJsonManager.writeSetting(false,new KeyPairValue(KEY_LOCK_SCREEN,lockScreen.isSelected()));
+		mJsonManager.writeSetting(false,new KeyPairValue(KEY_PROMOTIONAL_VIDEO,videoPromocional));
+		mJsonManager.writeSetting(false,new KeyPairValue(KEY_DEFAULT_PROMOTIONAL_VIDEO,defaultVideoPromotional));
+		mJsonManager.writeSetting(false,new KeyPairValue(KEY_CLICK_OF_CREDITS,clickCreditos));
+		mJsonManager.writeSetting(false,new KeyPairValue(KEY_UP_LIST,textFieldSubirL.getKeyCode()));
+		mJsonManager.writeSetting(false,new KeyPairValue(KEY_DOWN_LIST,textFieldBajarL.getKeyCode()));
+		mJsonManager.writeSetting(false,new KeyPairValue(KEY_UP_GENRE,textFieldSubirGenero.getKeyCode()));
+		mJsonManager.writeSetting(false,new KeyPairValue(KEY_DOWN_GENRE,textFieldBajarGenero.getKeyCode()));
+		mJsonManager.writeSetting(false,new KeyPairValue(KEY_FULL_SCREEN,textFieldPantallaCompleta.getKeyCode()));
+		mJsonManager.writeSetting(false,new KeyPairValue(KEY_DELETE_NUMBER,textFieldBorrar.getKeyCode()));
+		mJsonManager.writeSetting(false,new KeyPairValue(KEY_NEXT_SONG,textFieldSaltarCancion.getKeyCode()));
+		mJsonManager.writeSetting(false,new KeyPairValue(KEY_ADD_CREDIT,textFieldAgregarCreditos.getKeyCode()));
+		mJsonManager.writeSetting(false,new KeyPairValue(KEY_DELETE_CREDIT,textFieldBorrarCredito.getKeyCode()));
+		mJsonManager.writeSetting(false,new KeyPairValue(KEY_RIGHT_CLICK_CANCEL_MUSIC,cancelMusic));
+		mJsonManager.writeSetting(false,new KeyPairValue(KEY_PASSWORD,new String(passwordField.getPassword())));
+		mJsonManager.writeSetting(false,new KeyPairValue(KEY_USED_CREDITS,Integer.parseInt(labelCreditosUsados.getText())));
+		mJsonManager.writeSetting(false,new KeyPairValue(KEY_INSERTED_CREDITS,Integer.parseInt(labelMonedasInsertadas.getText())));
+		mJsonManager.writeSetting(false,new KeyPairValue(KEY_DEFAULT_BACKGROUND,defaultBackground));
+		mJsonManager.writeSetting(false,new KeyPairValue(KEY_PATH_BACKGRONUD,textFieldDirFondos.getText()));
+		mJsonManager.writeSetting(false,new KeyPairValue(KEY_COLOR_1,String.format("%s,%s,%s",color1.getRed(),color1.getGreen(),color1.getBlue())));
+		mJsonManager.writeSetting(false,new KeyPairValue(KEY_COLOR_2,String.format("%s,%s,%s",color2.getRed(),color2.getGreen(),color2.getBlue())));
+		mJsonManager.writeSetting(false,new KeyPairValue(KEY_FONT_CELLS,comboBoxSelectorDeFuente.getSelectedItem().toString()));
+		mJsonManager.writeSetting(false,new KeyPairValue(KEY_FONT_CELLS_SIZE,Integer.parseInt(comboBoxTamanioDeFuente.getSelectedItem().toString())));
+		mJsonManager.writeSetting(false,new KeyPairValue(KEY_FONT_SELECTOR_SIZE,Integer.parseInt(comboBoxTamanioDeFuenteSelector.getSelectedItem().toString())));
+		mJsonManager.writeSetting(false,new KeyPairValue(KEY_FONTS_CELLS_COLOR,String.format("%03d,%03d,%03d",colorDeFuente.getRed(),colorDeFuente.getGreen(),colorDeFuente.getBlue())));
+		mJsonManager.writeSetting(false,new KeyPairValue(KEY_FONT_CELL_BOLD,typeFont));
+		mJsonManager.writeSetting(false,new KeyPairValue(KEY_ADD_ADITIONAL_CREDIT,checkBoxCreditosAdicionales.isSelected()));
+		mJsonManager.writeSetting(false,new KeyPairValue(KEY_NUMBER_ADITIONAL_CREDITS,Integer.parseInt(textFieldNumeroDeCreditosAdicionales.getText())));
+		mJsonManager.writeSetting(false,new KeyPairValue(KEY_EVERY_AMOUNT_OF_CREDITS,Integer.parseInt(textFieldCadaCantidadDeCreditos.getText())));
+		mJsonManager.writeSetting(false,new KeyPairValue(KEY_CONTINUOUS_CREDITS,checkBoxCreditosContinuos.isSelected()));
+		mJsonManager.writeSetting(false,new KeyPairValue(KEY_AWARD_PRIZE,checkBoxPremio.isSelected()));
+		mJsonManager.writeSetting(false,new KeyPairValue(KEY_PRIZE_AMOUNT,Integer.parseInt(textFieldNumeroDePremios.getText())));
+		mJsonManager.writeSetting(false,new KeyPairValue(KEY_CREDITS_FOR_PRICE,Integer.parseInt(textFieldPremioCadaCreditos.getText())));
+		mJsonManager.writeSetting(false,new KeyPairValue(KEY_TYPE_OF_PRIZE,textFieldTipoDePremio.getText()));
+		mJsonManager.writeSetting(true,new KeyPairValue(KEY_SAVED_CREDITS,creditosGuardados));
+		return true;
 	}
 }

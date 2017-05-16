@@ -1,6 +1,7 @@
 package com.mfrockola.classes;
 
 import java.io.File;
+import java.nio.file.Files;
 
 /**
  * Created by Angel C on 12/05/2017.
@@ -11,6 +12,8 @@ public class RenameSongs extends Thread {
 
     private FinishListener finishListener;
 
+    private int count;
+
     public RenameSongs(String path){
         this.path = path;
     }
@@ -20,7 +23,7 @@ public class RenameSongs extends Thread {
         renameFiles();
     }
 
-    public void renameFiles(){
+    public void renameFiles() {
         // obtenemos un File con la ruta de los videos
         File file = new File(path);
 
@@ -33,31 +36,41 @@ public class RenameSongs extends Thread {
                 // verificamos si existe el genero
                 if (genres[i].exists()){
                     // Listamos los cantantes
-                    File [] singers = genres[i].listFiles();
-                    // para cada cantante
-                    for (int j = 0; j < singers.length; j++){
-                        // si el cantante existe
-                        if (singers[j].exists()) {
-                            //listamos las canciones y las renombramos
-                            rename(singers[j].listFiles());
+                    if (genres[i].isDirectory() && Files.isReadable(genres[i].toPath())){
+                        File [] singers = genres[i].listFiles();
+                        // para cada cantante
+                        for (int j = 0; j < singers.length; j++){
+                            // si el cantante existe
+                            if (singers[j].exists()) {
+                                //listamos las canciones y las renombramos
+                                if (singers[j].isDirectory()&& Files.isReadable(singers[j].toPath())){
+                                    rename(singers[j].listFiles());
+                                }
+                            }
                         }
+                        rename(singers);
                     }
-                    rename(singers);
                 }
             }
             rename(genres);
         } else {
-            finishListener.onRenameFinish(false);
+            finishListener.onRenameFinish(false,count);
             return;
         }
-        finishListener.onRenameFinish(true);
+        finishListener.onNewMessage(count);
+        finishListener.onRenameFinish(true,count);
     }
 
     private void rename(File [] files){
         for(int i = 0; i < files.length;i++){
-            if (files[i].exists()){
-                checkName(files[i]);
+            try {
+                if (files[i].exists()){
+                    checkName(files[i]);
+                }
+            } catch (NullPointerException e) {
+                System.out.println(files[i].getAbsolutePath());
             }
+
         }
     }
 
@@ -92,6 +105,11 @@ public class RenameSongs extends Thread {
         newPath = newPath.substring(0,newPath.length()-name.length())+name;
         File newPathFile = new File(newPath);
         file.renameTo(newPathFile);
+        count++;
+
+        if (count%100==0) {
+            finishListener.onNewMessage(count);
+        }
     }
 
     public void setFinishListener(FinishListener finishListener){
@@ -99,6 +117,8 @@ public class RenameSongs extends Thread {
     }
 
     public interface FinishListener {
-        void onRenameFinish(boolean result);
+        void onRenameFinish(boolean result, int count);
+
+        void onNewMessage(int count);
     }
 }
