@@ -14,71 +14,71 @@ import java.util.ArrayList;
 public class JsonManager {
 
     // Panel TIME
-    public static final String KEY_RANDOM_SONG = "randomSong";
-    public static final String KEY_RESET_SONGS = "resetSongs";
-    public static final String KEY_PROMOTIONAL_VIDEO = "promotionalVideo";
-    public static final String KEY_DEFAULT_PROMOTIONAL_VIDEO = "defaultPromotionalVideo";
-    public static final String KEY_PATH_PROMOTIONAL_VIDEO = "pathPromotionalVideo";
+    static final String KEY_RANDOM_SONG = "randomSong";
+    static final String KEY_RESET_SONGS = "resetSongs";
+    static final String KEY_PROMOTIONAL_VIDEO = "promotionalVideo";
+    static final String KEY_DEFAULT_PROMOTIONAL_VIDEO = "defaultPromotionalVideo";
+    static final String KEY_PATH_PROMOTIONAL_VIDEO = "pathPromotionalVideo";
 
     // Panel CREDITS
-    public static final String KEY_AMOUNT_OF_CREDITS = "amountOfCredits";
-    public static final String KEY_FREE = "free";
-    public static final String KEY_LOCK_SCREEN = "lockScreen";
-    public static final String KEY_FONT_SELECTOR_SIZE = "fontSelectorSize";
+    static final String KEY_AMOUNT_OF_CREDITS = "amountOfCredits";
+    static final String KEY_FREE = "free";
+    static final String KEY_LOCK_SCREEN = "lockScreen";
+    static final String KEY_FONT_SELECTOR_SIZE = "fontSelectorSize";
 
     // Panel PATHS
-    public static final String KEY_PATH_SONGS = "pathSongs";
-    public static final String KEY_PATH_VIDEOS_MP3 = "pathVideosMP3";
-    public static final String KEY_PATH_VLC = "pathVLC";
+    static final String KEY_PATH_SONGS = "pathSongs";
+    static final String KEY_PATH_VIDEOS_MP3 = "pathVideosMP3";
+    static final String KEY_PATH_VLC = "pathVLC";
 
     // Panel KEYBOARD AND MOUSE
-    public static final String KEY_UP_LIST = "keyUpList";
-    public static final String KEY_DOWN_LIST = "keyDownList";
-    public static final String KEY_UP_GENRE = "keyUpGenre";
-    public static final String KEY_DOWN_GENRE = "keyDownGenre";
-    public static final String KEY_FULL_SCREEN = "keyFullScreen";
-    public static final String KEY_DELETE_NUMBER = "keyDeleteNumber";
-    public static final String KEY_NEXT_SONG = "keyNextSong";
-    public static final String KEY_ADD_CREDIT = "keyAddCredit";
-    public static final String KEY_DELETE_CREDIT = "keyDeleteCredit";
-    public static final String KEY_CLICK_OF_CREDITS = "clickOfCredits";
-    public static final String KEY_RIGHT_CLICK_CANCEL_MUSIC = "rightClickCancelMusic";
-    public static final String KEY_PASSWORD = "password";
+    static final String KEY_UP_LIST = "keyUpList";
+    static final String KEY_DOWN_LIST = "keyDownList";
+    static final String KEY_UP_GENRE = "keyUpGenre";
+    static final String KEY_DOWN_GENRE = "keyDownGenre";
+    static final String KEY_FULL_SCREEN = "keyFullScreen";
+    static final String KEY_DELETE_NUMBER = "keyDeleteNumber";
+    static final String KEY_NEXT_SONG = "keyNextSong";
+    static final String KEY_ADD_CREDIT = "keyAddCredit";
+    static final String KEY_DELETE_CREDIT = "keyDeleteCredit";
+    static final String KEY_CLICK_OF_CREDITS = "clickOfCredits";
+    static final String KEY_RIGHT_CLICK_CANCEL_MUSIC = "rightClickCancelMusic";
+    static final String KEY_PASSWORD = "password";
 
     // Panel APPEARANCE
-    public static final String KEY_DEFAULT_BACKGROUND = "defaultBackground";
-    public static final String KEY_PATH_BACKGRONUD = "pathBackground";
-    public static final String KEY_COLOR_1 = "color1";
-    public static final String KEY_COLOR_2 = "color2";
-    public static final String KEY_FONT_CELLS = "fontCells";
-    public static final String KEY_FONT_CELLS_SIZE = "fontCellsSize";
-    public static final String KEY_FONTS_CELLS_COLOR = "fontCellsColor";
-    public static final String KEY_FONT_CELL_BOLD = "fontCellsBold";
+    static final String KEY_DEFAULT_BACKGROUND = "defaultBackground";
+    static final String KEY_PATH_BACKGRONUD = "pathBackground";
+    static final String KEY_COLOR_1 = "color1";
+    static final String KEY_COLOR_2 = "color2";
+    static final String KEY_FONT_CELLS = "fontCells";
+    static final String KEY_FONT_CELLS_SIZE = "fontCellsSize";
+    static final String KEY_FONTS_CELLS_COLOR = "fontCellsColor";
+    static final String KEY_FONT_CELL_BOLD = "fontCellsBold";
 
     // Panel STATISTICS
-    public static final String KEY_USED_CREDITS = "usedCredits";
-    public static final String KEY_INSERTED_CREDITS = "insertedCredits";
+    static final String KEY_USED_CREDITS = "usedCredits";
+    static final String KEY_INSERTED_CREDITS = "insertedCredits";
 
     // Panel PROMOTIONS
 
-    public static final String KEY_ADD_ADITIONAL_CREDIT = "addAditionalCredit";
-    public static final String KEY_NUMBER_ADITIONAL_CREDITS = "numberAditionalCredits";
-    public static final String KEY_EVERY_AMOUNT_OF_CREDITS = "everyAmountOfCredit";
-    public static final String KEY_CONTINUOUS_CREDITS = "continuousCredits";
-    public static final String KEY_AWARD_PRIZE = "awardPrize";
-    public static final String KEY_PRIZE_AMOUNT = "prizeAmount";
-    public static final String KEY_CREDITS_FOR_PRICE = "creditsForPrize";
-    public static final String KEY_TYPE_OF_PRIZE = "typeOfPrize";
+    static final String KEY_ADD_ADITIONAL_CREDIT = "addAditionalCredit";
+    static final String KEY_NUMBER_ADITIONAL_CREDITS = "numberAditionalCredits";
+    static final String KEY_EVERY_AMOUNT_OF_CREDITS = "everyAmountOfCredit";
+    static final String KEY_CONTINUOUS_CREDITS = "continuousCredits";
+    static final String KEY_AWARD_PRIZE = "awardPrize";
+    static final String KEY_PRIZE_AMOUNT = "prizeAmount";
+    static final String KEY_CREDITS_FOR_PRICE = "creditsForPrize";
+    static final String KEY_TYPE_OF_PRIZE = "typeOfPrize";
 
     // EXTRAS
 
-    public static final String KEY_SAVED_CREDITS = "savedCredits";
-    public static final String KEY_LANGUAGE = "language";
-    public static final String KEY_VERSION = "version";
+    static final String KEY_SAVED_CREDITS = "savedCredits";
+    static final String KEY_LANGUAGE = "language";
+    static final String KEY_VERSION = "version";
 
-    public JSONObject settings;
+    private JSONObject settings;
 
-    public JsonManager(){
+    JsonManager(){
         readFile();
     }
 
@@ -103,7 +103,7 @@ public class JsonManager {
             String line;
 
             while ((line = reader.readLine())!=null) {
-                buffer.append(line + "\n");
+                buffer.append(line).append("\n");
             }
 
             if (buffer.length()==0) {
@@ -116,9 +116,7 @@ public class JsonManager {
 
             settingsJsonStr = buffer.toString();
 
-            if (settingsJsonStr!=null) {
-                settings = new JSONObject(settingsJsonStr);
-            }
+            settings = new JSONObject(settingsJsonStr);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (JSONException e) {
@@ -134,7 +132,7 @@ public class JsonManager {
         }
     }
 
-    public Object getSetting(String key){
+    Object getSetting(String key){
         try {
             return settings.get(key);
         } catch (JSONException e) {
@@ -143,7 +141,7 @@ public class JsonManager {
         return null;
     }
 
-    public void writeSetting(boolean update, KeyPairValue value) {
+    void writeSetting(boolean update, KeyPairValue value) {
         try {
             settings.put(value.key,value.value);
         } catch (JSONException e) {
@@ -160,9 +158,7 @@ public class JsonManager {
             settings.write(file);
             file.flush();
             file.close();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+        } catch (JSONException | IOException e) {
             e.printStackTrace();
         }
     }
@@ -171,7 +167,7 @@ public class JsonManager {
         ArrayList newSettings = new ArrayList();
 
         // Panel TIME
-        newSettings.add(new KeyPairValue(KEY_RANDOM_SONG,1));
+        newSettings.add(new KeyPairValue(KEY_RANDOM_SONG, 1));
         newSettings.add(new KeyPairValue(KEY_RESET_SONGS,15));
         newSettings.add(new KeyPairValue(KEY_PROMOTIONAL_VIDEO,true));
         newSettings.add(new KeyPairValue(KEY_DEFAULT_PROMOTIONAL_VIDEO,true));
@@ -229,7 +225,7 @@ public class JsonManager {
         // EXTRAS
         newSettings.add(new KeyPairValue(KEY_SAVED_CREDITS,0));
         newSettings.add(new KeyPairValue(KEY_LANGUAGE,"ES"));
-        newSettings.add(new KeyPairValue(KEY_VERSION,"8.0"));
+        newSettings.add(new KeyPairValue(KEY_VERSION,"17.05.16.1412"));
 
         String settingsNew = "{}";
         try {
@@ -246,7 +242,7 @@ public class JsonManager {
         }
     }
 
-    public URL getDeaultURLBackground(){
+    private URL getDeaultURLBackground(){
         URL urlBackground = this.getClass().getResource("/com/mfrockola/imagenes/fondo.jpg");
         return urlBackground;
     }

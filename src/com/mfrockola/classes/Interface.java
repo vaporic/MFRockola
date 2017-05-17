@@ -747,6 +747,8 @@ class Interface extends JFrame {
                 {
                     if ((credits > 0 && condicion)||(free && condicion))
                     {
+                        mMediaPlayer.embeddedMediaPlayerMp3.stop();
+
                         if (mPlayList.songToPlay()==null)
                         {
                             if (timerRandomSong.isRunning()) {
@@ -999,7 +1001,9 @@ class Interface extends JFrame {
     {
         @Override
         public void stopped(uk.co.caprica.vlcj.player.MediaPlayer mediaPlayer) {
-            nextSong();
+            if (mPlayList.songToPlay()!=null) {
+                nextSong();
+            }
         }
 
         public void finished(uk.co.caprica.vlcj.player.MediaPlayer mediaPlayer) {
