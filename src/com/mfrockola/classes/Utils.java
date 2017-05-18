@@ -34,6 +34,10 @@ class Utils {
             return EXT_UNKNOWN;
         }
 
+        if (extension.equals("db") || extension.equals("DB")) {
+            return EXT_UNKNOWN;
+        }
+
         if (extension.equals("mp4") || extension.equals("MP4")) {
             return EXT_MP4;
         }

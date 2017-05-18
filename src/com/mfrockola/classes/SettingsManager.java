@@ -11,7 +11,7 @@ import java.util.ArrayList;
 /**
  * Created by Angel C on 14/05/2017.
  */
-public class JsonManager {
+public class SettingsManager {
 
     // Panel TIME
     static final String KEY_RANDOM_SONG = "randomSong";
@@ -78,7 +78,7 @@ public class JsonManager {
 
     private JSONObject settings;
 
-    JsonManager(){
+    SettingsManager(){
         readFile();
     }
 
@@ -163,7 +163,8 @@ public class JsonManager {
         }
     }
 
-    private void writeDefaultSettings(){
+
+    void writeDefaultSettings(){
         ArrayList newSettings = new ArrayList();
 
         // Panel TIME

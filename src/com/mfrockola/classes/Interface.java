@@ -1,7 +1,6 @@
 package com.mfrockola.classes;
 
 import com.mfrockola.android.InternetConnection;
-import com.sun.webkit.network.Util;
 import uk.co.caprica.vlcj.player.MediaPlayerEventAdapter;
 
 import javax.sound.sampled.AudioInputStream;
@@ -18,7 +17,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 
-import static com.mfrockola.classes.JsonManager.*;
+import static com.mfrockola.classes.SettingsManager.*;
 import static com.mfrockola.classes.Utils.*;
 
 /**
@@ -78,7 +77,7 @@ class Interface extends JFrame {
 
     private int savedCredits;
 
-    private JsonManager mUserSettings;
+    private SettingsManager mUserSettings;
 
     // This variable stores the amount of credits entered
     private int credits;
@@ -164,7 +163,7 @@ class Interface extends JFrame {
 
     Interface() {
         try {
-            mUserSettings = new JsonManager();
+            mUserSettings = new SettingsManager();
 
             // init vars
 
@@ -303,32 +302,8 @@ class Interface extends JFrame {
             }
         };
 
-        ActionListener playRandomSong = e -> {
-            Random random = new Random();
-            File path = new File(pathSongs);
-            if (path.exists()) {
-                File [] genres = path.listFiles();
-                File selectedGenre = genres[random.nextInt(genres.length)];
-                if (selectedGenre.exists()) {
-                    File [] singers = selectedGenre.listFiles();
-                    File selectedSinger = singers[random.nextInt(singers.length)];
-                    if (selectedSinger.exists()) {
-                        File [] songs = selectedSinger.listFiles();
-
-                        String randomSong = songs[random.nextInt(songs.length)].getAbsolutePath();
-
-                        int extension = Utils.getExtension(randomSong);
-
-                        if (extension == EXT_MP4 || extension == EXT_AVI || extension == EXT_MPG || extension == EXT_FLV || extension == EXT_MKV) {
-                            mMediaPlayer.playVideo(randomSong);
-                        } else if (extension == EXT_MP3 || extension == EXT_WMA || extension == EXT_WAV || extension == EXT_AAC) {
-                            mMediaPlayer.playAudio(
-                                    randomSong,
-                                    (String) mUserSettings.getSetting(KEY_PATH_VIDEOS_MP3) + "\\" + listMusicData.getPromVideo());
-                        }
-                    }
-                }
-            }
+        ActionListener play = e -> {
+            playRandomSong();
         };
 
         ActionListener pressKey = e -> {
@@ -347,7 +322,7 @@ class Interface extends JFrame {
         timerFullScreen = new Timer(10000, changeFullScreen);
         timerFullScreen.setRepeats(false);
 
-        timerRandomSong = new Timer(randomSong*1000*60,playRandomSong);
+        timerRandomSong = new Timer(randomSong*1000*60,play);
         timerRandomSong.setRepeats(false);
 
         if (mPlayList.songToPlay()==null) {
@@ -747,8 +722,6 @@ class Interface extends JFrame {
                 {
                     if ((credits > 0 && condicion)||(free && condicion))
                     {
-                        mMediaPlayer.embeddedMediaPlayerMp3.stop();
-
                         if (mPlayList.songToPlay()==null)
                         {
                             if (timerRandomSong.isRunning()) {
@@ -806,8 +779,7 @@ class Interface extends JFrame {
                             //Song cancion = new Song(numero, cancionAReproducir);
                             mPlayList.addSong(cancionAReproducir);
                             playListInterface.setListData(mPlayList.getPlayList());
-                            if (!free)
-                            {
+                            if (!free) {
                                 --credits;
                                 mUserSettings.writeSetting(true,new KeyPairValue(KEY_SAVED_CREDITS,credits));
                                 labelCredits.setForeground(Color.WHITE);
@@ -837,8 +809,6 @@ class Interface extends JFrame {
                         mSongSelector.resetValues();
                         mSongSelector.labelSelector.setText("- - - - -");
                     }
-
-
                 }
             }
             else if (evento.getKeyCode()==122) {
@@ -1079,6 +1049,62 @@ class Interface extends JFrame {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void playRandomSong(){
+
+        Random random = new Random();
+
+        mPlayList.addSong(listMusicData.getSong(random.nextInt(listMusicData.getSizeListOfSongs())));
+
+        int extension = Utils.getExtension(String.format("%s\\%s\\%s\\%s", pathSongs,mPlayList.getSongGender(),mPlayList.getSinger(), mPlayList.songToPlay()));
+
+        if (extension == EXT_MP4 || extension == EXT_AVI || extension == EXT_MPG || extension == EXT_FLV || extension == EXT_MKV) {
+            mMediaPlayer.playVideo(mPlayList.getSongGender(),mPlayList.getSinger(),mPlayList.songToPlay());
+        } else if (extension == EXT_MP3 || extension == EXT_WMA || extension == EXT_WAV || extension == EXT_AAC) {
+            mMediaPlayer.playAudio(
+                    mPlayList.getSongGender(),
+                    mPlayList.getSinger(),
+                    mPlayList.songToPlay(),
+                    pathVideosMP3 + "\\" + listMusicData.getPromVideo());
+        }
+
+        playListInterface.setListData(mPlayList.getPlayList());
+
+        labelSongPlayingBottom.setText(String.format("%05d - %s - %s - %s",
+                mPlayList.getSongNumber(),
+                mPlayList.getSongGender(),
+                mPlayList.getSinger(),
+                mPlayList.songToPlay()));
+        labelSongPlayingRight.setText(String.format("%05d - %s - %s - %s",
+                mPlayList.getSongNumber(),mPlayList.getSongGender(),
+                mPlayList.getSinger(), mPlayList.songToPlay()));
+
+        /*Random random = new Random();
+        File path = new File(pathSongs);
+        if (path.exists()) {
+            File [] genres = path.listFiles();
+            File selectedGenre = genres[random.nextInt(genres.length)];
+            if (selectedGenre.exists()) {
+                File [] singers = selectedGenre.listFiles();
+                File selectedSinger = singers[random.nextInt(singers.length)];
+                if (selectedSinger.exists()) {
+                    File [] songs = selectedSinger.listFiles();
+
+                    String randomSong = songs[random.nextInt(songs.length)].getAbsolutePath();
+
+                    int extension = Utils.getExtension(randomSong);
+
+                    if (extension == EXT_MP4 || extension == EXT_AVI || extension == EXT_MPG || extension == EXT_FLV || extension == EXT_MKV) {
+                        mMediaPlayer.playVideo(randomSong);
+                    } else if (extension == EXT_MP3 || extension == EXT_WMA || extension == EXT_WAV || extension == EXT_AAC) {
+                        mMediaPlayer.playAudio(
+                                randomSong,
+                                (String) mUserSettings.getSetting(KEY_PATH_VIDEOS_MP3) + "\\" + listMusicData.getPromVideo());
+                    }
+                }
+            }
+        }*/
     }
 
     public void addSongToPlayList(ArrayList numbers) {
