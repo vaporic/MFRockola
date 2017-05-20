@@ -861,7 +861,7 @@ class Interface extends JFrame {
 
                 labelPromotions.setVisible(false);
 
-                if(mSongListInterface.getSelectedIndex()+20 > listMusicData.getGenderSongs(listMusicData.getSelectedGender()).length) {
+                if(mSongListInterface.getSelectedIndex()+20 >= listMusicData.getGenderSongs(listMusicData.getSelectedGender()).length) {
                     if (mSongListInterface.getSelectedIndex()==listMusicData.getGenderSongs(listMusicData.getSelectedGender()).length-1) {
                         if (listMusicData.upGender()) {
                             mSongListInterface.setListData(listMusicData.getGenderSongs(listMusicData.getSelectedGender()));
