@@ -1,5 +1,6 @@
 package com.mfrockola.classes;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -24,6 +25,7 @@ public class SettingsManager {
     static final String KEY_AMOUNT_OF_CREDITS = "amountOfCredits";
     static final String KEY_FREE = "free";
     static final String KEY_LOCK_SCREEN = "lockScreen";
+    static final String KEY_SAVE_SONGS = "saveSongs";
     static final String KEY_FONT_SELECTOR_SIZE = "fontSelectorSize";
 
     // Panel PATHS
@@ -73,8 +75,17 @@ public class SettingsManager {
     // EXTRAS
 
     static final String KEY_SAVED_CREDITS = "savedCredits";
+    static final String KEY_SAVED_SONGS = "savedSongs";
     static final String KEY_LANGUAGE = "language";
     static final String KEY_VERSION = "version";
+
+    // SONGS
+
+    static final String KEY_SONG_NUMBER = "songNumber";
+    static final String KEY_SONG_GENRE = "songGenre";
+    static final String KEY_SONG_SINGER = "songSinger";
+    static final String KEY_SONG_NAME = "songName";
+
 
     private JSONObject settings;
 
@@ -178,6 +189,7 @@ public class SettingsManager {
         newSettings.add(new KeyPairValue(KEY_AMOUNT_OF_CREDITS,1));
         newSettings.add(new KeyPairValue(KEY_FREE,false));
         newSettings.add(new KeyPairValue(KEY_LOCK_SCREEN,true));
+        newSettings.add(new KeyPairValue(KEY_SAVE_SONGS,true));
         newSettings.add(new KeyPairValue(KEY_FONT_SELECTOR_SIZE,50));
 
         // Panel PATHS
@@ -225,8 +237,9 @@ public class SettingsManager {
 
         // EXTRAS
         newSettings.add(new KeyPairValue(KEY_SAVED_CREDITS,0));
+        newSettings.add(new KeyPairValue(KEY_SAVED_SONGS,new JSONArray()));
         newSettings.add(new KeyPairValue(KEY_LANGUAGE,"ES"));
-        newSettings.add(new KeyPairValue(KEY_VERSION,"17.05.16.1412"));
+        newSettings.add(new KeyPairValue(KEY_VERSION,"17.05.29.1455"));
 
         String settingsNew = "{}";
         try {

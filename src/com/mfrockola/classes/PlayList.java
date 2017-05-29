@@ -1,5 +1,9 @@
 package com.mfrockola.classes;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 class PlayList {
@@ -37,6 +41,20 @@ class PlayList {
         if (mPlayList.size()>0) {
             mPlayList.remove(0);
         }
+    }
+
+    public JSONObject getSongJSONObject(Song song) {
+        JSONObject songJsonObject = new JSONObject();
+
+        try {
+            songJsonObject.put("songNumber",song.getSongNumber());
+            songJsonObject.put("songGenre",song.getSongGenre());
+            songJsonObject.put("songSinger",song.getSinger());
+            songJsonObject.put("songName",song.getSongName());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return songJsonObject;
     }
 
     Object[] getPlayList(){

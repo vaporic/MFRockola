@@ -1,6 +1,9 @@
 package com.mfrockola.classes;
 
 import com.mfrockola.android.InternetConnection;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import uk.co.caprica.vlcj.player.MediaPlayerEventAdapter;
 
 import javax.sound.sampled.AudioInputStream;
@@ -76,6 +79,7 @@ class Interface extends JFrame {
     private String typeOfPrize;
 
     private int savedCredits;
+    private JSONArray savedSongs;
 
     private SettingsManager mUserSettings;
 
@@ -217,6 +221,24 @@ class Interface extends JFrame {
             typeOfPrize = (String) mUserSettings.getSetting(KEY_TYPE_OF_PRIZE);
 
             savedCredits = (int) mUserSettings.getSetting(KEY_SAVED_CREDITS);
+            savedSongs = (JSONArray) mUserSettings.getSetting(KEY_SAVED_SONGS);
+
+            if ((boolean) mUserSettings.getSetting(KEY_SAVE_SONGS) && savedSongs.length()>0) {
+                for (int i = 0; i < savedSongs.length(); i++) {
+                    try {
+                        JSONObject songJSON = savedSongs.getJSONObject(i);
+                        mPlayList.addSong(new Song(
+                                songJSON.getInt(KEY_SONG_NUMBER),
+                                songJSON.getString(KEY_SONG_GENRE),
+                                songJSON.getString(KEY_SONG_SINGER),
+                                songJSON.getString(KEY_SONG_NAME)));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                savedSongs.remove(0);
+                mUserSettings.writeSetting(true,new KeyPairValue(KEY_SAVED_SONGS,savedSongs));
+            }
 
             // End of init vars
 
@@ -344,6 +366,29 @@ class Interface extends JFrame {
         if(promotionalVideo) {
             mMediaPlayer.embeddedMediaPlayer.playMedia(pathPromotionalVideo);
             setFullScreen();
+        }
+
+        if (mPlayList.songToPlay()!=null) {
+            int extension = Utils.getExtension(String.format("%s\\%s\\%s\\%s", pathSongs,mPlayList.getSongGender(),mPlayList.getSinger(), mPlayList.songToPlay()));
+
+            if (extension == EXT_MP4 || extension == EXT_AVI || extension == EXT_MPG || extension == EXT_FLV || extension == EXT_MKV) {
+                mMediaPlayer.playVideo(mPlayList.getSongGender(),mPlayList.getSinger(),mPlayList.songToPlay());
+            } else if (extension == EXT_MP3 || extension == EXT_WMA || extension == EXT_WAV || extension == EXT_AAC) {
+                mMediaPlayer.playAudio(
+                        mPlayList.getSongGender(),
+                        mPlayList.getSinger(),
+                        mPlayList.songToPlay(),
+                        pathVideosMP3 + "\\" + listMusicData.getPromVideo());
+            }
+
+            labelSongPlayingBottom.setText(String.format("%05d - %s - %s - %s",
+                    mPlayList.getSongNumber(),
+                    mPlayList.getSongGender(),
+                    mPlayList.getSinger(),
+                    mPlayList.songToPlay()));
+            labelSongPlayingRight.setText(String.format("%05d - %s - %s - %s",
+                    mPlayList.getSongNumber(),mPlayList.getSongGender(),
+                    mPlayList.getSinger(), mPlayList.songToPlay()));
         }
 
         addMouseListener(new MouseAdapter() {
@@ -778,6 +823,9 @@ class Interface extends JFrame {
                             Song cancionAReproducir = listMusicData.getSong(numero);
                             //Song cancion = new Song(numero, cancionAReproducir);
                             mPlayList.addSong(cancionAReproducir);
+                            JSONObject jsonSong = mPlayList.getSongJSONObject(cancionAReproducir);
+                            savedSongs.put(jsonSong);
+                            mUserSettings.writeSetting(false,new KeyPairValue(KEY_SAVED_SONGS,savedSongs));
                             playListInterface.setListData(mPlayList.getPlayList());
                             if (!free) {
                                 --credits;
@@ -978,7 +1026,9 @@ class Interface extends JFrame {
 
         public void finished(uk.co.caprica.vlcj.player.MediaPlayer mediaPlayer) {
             if (mMediaPlayer.embeddedMediaPlayerMp3.isPlaying()) {
-                mMediaPlayer.embeddedMediaPlayer.playMedia(pathVideosMP3 + "\\" + listMusicData.getPromVideo());
+                String path = pathVideosMP3 + "\\" + listMusicData.getPromVideo();
+                File file = new File(path);
+                mMediaPlayer.embeddedMediaPlayer.playMedia(file.getAbsolutePath());
             } else {
                 nextSong();
             }
@@ -986,6 +1036,10 @@ class Interface extends JFrame {
 
         public void nextSong() {
             mPlayList.removeSong();
+            if (savedSongs.length()>0) {
+                savedSongs.remove(0);
+                mUserSettings.writeSetting(true,new KeyPairValue(KEY_SAVED_SONGS,savedSongs));
+            }
             playListInterface.setListData(mPlayList.getPlayList());
 
             if (mPlayList.songToPlay() == null) {

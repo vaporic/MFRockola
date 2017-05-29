@@ -45,7 +45,7 @@ class MediaPlayer {
             mediaPlayerContainer.add(canvas,BorderLayout.CENTER);
 
             // Instantiating a MediaPlayerFactory. Create an embedded player and add our canvas
-            MediaPlayerFactory mediaPlayerFactory = new MediaPlayerFactory("--no-video-title-show");
+            MediaPlayerFactory mediaPlayerFactory = new MediaPlayerFactory();
             embeddedMediaPlayer = mediaPlayerFactory.newEmbeddedMediaPlayer();
             embeddedMediaPlayer.setVideoSurface(mediaPlayerFactory.newVideoSurface(canvas));
             embeddedMediaPlayerMp3 = mediaPlayerFactory.newEmbeddedMediaPlayer();

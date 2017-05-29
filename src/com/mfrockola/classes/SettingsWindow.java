@@ -82,6 +82,7 @@ public class SettingsWindow extends JFrame implements RenameSongs.FinishListener
 	private JLabel labelFuente; // label de resultado del tipo de fuente seleccionada
 	private JLabel labelSelector; // label del resultado del tamaño del seletor
 	private JCheckBox lockScreen;
+	private JCheckBox saveSongs;
 	private JButton botonColor1; // boton selector de color de celda 1
 	private JButton botonColor2; // boton selector de color de celda 2
 	private JButton botonColorDeFuente; // boton selector del color de la fuente
@@ -361,17 +362,23 @@ public class SettingsWindow extends JFrame implements RenameSongs.FinishListener
 		lockScreen.setBackground(Color.WHITE);
 		panel3.add(lockScreen);
 
+		saveSongs = new JCheckBox("Guardar canciones cuando se apaga la Rockola");
+		saveSongs.setBounds(285,196,254,14);
+		saveSongs.setHorizontalAlignment(SwingConstants.RIGHT);
+		saveSongs.setBackground(Color.WHITE);
+		panel3.add(saveSongs);
+
 		Border border = BorderFactory.createLineBorder(Color.BLACK);
 
 		JLabel labelTamanioDeLetraSelector = new JLabel("Tamaño de letra de la selección musical");
-		labelTamanioDeLetraSelector.setBounds(291,196,200,14);
+		labelTamanioDeLetraSelector.setBounds(291,221,200,14);
 		labelTamanioDeLetraSelector.setHorizontalAlignment(SwingConstants.RIGHT);
 		panel3.add(labelTamanioDeLetraSelector);
 
 		String [] tamanios = {"8","9","10","11","12","13","14","16","18","20","24","28","36","48","50","55","60","65","70","72"};
 
 		comboBoxTamanioDeFuenteSelector = new JComboBox(tamanios);
-		comboBoxTamanioDeFuenteSelector.setBounds(498,191,43,23);
+		comboBoxTamanioDeFuenteSelector.setBounds(498,216,43,23);
 		panel3.add(comboBoxTamanioDeFuenteSelector);
 
 		comboBoxTamanioDeFuenteSelector.addActionListener(new ActionListener() {
@@ -384,7 +391,7 @@ public class SettingsWindow extends JFrame implements RenameSongs.FinishListener
 		labelSelector = new JLabel("- - - 2 8");
 		labelSelector.setHorizontalAlignment(JLabel.CENTER);
 		labelSelector.setBorder(border);
-		labelSelector.setBounds(220,220,321,106);
+		labelSelector.setBounds(220,245,321,106);
 		labelSelector.setOpaque(true);
 		panel3.add(labelSelector);
 
@@ -1184,6 +1191,12 @@ public class SettingsWindow extends JFrame implements RenameSongs.FinishListener
 			lockScreen.setSelected(false);
 		}
 
+		if ((boolean) mSettingsManager.getSetting(KEY_SAVE_SONGS)) {
+			saveSongs.setSelected(true);
+		} else {
+			saveSongs.setSelected(false);
+		}
+
 		if ((int) mSettingsManager.getSetting(KEY_CLICK_OF_CREDITS) == 0) {
 			rdbtnClickIzquierdo.setSelected(true);
 			clickCreditos = 0;
@@ -1391,6 +1404,7 @@ public class SettingsWindow extends JFrame implements RenameSongs.FinishListener
 		mSettingsManager.writeSetting(false,new KeyPairValue(KEY_AMOUNT_OF_CREDITS,Integer.parseInt(textFieldCantCreditos.getText())));
 		mSettingsManager.writeSetting(false,new KeyPairValue(KEY_FREE,libre));
 		mSettingsManager.writeSetting(false,new KeyPairValue(KEY_LOCK_SCREEN,lockScreen.isSelected()));
+		mSettingsManager.writeSetting(false,new KeyPairValue(KEY_SAVE_SONGS,saveSongs.isSelected()));
 		mSettingsManager.writeSetting(false,new KeyPairValue(KEY_PROMOTIONAL_VIDEO,videoPromocional));
 		mSettingsManager.writeSetting(false,new KeyPairValue(KEY_DEFAULT_PROMOTIONAL_VIDEO,defaultVideoPromotional));
 		mSettingsManager.writeSetting(false,new KeyPairValue(KEY_CLICK_OF_CREDITS,clickCreditos));
