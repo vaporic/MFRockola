@@ -71,6 +71,7 @@ public class SettingsManager {
     static final String KEY_PRIZE_AMOUNT = "prizeAmount";
     static final String KEY_CREDITS_FOR_PRICE = "creditsForPrize";
     static final String KEY_TYPE_OF_PRIZE = "typeOfPrize";
+    static final String KEY_INSERTED_CREDITS_FOR_PRIZE = "insertedCreditsForPrize";
 
     // EXTRAS
 
@@ -234,6 +235,7 @@ public class SettingsManager {
         newSettings.add(new KeyPairValue(KEY_PRIZE_AMOUNT,0));
         newSettings.add(new KeyPairValue(KEY_CREDITS_FOR_PRICE,0));
         newSettings.add(new KeyPairValue(KEY_TYPE_OF_PRIZE,""));
+        newSettings.add(new KeyPairValue(KEY_INSERTED_CREDITS_FOR_PRIZE,0));
 
         // EXTRAS
         newSettings.add(new KeyPairValue(KEY_SAVED_CREDITS,0));

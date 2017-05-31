@@ -219,6 +219,7 @@ class Interface extends JFrame {
             prizeAmount = (int) mUserSettings.getSetting(KEY_PRIZE_AMOUNT);
             creditsForPrize = (int) mUserSettings.getSetting(KEY_CREDITS_FOR_PRICE);
             typeOfPrize = (String) mUserSettings.getSetting(KEY_TYPE_OF_PRIZE);
+            insertedCreditsForPrize = (int) mUserSettings.getSetting(KEY_INSERTED_CREDITS_FOR_PRIZE);
 
             savedCredits = (int) mUserSettings.getSetting(KEY_SAVED_CREDITS);
             savedSongs = (JSONArray) mUserSettings.getSetting(KEY_SAVED_SONGS);
@@ -661,6 +662,7 @@ class Interface extends JFrame {
 
         if (awardPrize && !free) {
             insertedCreditsForPrize++;
+            mUserSettings.writeSetting(true,new KeyPairValue(KEY_INSERTED_CREDITS_FOR_PRIZE,insertedCreditsForPrize));
             if (insertedCreditsForPrize % creditsForPrize == 0) {
                 // Aqui va la cuestion para controlar el cartel de premio
                 labelPromotions.setText(String.format("Ganaste %s %s!", prizeAmount,typeOfPrize));
@@ -757,7 +759,7 @@ class Interface extends JFrame {
                     condicion = false;
 
                 if (numero >= listMusicData.getSizeListOfSongs()) {
-                    labelCredits.setText("Musica no encontrada");
+                    labelCredits.setText("Canción no encontrada");
                     mSongSelector.play = false;
                     mSongSelector.resetValues();
                     mSongSelector.labelSelector.setText("- - - - -");
