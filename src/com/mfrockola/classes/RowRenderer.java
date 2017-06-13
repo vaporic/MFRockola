@@ -37,7 +37,7 @@ class RowRenderer extends JLabel implements ListCellRenderer {
 		// If there are no songs in the list, it indicates, but, the name of the object is placed,
 		// in this case, the song
 		if (value == null) {
-			setText("Sin canciones en reproducción");
+			setText("");
 		} else setText(value.toString());
 
 		// If the number of the row in the list is even, the first color is placed, but the second color is placed.

@@ -1,6 +1,8 @@
 package com.mfrockola.classes;
 
 import java.io.File;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -63,6 +65,8 @@ public class ListMusic {
                 gender.add(new Gender(listaArchivos[i],countSongs(archivoActual)));
             }
         }
+
+        gender.add(getGenderTop30());
 
         File directorioVideosPromocionales = new File(getPathPromVideos());
 
@@ -151,5 +155,32 @@ public class ListMusic {
 
     public void setPathPromVideos(String pathPromVideos) {
         this.pathPromVideos = pathPromVideos;
+    }
+
+    private Gender getGenderTop30() {
+        Song[] songs = new Song[30];
+        Gender genderTop30 = null;
+        SQLiteConsultor sqLiteConsultor = new SQLiteConsultor();
+
+        try {
+            ResultSet resultSet = sqLiteConsultor.query("SELECT * FROM most_popular ORDER BY times DESC, number ASC");
+            int i = 0;
+            while (resultSet.next() && i < 30) {
+                songs[i] = new Song(resultSet.getInt("number"),
+                        resultSet.getString("genre"),
+                        resultSet.getString("artist"),
+                        resultSet.getString("name"));
+                i++;
+            }
+
+            genderTop30 = new Gender("Top 30",songs);
+
+            resultSet.close();
+            sqLiteConsultor.closeConnection();
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return genderTop30;
     }
 }
