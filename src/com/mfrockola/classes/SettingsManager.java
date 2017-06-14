@@ -241,7 +241,7 @@ public class SettingsManager {
         newSettings.add(new KeyPairValue(KEY_SAVED_CREDITS,0));
         newSettings.add(new KeyPairValue(KEY_SAVED_SONGS,new JSONArray()));
         newSettings.add(new KeyPairValue(KEY_LANGUAGE,"ES"));
-        newSettings.add(new KeyPairValue(KEY_VERSION,"17.05.29.1455"));
+        newSettings.add(new KeyPairValue(KEY_VERSION,"17.06.13.2025"));
 
         String settingsNew = "{}";
         try {
